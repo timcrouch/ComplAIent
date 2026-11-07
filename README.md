@@ -8,9 +8,9 @@ Run risks, controls, evidence and your Statement of Applicability for ISO 27001,
 [![CI](https://github.com/timcrouch/ComplAIent/actions/workflows/ci.yml/badge.svg)](https://github.com/timcrouch/ComplAIent/actions/workflows/ci.yml)
 [![Licence: PolyForm Shield 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Shield%201.0.0-blue)](LICENSE)
 
-<!-- TODO: replace with a 60–90 s GIF or screenshot of the demo data: report a concern → risk → controls → evidence → SoA → board report.
-![ComplAIent ISMS](docs/brand/screenshot.png)
--->
+![ComplAIent ISMS: home workspace, risk map, a risk record with its controls, treatment and approval, the control library, the Statement of Applicability and the board pack](docs/brand/demo.gif)
+
+<sub>Sample data: a year of activity for a fictional German financial firm. Load it yourself with <code>pnpm demo:load</code>.</sub>
 
 ---
 
