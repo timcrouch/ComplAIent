@@ -10,6 +10,7 @@ const me = {
   roles: [],
   permissions: ["me.read"],
   viewMode: "guided",
+  theme: "system",
 };
 
 const itemRoute = defineRoute({

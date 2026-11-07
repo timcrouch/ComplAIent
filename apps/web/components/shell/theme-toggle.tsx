@@ -2,15 +2,13 @@
 
 import { MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { THEME_COOKIE, themeAttribute, type Theme } from "../../lib/theme";
+import { THEME_COOKIE, THEME_COOKIE_MAX_AGE_S, themeAttribute, type Theme } from "../../lib/theme";
 import { Segmented } from "./segmented";
-
-const ONE_YEAR_S = 365 * 24 * 60 * 60;
 
 /** Applies a theme now (data-theme on <html>) and stores it for the server's next render. */
 export function applyTheme(theme: Theme): void {
   const secure = window.location.protocol === "https:" ? "; secure" : "";
-  document.cookie = `${THEME_COOKIE}=${theme}; path=/; max-age=${String(ONE_YEAR_S)}; samesite=lax${secure}`;
+  document.cookie = `${THEME_COOKIE}=${theme}; path=/; max-age=${String(THEME_COOKIE_MAX_AGE_S)}; samesite=lax${secure}`;
   const attribute = themeAttribute(theme);
   if (attribute) document.documentElement.dataset.theme = attribute;
   else delete document.documentElement.dataset.theme;

@@ -163,6 +163,9 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           },
           "viewMode": {
             "$ref": "#/components/schemas/ViewMode"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/Theme"
           }
         },
         "required": [
@@ -171,7 +174,8 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "displayName",
           "roles",
           "permissions",
-          "viewMode"
+          "viewMode",
+          "theme"
         ]
       },
       "RoleAssignmentDto": {
@@ -253,15 +257,27 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "executive"
         ]
       },
+      "Theme": {
+        "type": "string",
+        "enum": [
+          "light",
+          "dark",
+          "system"
+        ]
+      },
       "PreferencesResponse": {
         "type": "object",
         "properties": {
           "viewMode": {
             "$ref": "#/components/schemas/ViewMode"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/Theme"
           }
         },
         "required": [
-          "viewMode"
+          "viewMode",
+          "theme"
         ]
       },
       "UpdatePreferencesRequest": {
@@ -269,11 +285,11 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
         "properties": {
           "viewMode": {
             "$ref": "#/components/schemas/ViewMode"
+          },
+          "theme": {
+            "$ref": "#/components/schemas/Theme"
           }
         },
-        "required": [
-          "viewMode"
-        ],
         "additionalProperties": false
       },
       "ListUsersResponse": {
@@ -5349,7 +5365,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
     },
     "/api/v1/me/preferences": {
       "patch": {
-        "summary": "Save the current user's view mode",
+        "summary": "Save the current user's view mode and/or colour theme",
         "x-permission": "me.update",
         "requestBody": {
           "content": {

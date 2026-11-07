@@ -15,6 +15,13 @@ enum ViewMode {
   executive
 }
 
+/// Colour theme chosen in the account menu. NULL on User means "system" (follow the device).
+enum ColourTheme {
+  light
+  dark
+  system
+}
+
 enum Role {
   administrator
   ciso
@@ -38,6 +45,8 @@ model User {
   email       String
   displayName String
   viewMode    ViewMode?
+  /// Presentation only, per user (#2): the theme cookie is just a cache of this for rendering.
+  theme       ColourTheme?
   lastSeenAt  DateTime? @db.Timestamptz(3)
 
   roleAssignments        RoleAssignment[]            @relation("AssignedTo")

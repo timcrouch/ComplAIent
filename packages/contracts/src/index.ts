@@ -9,11 +9,12 @@ export {
   MeResponse,
   PreferencesResponse,
   RoleAssignmentDto,
+  ThemeSchema,
   UpdatePreferencesRequest,
   ViewModeSchema,
   identityRoutes,
 } from "./routes/identity.js";
-export type { ViewMode } from "./routes/identity.js";
+export type { Theme, ViewMode } from "./routes/identity.js";
 export { ConflictReasonSchema, conflictDetail, conflictReasons } from "./conflicts.js";
 export type { ConflictReason } from "./conflicts.js";
 export {
