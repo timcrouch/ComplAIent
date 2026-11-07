@@ -26,3 +26,6 @@ apps/web/AGENTS.md
 # Claude Code local state
 .claude/worktrees/
 .claude/settings.local.json
+
+# Private notes (customer details, commercial plans): never committed
+docs/private/
