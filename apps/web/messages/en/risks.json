@@ -1,0 +1,237 @@
+{
+  "risks": {
+    "pageTitle": "Risks · {app}",
+    "eyebrow": "Risk register",
+    "title": "Risks",
+    "intro": "Concerns people reported and the risks you look after. Open one to review it, complete the record and choose its controls.",
+    "filters": {
+      "label": "Show risks",
+      "all": "All",
+      "toReview": "To review",
+      "awaitingMyApproval": "Awaiting my approval",
+      "aboveAppetite": "Above appetite",
+      "evidenceMissing": "Evidence missing",
+      "reviewDue": "Due for review",
+      "reportedByMe": "Reported by me",
+      "ownedByMe": "Owned by me",
+      "noExpectedScore": "No expected score"
+    },
+    "queue": {
+      "listLabel": "Risks",
+      "empty": "No risks to show here.",
+      "loadMore": "Load more",
+      "loading": "Loading…",
+      "loaded": "{count, plural, one {# more risk} other {# more risks}} loaded.",
+      "loadFailed": "We couldn't load more risks. Please try again.",
+      "owner": "Owner: {name}",
+      "noOwner": "No owner yet",
+      "site": "Site: {name}",
+      "noSite": "No single site",
+      "updated": "Last change {date}"
+    },
+    "state": {
+      "proposed": "Proposed",
+      "in_review": "In review",
+      "approved": "Approved",
+      "returned": "Returned",
+      "closed": "Treated"
+    },
+    "score": {
+      "value": "Score {score}",
+      "unscored": "Not assessed yet",
+      "aboveAppetite": "Above appetite",
+      "withinAppetite": "Within appetite",
+      "outOf": "{score} out of 25"
+    },
+    "header": {
+      "back": "All risks",
+      "version": "Version {version}",
+      "aiAssisted": "Drafted with AI assistance",
+      "reportedBy": "Reported by {name}",
+      "conversation": "Conversation"
+    },
+    "stale": {
+      "message": "Someone else changed this risk. Reload to see their changes.",
+      "reload": "Reload",
+      "reloaded": "Reloaded. You are seeing the latest version.",
+      "reloadFailed": "We couldn't reload the risk. Please try again in a moment."
+    },
+    "inline": {
+      "edit": "Edit",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "saved": "{field} saved.",
+      "empty": "Not given yet"
+    },
+    "errors": {
+      "notEditable": "This risk can't be changed now.",
+      "forbidden": "You can't change this risk.",
+      "notFound": "This risk is no longer open to you.",
+      "invalid": "That value isn't accepted. Check it and try again.",
+      "owner": "This person can't own a risk here. Choose a risk owner or security lead for its site.",
+      "duplicate": "This control is already on the risk.",
+      "controlNotAccepted": "Only an accepted control can be removed.",
+      "controlHasOpenRequest": "Someone has an open evidence request for this control. It can be removed once the request is done.",
+      "aiUnavailable": "The AI can't suggest controls right now. Find and add them yourself below.",
+      "notAccepted": "That change wasn't accepted. Please reload and try again.",
+      "unavailable": "We couldn't save that. Please try again in a moment."
+    },
+    "record": {
+      "title": "Record",
+      "fields": {
+        "title": "Title",
+        "scenario": "What could happen",
+        "threat": "What could cause it",
+        "consequence": "What would happen then",
+        "existingSafeguards": "What already protects it",
+        "assets": "What is affected",
+        "site": "Site",
+        "department": "Department",
+        "owner": "Owner"
+      },
+      "noSite": "No single site",
+      "noDepartment": "No department",
+      "noOwner": "No owner yet",
+      "noAssets": "Nothing named yet",
+      "assetName": "Name of affected thing {number}",
+      "assetType": "Kind of affected thing {number}",
+      "addAsset": "Add something affected",
+      "removeAsset": "Remove affected thing {number}",
+      "ownerHint": "Risk owners and security leads for this risk's site.",
+      "assetLine": "{name} · {kind}"
+    },
+    "toConfirm": {
+      "title": "To confirm",
+      "intro": "Questions the reporter wasn't sure about. Resolve each one before the risk goes for approval.",
+      "listLabel": "Questions to confirm",
+      "resolved": "Resolved",
+      "none": "Nothing left to confirm.",
+      "done": "Marked as resolved.",
+      "resolvedLabel": "Resolved: {item}"
+    },
+    "assessment": {
+      "title": "Assessment",
+      "fieldLabel": "Likelihood and impact",
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "notSet": "Not set",
+      "level": "{value} – {label}",
+      "score": "Score",
+      "ai": {
+        "badge": "AI estimate",
+        "values": "Likelihood {likelihood} · Impact {impact}",
+        "hint": "Only a hint. The official figures are the ones a person sets.",
+        "use": "Use the AI estimate",
+        "used": "AI estimate used for likelihood and impact."
+      }
+    },
+    "controls": {
+      "title": "Controls",
+      "intro": "Choose the controls that reduce this risk. Suggestions are only hints until you accept them.",
+      "suggest": "Suggest controls",
+      "finding": "Finding controls…",
+      "ready": "Suggestions ready",
+      "failed": "The AI couldn't suggest controls this time. Find and add them yourself below.",
+      "slow": "This is taking longer than usual. Check again in a minute.",
+      "suggestedTitle": "Suggestions",
+      "noSuggestions": "No suggestions waiting.",
+      "suggestedBadge": "Suggested by AI",
+      "suggestionsLabel": "Suggested controls",
+      "reasonLabel": "Your reason for {code} (optional)",
+      "accept": "Accept",
+      "reject": "Reject",
+      "accepted": "Accepted {code}.",
+      "rejected": "Rejected {code}.",
+      "acceptedTitle": "Accepted controls",
+      "acceptedLabel": "Accepted controls",
+      "noAccepted": "No controls accepted yet.",
+      "decidedBy": "Accepted by {name}",
+      "aiSuggested": "Suggested by AI",
+      "remove": "Remove",
+      "removed": "Removed {code}.",
+      "hasEvidence": "Has evidence, so it stays.",
+      "refs": "Mapped to {refs}",
+      "ref": "{framework} {ref}",
+      "checkAgain": "Check again"
+    },
+    "picker": {
+      "title": "Add a control from the library",
+      "label": "Search the library",
+      "hint": "Search by code or words, for example backup.",
+      "search": "Search",
+      "searching": "Searching…",
+      "found": "{count, plural, =0 {No controls found.} one {# control found.} other {# controls found.}}",
+      "resultsLabel": "Library controls",
+      "add": "Add",
+      "added": "Added {code}.",
+      "onRisk": "On this risk",
+      "failed": "We couldn't search the library. Please try again."
+    },
+    "treatment": {
+      "title": "Treatment",
+      "fieldLabel": "How would you like to handle this risk?",
+      "noteLabel": "Treatment note",
+      "notChosen": "Not chosen yet",
+      "term": "({term})",
+      "avoid": {
+        "label": "Fix the problem",
+        "term": "avoid"
+      },
+      "mitigate": {
+        "label": "Reduce the risk",
+        "term": "mitigate"
+      },
+      "transfer": {
+        "label": "Transfer responsibility",
+        "term": "transfer"
+      },
+      "accept": {
+        "label": "Accept the risk with approval",
+        "term": "accept"
+      }
+    },
+    "history": {
+      "title": "History",
+      "listLabel": "Versions",
+      "entry": "Version {version}",
+      "by": "{name} · {date}",
+      "reported": "Reported",
+      "changed": "Changed: {fields}",
+      "fields": {
+        "title": "title",
+        "scenario": "what could happen",
+        "threat": "what could cause it",
+        "consequence": "what would happen then",
+        "existingSafeguards": "what already protects it",
+        "toConfirm": "to confirm",
+        "assets": "what is affected",
+        "likelihood": "likelihood",
+        "impact": "impact",
+        "residualLikelihood": "expected likelihood",
+        "residualImpact": "expected impact",
+        "treatment": "treatment",
+        "treatmentNote": "treatment note",
+        "ownerId": "owner",
+        "siteId": "site",
+        "departmentId": "department",
+        "controls": "controls",
+        "state": "state",
+        "reviewerId": "reviewer",
+        "other": "other details"
+      }
+    },
+    "transcript": {
+      "pageTitle": "Conversation · {app}",
+      "back": "Back to {reference}",
+      "title": "How {reference} was reported",
+      "intro": "The conversation the reporter had with the assistant. It is read-only.",
+      "logLabel": "Conversation",
+      "reporter": "Reporter",
+      "assistant": "AI assistant",
+      "notSure": "Not sure",
+      "summary": "The assistant summarised the answers.",
+      "empty": "No messages."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "@isms/ui/tokens.css";
+
+/* The app's own components (Tailwind also scans @isms/ui through tokens.css). */
+@source "../components";
+@source "../app";
+
+html {
+  /* next/font sets --font-jakarta on <html> (root layout); @isms/ui reads --isms-font-sans. */
+  --isms-font-sans:
+    var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--isms-bg);
+  background-image:
+    radial-gradient(
+      60rem 40rem at 85% -10%,
+      color-mix(in oklab, var(--isms-accent) 9%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50rem 36rem at -10% 110%,
+      color-mix(in oklab, var(--isms-info) 6%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(
+      160deg,
+      var(--isms-bg-gradient-from) 0%,
+      var(--isms-bg) 60%,
+      var(--isms-bg-gradient-to) 100%
+    );
+  background-attachment: fixed;
+  color: var(--isms-text);
+}
+
+/*
+ * Reduced motion: no entrance or page transitions. Motion runs them with duration 0; this
+ * also pins the server-rendered first frame (Motion's initial styles) to the final state.
+ */
+@media (prefers-reduced-motion: reduce) {
+  [data-entrance] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,295 @@
+{
+  "controls": [
+    {
+      "code": "DEV-01",
+      "title": "Make security a routine part of how your teams build software",
+      "description": "Security bolted on at the end is expensive and usually incomplete. Every team that builds or configures software, in house or in the cloud, follows one lightweight set of security steps from idea to release, built into the tools they already use.",
+      "guidance": [
+        "Write one short secure development standard covering design, code, testing and release, and keep it next to the code.",
+        "Build the checks into the pipeline, so nothing is released while a required check is failing.",
+        "Name a security champion in each team who gets extra training and is the first contact for questions.",
+        "Track security flaws in the same backlog as other work, with fix deadlines by severity.",
+        "Apply the same standard to low-code tools, scripts and spreadsheets that run important business processes.",
+        "Review the standard with the teams each year, and drop steps that add effort without reducing risk."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.25"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.PS-06"
+        }
+      ]
+    },
+    {
+      "code": "DEV-02",
+      "title": "Write down what secure enough means before anyone builds or buys",
+      "description": "Security that nobody asked for rarely gets built, and gaps found after go-live are costly to close. A payments system and a lunch-menu page are not held to the same bar, and every project knows its bar before work starts, so testers can check it at acceptance.",
+      "guidance": [
+        "Keep a short checklist of requirements for each data rating, and have the system owner pick and sign off the right one at project start.",
+        "Write requirements as acceptance criteria in user stories, so testers can check them.",
+        "Use the same checklist when buying, and ask software and cloud vendors to show how they meet each point.",
+        "For systems that move money or place orders, require a second approval for high-value actions and a record that cannot be altered.",
+        "Include privacy needs, such as deleting and exporting a person's data, alongside the security ones.",
+        "Record every requirement a system cannot meet as a risk with an owner."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.26"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 25(1)"
+        }
+      ]
+    },
+    {
+      "code": "DEV-03",
+      "title": "Design systems to stay safe even when one part is breached",
+      "description": "Systems designed on the assumption that the network is safe and every user is honest collapse once an attacker gets in. New systems are designed to limit what an intruder can reach from any one foothold, and an experienced reviewer checks important designs before building starts.",
+      "guidance": [
+        "Agree a handful of design principles in your own words, for example that no request is trusted because of where on the network it comes from.",
+        "Reuse the shared building blocks you trust for sign-in, secrets, logging and encryption, instead of each team writing its own.",
+        "Draw how data flows through each new system, and ask what an attacker could do at each step.",
+        "Have an architect or security reviewer sign off designs for systems that hold sensitive data or face the internet.",
+        "Plan from the start how the system will be patched, monitored and recovered.",
+        "Update the principles when you adopt a new platform, such as another cloud provider or an AI service."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.27"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        }
+      ]
+    },
+    {
+      "code": "DEV-04",
+      "title": "Catch common coding flaws before code reaches production",
+      "description": "Injection, broken permission checks and leaked secrets are still behind many breaches, and they are cheap to prevent while code is being written. Developers know the common mistakes, tools check every change automatically, and a second person reviews code before it ships.",
+      "guidance": [
+        "Train developers on the most common web and API weaknesses, using public lists such as the OWASP Top 10.",
+        "Run static analysis and secret scanning on every pull request, and block merges on high-severity findings.",
+        "Scan third-party libraries for known flaws and licence problems, and keep them current with automated update requests.",
+        "Review code written with AI assistants as carefully as code written by people.",
+        "Use the framework's built-in protections for database queries, page output and sessions rather than hand-made ones.",
+        "Keep a short review checklist for changes that touch sign-in, permissions, payments or personal data."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.28"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        }
+      ]
+    },
+    {
+      "code": "DEV-05",
+      "title": "Test security before go-live and attack your own systems regularly",
+      "description": "Flaws found by your own testers cost far less than flaws found by attackers. New and changed systems pass security tests before release, and important systems, especially those facing the internet, are tested by skilled outsiders on a regular cycle.",
+      "guidance": [
+        "Run automated security scans against each build in a test environment, and stop the release on serious findings.",
+        "Commission a penetration test before launching an important system, and at least yearly for internet-facing ones.",
+        "Test the security requirements agreed for the system during acceptance, including for software you buy.",
+        "Fix serious findings before go-live, or have the system owner accept the risk in writing with a deadline.",
+        "Retest to confirm each fix, and track findings until they are closed.",
+        "Include systems that handle personal data in the test plan, and keep the results as proof that their protection is checked."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.29"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(f)"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 32"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.IM-02"
+        }
+      ]
+    },
+    {
+      "code": "DEV-06",
+      "title": "Hold outside developers to the same security standard as your own",
+      "description": "Software written for you by contractors or agencies carries your risk, not theirs. Contracts set out your security expectations, their work passes your own checks before it goes live, and you keep control of the code and the accounts it runs under.",
+      "guidance": [
+        "Write your secure development standard, test requirements and a right to audit their development practices into every development contract.",
+        "Have contractors work in your code repositories and pipelines, with their own accounts that expire with the contract.",
+        "Scan and review delivered code yourself before accepting it, rather than relying on the supplier's word.",
+        "Make sure you can build and run the software yourself from what is delivered, so you are not stuck if the supplier disappears.",
+        "Require the supplier to report flaws found after delivery and fix them within agreed times.",
+        "Give contractors the same security training and scanning tools as your own developers."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.30"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(d)"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        }
+      ]
+    },
+    {
+      "code": "DEV-07",
+      "title": "Stop a failed test or hacked developer account reaching live systems",
+      "description": "A test that goes wrong, or a developer account that is hacked, should not be able to touch live systems or live data. Development, test and production run separately with their own accounts and credentials, and changes reach production only through the release pipeline.",
+      "guidance": [
+        "Give production its own cloud accounts or subscriptions, separate from development and test.",
+        "Use different credentials and secrets in each environment, so a leaked test key opens nothing live.",
+        "Give developers no standing write access to production, only time-limited access granted for an incident.",
+        "Deploy to production only from the pipeline, using builds that have already passed testing.",
+        "Rebuild test environments from scratch regularly, so forgotten accounts and changes do not pile up.",
+        "Protect any test system that holds a copy of real data as strongly as production."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.31"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        }
+      ]
+    },
+    {
+      "code": "DEV-08",
+      "title": "Make changes to live systems planned, reviewed and reversible",
+      "description": "Unplanned changes are a leading cause of outages and of security gaps that open without anyone noticing. Every change to live systems is recorded, sized by its risk, checked by someone other than its author and can be rolled back, with a fast but recorded route for emergencies.",
+      "guidance": [
+        "Log every change to live systems in one place: what changes, why, who approved it and when it goes in.",
+        "Pre-approve low-risk routine changes as standard, so review effort goes to the risky ones.",
+        "Require peer review and passing tests for code and infrastructure changes, enforced by the pipeline.",
+        "Write the rollback step before making a risky change, and know how long it takes.",
+        "Let emergency changes go in first and be reviewed within two working days, with the reasons recorded.",
+        "Freeze non-urgent changes around critical business dates, such as month-end closing or peak season."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.32"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.RA-07"
+        }
+      ]
+    },
+    {
+      "code": "DEV-09",
+      "title": "Test with made-up data unless real data is truly needed",
+      "description": "Copies of live data in test systems are often less protected and forgotten once the project ends. Testing uses generated or disguised data by default, so a leak from a test system exposes nobody, and the rare real copy has a named owner and an end date.",
+      "guidance": [
+        "Generate realistic synthetic data sets for common tests, and share them across teams.",
+        "If a test needs live data, replace names, contact details and account numbers first, using an approved, repeatable tool.",
+        "Require the data owner's approval for any undisguised copy, with a reason and an end date.",
+        "Delete test copies when the test ends, and look each quarter for copies that outlived their purpose.",
+        "Never use real customer data in demos, training sessions or tickets sent to suppliers."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.33"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        }
+      ]
+    },
+    {
+      "code": "DEV-10",
+      "title": "Let testers in deep without letting them break or expose anything",
+      "description": "Auditors and penetration testers need deep access, and a careless scan can crash a production system or leave a back door open. Before any test starts, both sides know what is in bounds, who can call a halt and how everything the testers touched will be put back.",
+      "guidance": [
+        "Agree written rules of engagement for each test: targets, timing, methods that are off-limits and an emergency contact on each side.",
+        "Create tester accounts for the test only, read-only where possible, log everything they do and disable them the day it ends.",
+        "Tell your monitoring team the testers' source addresses and times, so a real attack is not mistaken for the test.",
+        "Run tests that could slow or disrupt a system when the business can tolerate it, and have a restore ready.",
+        "Treat findings and any data testers collect as confidential, and confirm they delete their copies afterwards.",
+        "After the test, check that tools, accounts and changed settings have all been removed."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.34"
+        }
+      ]
+    },
+    {
+      "code": "DEV-11",
+      "title": "Make it easy for outsiders to report flaws, and act on them",
+      "description": "Researchers and customers often find weaknesses before you do, and if they cannot reach you they may go public instead. A published route takes reports about flaws in your products and services, each report is answered and fixed within set times, and affected customers are told.",
+      "guidance": [
+        "Publish a disclosure policy and a security contact file on your website, saying how to report and what you promise in return.",
+        "Acknowledge reports within a few working days, and keep the reporter informed until the flaw is fixed.",
+        "Rate each reported flaw on the same severity scale as your own findings, and fix it within the same deadlines.",
+        "Agree publication dates with the reporter, and involve your national CSIRT when several vendors or many users are affected.",
+        "Tell customers about fixed flaws through security advisories, with clear steps they need to take.",
+        "If you sell products with digital elements in the EU, prepare for the Cyber Resilience Act's duty to report actively exploited flaws."
+      ],
+      "category": "development",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.8"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.RA-08"
+        }
+      ]
+    }
+  ]
+}

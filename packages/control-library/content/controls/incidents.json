@@ -1,0 +1,272 @@
+{
+  "controls": [
+    {
+      "code": "INC-01",
+      "title": "Know who leads and what to do when an incident strikes",
+      "description": "Working out who is in charge, who to call and what to switch off while under attack wastes the hours that matter most. When the call comes in the middle of the night, the person answering knows they are in charge, has a playbook for what is happening and can reach outside help within the hour.",
+      "guidance": [
+        "Name an incident lead and a deputy for every shift, with authority to isolate systems without waiting for approval.",
+        "Write short playbooks for the incidents you are most likely to face, such as ransomware, a hijacked mailbox, a lost device or a supplier breach.",
+        "Sign a retainer with an incident response firm, and know your insurer's hotline and conditions, before you need them.",
+        "Keep the contact list for staff, suppliers, authorities and lawyers on paper and on phones, not only on a network that may be down.",
+        "Run a tabletop exercise at least twice a year, and fix the gaps it reveals.",
+        "Prepare holding statements for customers and media, and agree who may approve them during an incident."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.24"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.IM-04"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MA-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.CO-04"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "GV.SC-08"
+        }
+      ]
+    },
+    {
+      "code": "INC-02",
+      "title": "Triage every alert and report quickly on one shared severity scale",
+      "description": "Most alerts and reports turn out to be harmless, but the one that is not must not wait in a queue. Each is looked at quickly, rated on one shared severity scale and checked for whether personal data is involved or a legal reporting clock has started.",
+      "guidance": [
+        "Set a time limit for the first look at reports and high-priority alerts, such as 30 minutes, and track how often you meet it.",
+        "Use one severity scale with real examples for each level, so two people rate the same event the same way.",
+        "Ask straight away whether personal data is affected, and how likely and how severe the harm to the people involved could be.",
+        "Check whether the event could be a significant incident under NIS2 or a major ICT-related incident under DORA's classification criteria, and note when you became aware.",
+        "Record every decision, including 'not an incident', with the reason, so it can be revisited if new facts appear.",
+        "Bring in the incident lead and your data protection officer at the levels your scale defines."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.25"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 33"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 34"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.AE-04"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.AE-08"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MA-02"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MA-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MA-04"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.AN-08"
+        }
+      ]
+    },
+    {
+      "code": "INC-03",
+      "title": "Contain the damage, remove the attacker and restore service safely",
+      "description": "Rushing to rebuild can destroy evidence or let the attacker back in through a door you did not close. Each incident follows its playbook to limit the damage, find and shut the way in, and bring systems back only once they are known to be clean.",
+      "guidance": [
+        "Isolate affected machines through your endpoint tools rather than switching them off, so their memory can still be examined.",
+        "Reset passwords, tokens and keys for every account the attacker may have used, including service accounts.",
+        "Find out how the attacker got in and close that route before restoring anything.",
+        "Restore from backups taken before the compromise, and scan them before use.",
+        "Keep a running timeline of what was seen and done, with times, in a channel the attacker cannot read.",
+        "Leave any ransom decision to leadership and legal, after a sanctions check and with your insurer involved."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.26"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MA-05"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MI-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.MI-02"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.RP-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.RP-05"
+        }
+      ]
+    },
+    {
+      "code": "INC-04",
+      "title": "Turn every serious incident and near miss into lasting fixes",
+      "description": "The same weakness often causes the next incident when nobody follows up. After each serious incident or near miss, the team works out what really went wrong without blaming individuals, and the fixes are tracked until they are done.",
+      "guidance": [
+        "Hold a review within two weeks of closing a serious incident, with everyone who took part.",
+        "Ask which safeguards failed, which worked and what slowed the response, rather than who made the mistake.",
+        "Turn findings into actions with owners and dates, and track them in the same place as other risk work.",
+        "Update playbooks, detections and training with what you learned.",
+        "Look across all incidents each quarter for patterns, such as the same supplier, system or kind of attack.",
+        "Report the main lessons and the status of the actions to leadership."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.27"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(f)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.IM-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.AN-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.RP-06"
+        }
+      ]
+    },
+    {
+      "code": "INC-05",
+      "title": "Preserve evidence so it holds up with insurers, courts and regulators",
+      "description": "Evidence that was altered, incomplete or handled by unknown hands may be rejected just when you need it for an insurance claim or a case against an attacker. If an insurer, court or regulator later asks, you can show what you took from a serious incident, that each copy matches its source and who has held it since.",
+      "guidance": [
+        "Copy the disks and memory of key machines before rebuilding them, and record a hash of each copy.",
+        "Extend log retention at once for the systems involved, so nothing expires during the investigation.",
+        "Keep a handover record for each item of evidence: who took it, when, and where it went next.",
+        "Store evidence in write-protected storage that only the investigation team can open.",
+        "Call in a forensic specialist when the incident may end up in court or with the police.",
+        "Take legal advice before collecting data from employees' personal devices or private messages."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.28"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.AN-06"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.AN-07"
+        }
+      ]
+    },
+    {
+      "code": "INC-06",
+      "title": "Report breaches and major incidents to the authorities on time",
+      "description": "Missing a legal reporting deadline turns an incident into a fine and a loss of trust. You know which authorities must hear about which incidents and how fast, and drafts, approvers and submission routes are ready before you need them.",
+      "guidance": [
+        "Tell the data protection authority of a personal data breach within 72 hours of becoming aware, unless it is unlikely to put people at risk, and explain any delay.",
+        "For a significant incident under NIS2, send an early warning within 24 hours, a full notification within 72 hours and a final report within a month.",
+        "Financial firms under DORA report major ICT incidents to their financial supervisor instead of under NIS2: first notice within 4 h of classing it major (24 h at most), then 72 h and one month.",
+        "Send what you know first and add details as they emerge, rather than waiting for the full picture.",
+        "Require processors and key suppliers to tell you without delay about breaches affecting your data, so none of your time is lost.",
+        "Record every personal data breach, reported or not, with its facts, its effects and the actions taken."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 33"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.CO-02"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.CO-03"
+        }
+      ]
+    },
+    {
+      "code": "INC-07",
+      "title": "Tell affected people quickly when a breach puts them at high risk",
+      "description": "People whose data has leaked can protect themselves only if they know, for example by changing passwords or watching their accounts. When a breach is likely to cause them serious harm, you tell them promptly, in plain language, what happened and what they should do.",
+      "guidance": [
+        "Prepare plain-language message templates for likely breaches, approved in advance by legal and communications.",
+        "Say what happened, what it could mean for them, what you are doing about it and who they can contact with questions.",
+        "Give concrete steps people can take, such as resetting a password or watching for fake calls that claim to come from you.",
+        "You may not need to tell people if the data was strongly encrypted and the key was not exposed, or if you have removed the high risk; record why you decided not to.",
+        "Where contacting everyone one by one would take disproportionate effort, use a public notice that reaches them just as well.",
+        "Brief your helpdesk before the message goes out, so they can answer the calls that follow."
+      ],
+      "category": "incidents",
+      "mappings": [
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 34"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RS.CO-02"
+        }
+      ]
+    }
+  ]
+}

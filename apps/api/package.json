@@ -1,0 +1,60 @@
+{
+  "name": "@isms/api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "node --watch --env-file=../../.env --import @swc-node/register/esm-register src/main.ts",
+    "build": "isms-build-js",
+    "typecheck": "tsc -p .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "node --env-file=../../.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.1156.0",
+    "@isms/ai": "workspace:*",
+    "@isms/config": "workspace:*",
+    "@isms/contracts": "workspace:*",
+    "@isms/database": "workspace:*",
+    "@isms/demo": "workspace:*",
+    "@isms/domain": "workspace:*",
+    "@isms/jobs": "workspace:*",
+    "@isms/telemetry": "workspace:*",
+    "@isms/ui": "workspace:*",
+    "@nestjs/common": "12.3.2",
+    "@nestjs/core": "12.3.2",
+    "@nestjs/platform-express": "12.3.2",
+    "@nestjs/throttler": "6.7.1",
+    "helmet": "8.3.0",
+    "ioredis": "6.0.0",
+    "jose": "6.2.14",
+    "nestjs-pino": "5.3.1",
+    "pdfmake": "0.3.12",
+    "pino": "10.4.0",
+    "pino-http": "11.0.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "write-excel-file": "4.1.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@isms/control-library": "workspace:*",
+    "@isms/tooling": "workspace:*",
+    "@nestjs/testing": "12.3.2",
+    "@swc-node/register": "1.12.1",
+    "@swc/core": "1.16.21",
+    "@types/express": "5.0.6",
+    "@types/node": "26.6.6",
+    "@types/supertest": "7.2.1",
+    "eslint": "10.13.0",
+    "fflate": "0.8.3",
+    "supertest": "7.3.1",
+    "typescript": "6.0.3",
+    "unplugin-swc": "2.0.0",
+    "vitest": "5.1.0"
+  }
+}

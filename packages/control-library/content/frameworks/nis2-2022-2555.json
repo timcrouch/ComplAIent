@@ -1,0 +1,54 @@
+{
+  "framework": {
+    "key": "nis2",
+    "name": "NIS2",
+    "publisher": "European Union",
+    "summary": "EU law on cybersecurity for essential and important organisations in sectors such as manufacturing, digital services and energy. Check whether it applies to you."
+  },
+  "version": {
+    "key": "nis2-2022-2555",
+    "label": "Directive (EU) 2022/2555"
+  },
+  "requirements": [
+    {
+      "ref": "Art. 21(2)(a)",
+      "title": "Risks to networks and systems are analysed and governed by approved security policies."
+    },
+    {
+      "ref": "Art. 21(2)(b)",
+      "title": "Cyber incidents are detected, handled and resolved in a controlled way."
+    },
+    {
+      "ref": "Art. 21(2)(c)",
+      "title": "Operations continue through crises, with backups and disaster recovery ready to use."
+    },
+    {
+      "ref": "Art. 21(2)(d)",
+      "title": "Security risks from direct suppliers and service providers are understood and managed."
+    },
+    {
+      "ref": "Art. 21(2)(e)",
+      "title": "Systems are bought, built and maintained securely, and vulnerabilities are handled and disclosed."
+    },
+    {
+      "ref": "Art. 21(2)(f)",
+      "title": "The organisation regularly checks whether its cybersecurity measures actually work."
+    },
+    {
+      "ref": "Art. 21(2)(g)",
+      "title": "Staff practise basic cyber hygiene and receive regular cybersecurity training."
+    },
+    {
+      "ref": "Art. 21(2)(h)",
+      "title": "Cryptography, including encryption where appropriate, is used under clear rules."
+    },
+    {
+      "ref": "Art. 21(2)(i)",
+      "title": "Staff are vetted, access is controlled, and assets are known and managed."
+    },
+    {
+      "ref": "Art. 21(2)(j)",
+      "title": "Multi-factor or continuous authentication and secured voice, video, text and emergency communications are used where appropriate."
+    }
+  ]
+}

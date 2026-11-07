@@ -1,0 +1,24 @@
+{
+  "libraryVersion": "2026.11.3",
+  "frameworks": [
+    "frameworks/iso27001-2022.json",
+    "frameworks/gdpr-2016-679.json",
+    "frameworks/nis2-2022-2555.json",
+    "frameworks/nist-csf-2.0.json",
+    "frameworks/nist-sp800-53-r5.json"
+  ],
+  "controls": [
+    "controls/governance.json",
+    "controls/privacy.json",
+    "controls/suppliers.json",
+    "controls/assets.json",
+    "controls/access.json",
+    "controls/people.json",
+    "controls/physical.json",
+    "controls/operations.json",
+    "controls/resilience.json",
+    "controls/incidents.json",
+    "controls/development.json"
+  ],
+  "mappings": ["mappings/nist-sp800-53-r5.json"]
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@isms/jobs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "isms-dist": "./dist/index.js",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "node --env-file=../../.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts",
+    "build": "isms-build-js"
+  },
+  "dependencies": {
+    "@isms/domain": "workspace:*",
+    "@isms/telemetry": "workspace:*",
+    "bullmq": "5.81.5",
+    "ioredis": "5.11.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@isms/config": "workspace:*",
+    "@isms/tooling": "workspace:*",
+    "@types/node": "26.6.6",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

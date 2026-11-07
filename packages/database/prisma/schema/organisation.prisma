@@ -1,0 +1,129 @@
+// Organisation profile, sites, departments, frameworks in scope, risk scales and assets.
+
+model Organisation {
+  id                   String    @id @default(uuid(7)) @db.Uuid
+  /// Always true; the unique index plus a check constraint allow exactly one row.
+  singleton            Boolean   @unique @default(true)
+  name                 String
+  description          String    @default("")
+  approximateHeadcount Int?
+  setupCompletedAt     DateTime? @db.Timestamptz(3)
+  setupCompletedById   String?   @db.Uuid
+  /// Months between periodic risk reviews; 1-36 (check constraint in the migration, Plan 6).
+  reviewIntervalMonths Int       @default(12)
+  createdAt            DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime  @updatedAt @db.Timestamptz(3)
+
+  setupCompletedBy User? @relation("SetupCompletedBy", fields: [setupCompletedById], references: [id], onDelete: Restrict)
+}
+
+model Site {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  name        String
+  /// lower(btrim(name)) (check constraint in the migration); makes names unique ignoring case.
+  nameKey     String   @unique
+  /// ISO-3166 alpha-2, two capital letters (check constraint in the migration).
+  countryCode String   @db.Char(2)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+
+  roleAssignments RoleAssignment[]
+  assets          Asset[]
+  risks           Risk[]
+}
+
+model Department {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  name      String
+  /// lower(btrim(name)) (check constraint in the migration).
+  nameKey   String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  roleAssignments RoleAssignment[]
+  risks           Risk[]
+}
+
+enum OrganisationFrameworkStatus {
+  suggested
+  confirmed
+}
+
+enum OrganisationFrameworkSource {
+  manual
+  ai
+}
+
+model OrganisationFramework {
+  id                 String                      @id @default(uuid(7)) @db.Uuid
+  frameworkVersionId String                      @unique @db.Uuid
+  status             OrganisationFrameworkStatus
+  source             OrganisationFrameworkSource
+  reasoning          String?
+  /// Set together with confirmedAt exactly when status = confirmed (check constraint in the migration).
+  confirmedById      String?                     @db.Uuid
+  confirmedAt        DateTime?                   @db.Timestamptz(3)
+  createdAt          DateTime                    @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime                    @updatedAt @db.Timestamptz(3)
+
+  frameworkVersion FrameworkVersion @relation(fields: [frameworkVersionId], references: [id], onDelete: Restrict)
+  confirmedBy      User?            @relation("FrameworkConfirmedBy", fields: [confirmedById], references: [id], onDelete: Restrict)
+}
+
+enum RiskAxis {
+  likelihood
+  impact
+}
+
+/// Append-only: the app role may INSERT and SELECT but not UPDATE, DELETE or TRUNCATE.
+model RiskScale {
+  id                String   @id @default(uuid(7)) @db.Uuid
+  version           Int      @unique
+  /// A risk is above appetite when its score is greater than this (P2-R9); 1-24 (check constraint in the migration).
+  appetiteThreshold Int
+  createdById       String   @db.Uuid
+  createdAt         DateTime @default(now()) @db.Timestamptz(3)
+
+  createdBy User             @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  levels    RiskScaleLevel[]
+  risks     Risk[]
+}
+
+model RiskScaleLevel {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  riskScaleId String   @db.Uuid
+  axis        RiskAxis
+  /// 1-5 (check constraint in the migration).
+  value       Int
+  label       String
+  description String
+
+  riskScale RiskScale @relation(fields: [riskScaleId], references: [id], onDelete: Restrict)
+
+  @@unique([riskScaleId, axis, value])
+}
+
+enum AssetType {
+  information
+  application
+  device
+  service
+  facility
+  other
+}
+
+model Asset {
+  id        String    @id @default(uuid(7)) @db.Uuid
+  name      String
+  /// lower(btrim(name)) (check constraint in the migration); makes names unique per type ignoring case.
+  nameKey   String
+  type      AssetType
+  siteId    String?   @db.Uuid
+  ownerId   String?   @db.Uuid
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(3)
+
+  site  Site?       @relation(fields: [siteId], references: [id], onDelete: Restrict)
+  owner User?       @relation(fields: [ownerId], references: [id], onDelete: Restrict)
+  risks RiskAsset[]
+
+  @@unique([nameKey, type])
+}

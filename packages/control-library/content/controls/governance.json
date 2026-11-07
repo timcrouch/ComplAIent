@@ -1,0 +1,281 @@
+{
+  "controls": [
+    {
+      "code": "GOV-01",
+      "title": "Publish the security rules your leadership has signed off",
+      "description": "Staff can find the security rules that apply to their job within a minute, and they know leadership stands behind them. Rules that are hard to find, or that nobody senior has backed, get ignored.",
+      "guidance": [
+        "Start from the risks and duties you actually face, and write only the rules people need in order to act on them.",
+        "Keep a one-page overview of why security matters and who decides, linking to short rule sets such as visitors or travelling with laptops.",
+        "Have a senior executive sign each document, and show the signature, date and version on it.",
+        "Put the documents where staff already work, and add a read-and-confirm step to onboarding.",
+        "Give each document an owner who keeps it current, with a date for its next check."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.1" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(a)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.PO-01" },
+        { "framework": "nist-csf-2.0", "ref": "GV.PO-02" }
+      ]
+    },
+    {
+      "code": "GOV-02",
+      "title": "Name who owns each security duty and hold managers to it",
+      "description": "Ask who does any security task, from approving access to reading logs, and there is one named answer. Team managers treat security slips like any other performance issue. When ownership is vague, tasks fall between teams and nobody notices until something fails.",
+      "guidance": [
+        "List recurring security tasks and assign each one to a role, with a named person and a deputy.",
+        "Write security duties into job descriptions and into managers' yearly objectives.",
+        "Ask managers to brief new team members on the security rules that matter for their work.",
+        "Raise repeated rule-breaking in a team with its manager, not only with the individual.",
+        "Revisit the assignments whenever people leave, change role or the organisation is restructured."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.2" },
+        { "framework": "iso27001-2022", "ref": "A.5.4" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RR-02" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-02" }
+      ]
+    },
+    {
+      "code": "GOV-03",
+      "title": "Split risky tasks so no single person can act unchecked",
+      "description": "Actions that could enable fraud, serious error or a hidden breach, such as approving payments, granting admin rights or releasing code to production, need two different people. Where the team is too small to split the work, extra oversight fills the gap.",
+      "guidance": [
+        "Identify tasks where one person acting alone could cause serious loss or cover their tracks.",
+        "Separate requesting from approving, and doing from checking, for each of those tasks.",
+        "Enforce the split in systems where you can, for example by blocking people from approving their own requests.",
+        "Where a team is too small to split duties, log the actions and have someone outside the team review them regularly."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.3" },
+        { "framework": "nist-csf-2.0", "ref": "PR.AA-05" }
+      ]
+    },
+    {
+      "code": "GOV-04",
+      "title": "Know which authorities to contact in a crisis, and how",
+      "description": "Current contact details and reporting routes are on file for every authority you may need during an incident, an outage or a legal matter, and specific roles are agreed to talk to them. Searching for a reporting address mid-crisis wastes time that a legal deadline may not allow.",
+      "guidance": [
+        "List the authorities relevant to you, such as the data protection authority, the national cyber agency and your sector regulator.",
+        "Record each one's reporting channel, opening hours and any legal reporting deadline.",
+        "Agree which roles may contact authorities for the organisation, and tell staff to route requests to them.",
+        "Check the list twice a year and whenever a regulator or its reporting rules change."
+      ],
+      "category": "governance",
+      "mappings": [{ "framework": "iso27001-2022", "ref": "A.5.5" }]
+    },
+    {
+      "code": "GOV-05",
+      "title": "Gather threat warnings from trusted sources and act on them",
+      "description": "Security staff follow reliable sources on attacks, vulnerabilities and attacker behaviour, take part in peer groups where organisations share warnings, and turn what is relevant into concrete action. Defences based only on last year's picture miss what attackers are doing now.",
+      "guidance": [
+        "Subscribe to advisories from your national cyber agency and from the makers of your key systems.",
+        "Join a sector or regional group where security staff exchange warnings under agreed sharing rules.",
+        "Have a named person review incoming warnings each week and decide which apply to you.",
+        "Record each relevant warning with the action taken, such as a patch, a blocking rule or a staff alert.",
+        "Share your own lessons back with the group where you are able to."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.6" },
+        { "framework": "iso27001-2022", "ref": "A.5.7" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-02" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-03" },
+        { "framework": "nist-csf-2.0", "ref": "DE.AE-07" }
+      ]
+    },
+    {
+      "code": "GOV-06",
+      "title": "Ask what each project could put at risk before it starts",
+      "description": "Every project, IT or not, works out early what it could expose or break and has its safeguards ready before go-live. Fixing security after launch is slower, costs more and is often skipped.",
+      "guidance": [
+        "Add a short set of security and privacy questions to the project start-up template.",
+        "Record the risks found and the safeguards agreed in the project plan, each with an owner.",
+        "Make a security sign-off one of the conditions for go-live or handover.",
+        "Scale the effort to the project: a quick checklist for small changes, a full review for major ones."
+      ],
+      "category": "governance",
+      "mappings": [{ "framework": "iso27001-2022", "ref": "A.5.8" }]
+    },
+    {
+      "code": "GOV-07",
+      "title": "Track every security duty that law or a contract places on you",
+      "description": "For any security or privacy duty the organisation carries, you can say where it comes from, who answers for it and what proves you meet it. Without this, obligations come to light only when an auditor, customer or regulator asks about them.",
+      "guidance": [
+        "Start with the laws for your sector and the countries you operate in, then add customer contracts and certifications.",
+        "For each entry, record what it requires of you, who owns it and where the evidence is kept.",
+        "Ask your legal team or a qualified adviser to confirm the list at least once a year.",
+        "Add new or changed obligations as regulator updates arrive and new contracts are signed."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.31" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OC-03" }
+      ]
+    },
+    {
+      "code": "GOV-08",
+      "title": "Use software and content only as their licences allow",
+      "description": "Every program, font, image or data set you did not create is used within its terms, so a vendor audit holds no surprises, and your own code and designs are kept out of others' hands. Unlicensed use brings legal claims and back-payments, and unofficial downloads often carry malware.",
+      "guidance": [
+        "Let an inventory tool compare installed software with what you are entitled to, and review the gaps each month.",
+        "Route every software request through one approval step that checks the licence first.",
+        "Before shipping a product, list its open-source components and check each licence against your policy.",
+        "Give staff a short rule for reusing images, fonts and text found online.",
+        "Mark your own source code and designs as confidential and limit who can copy or export them."
+      ],
+      "category": "governance",
+      "mappings": [{ "framework": "iso27001-2022", "ref": "A.5.32" }]
+    },
+    {
+      "code": "GOV-09",
+      "title": "Be able to produce any required record, complete and untouched",
+      "description": "When a court, regulator or auditor asks for a record, you can hand it over complete and show that nobody has tampered with it, and you hold nothing longer than you should. A missing or doctored record can lose a dispute or an audit.",
+      "guidance": [
+        "List the types of record you must keep, how long for, and the rule that sets each period.",
+        "Keep finished records where they can be read but not edited, such as write-once storage or a locked archive.",
+        "Each year, open a sample of your oldest records to prove you can still read them.",
+        "At the end of each period, destroy the records securely and log what went and when."
+      ],
+      "category": "governance",
+      "mappings": [{ "framework": "iso27001-2022", "ref": "A.5.33" }]
+    },
+    {
+      "code": "GOV-10",
+      "title": "Get an outsider's verdict on whether your security really works",
+      "description": "At least once a year, an internal auditor or outside firm with no stake in the result tells leadership plainly whether your security holds up. People rarely spot the weaknesses in a system they built themselves.",
+      "guidance": [
+        "Choose reviewers who have no responsibility for the areas they review.",
+        "Agree the scope and timing in a yearly plan approved by leadership.",
+        "Bring a review forward after a merger, a major system change or a serious incident.",
+        "Report findings to senior leadership and track each one to closure with an owner and a due date."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.35" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(f)" },
+        { "framework": "nist-csf-2.0", "ref": "ID.IM-01" }
+      ]
+    },
+    {
+      "code": "GOV-11",
+      "title": "Spot-check whether daily work matches your written security rules",
+      "description": "Managers and the security team look for places where daily practice has drifted from what the rules say, using spot checks, self-assessments and automated reports, and they close the gaps. Rules nobody checks quietly fall out of use.",
+      "guidance": [
+        "Give managers a short self-assessment checklist for their area to complete every quarter.",
+        "Run spot checks on a sample, for example that leavers' accounts were closed or that laptops are encrypted.",
+        "Use automated reports where systems can show compliance, such as patch or backup status.",
+        "Record each gap with its cause, a fix, an owner and a due date, and check again once it is fixed."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.36" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(f)" },
+        { "framework": "nist-csf-2.0", "ref": "ID.IM-01" },
+        { "framework": "nist-csf-2.0", "ref": "ID.IM-03" }
+      ]
+    },
+    {
+      "code": "GOV-12",
+      "title": "Write step-by-step guides for routine IT and security tasks",
+      "description": "Anyone trained can carry out recurring technical jobs, such as running backups, setting up new users or patching, by following a written guide instead of relying on the usual person. Knowledge that lives in one head is lost when that person is away or leaves.",
+      "guidance": [
+        "List the recurring technical tasks that would cause harm if done wrongly or skipped.",
+        "Write each as numbered steps with checks, expected results and what to do if a step fails.",
+        "Keep a copy of the guides somewhere you can still open when the main systems are down.",
+        "Have someone other than the author follow each guide once to prove it works.",
+        "Update a guide whenever the system or the process it describes changes."
+      ],
+      "category": "governance",
+      "mappings": [{ "framework": "iso27001-2022", "ref": "A.5.37" }]
+    },
+    {
+      "code": "GOV-13",
+      "title": "Rate security risks by one method and record who accepts them",
+      "description": "Everyone rates security risks the same way, weighing harm to the business and to the people whose personal data is involved, so leadership can compare risks, decide what to fix first and see who agreed to live with what.",
+      "guidance": [
+        "Write a short method with a likelihood scale, impact scales covering harm to the business and to affected individuals, and the score that triggers action.",
+        "Have leadership approve how much risk it will tolerate and who may sign off risks at each level.",
+        "Reassess at least yearly, and whenever you launch a major system, change a key supplier or suffer a serious incident.",
+        "Give every risk a named owner and a decision: reduce, avoid, transfer or accept.",
+        "Record each accepted risk with who accepted it, why, and when it will be looked at again.",
+        "Keep all risks in one register so trends and overdue actions are visible."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "gdpr-2016-679", "ref": "Art. 32" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(a)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-06" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-03" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-04" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-05" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-06" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-03" }
+      ]
+    },
+    {
+      "code": "GOV-14",
+      "title": "Ground security decisions in what you deliver and who relies on it",
+      "description": "Before deciding what to protect, you can say what the organisation must deliver, to whom, and what customers, regulators and partners expect of its security. Without that picture, effort goes to whatever is easiest to secure rather than to what the business cannot do without.",
+      "guidance": [
+        "Write a one-page summary of what the organisation delivers, to whom, and which services would hurt most if they stopped.",
+        "List the groups with a stake in your security, such as customers, regulators, staff, partners and insurers, and what each expects.",
+        "Note the availability and security commitments you have made to customers and partners, and tell the teams who deliver them.",
+        "Use the summary to set priorities in risk assessments, recovery planning and the security budget.",
+        "Revisit it each year and whenever you enter a new market, launch a major service or take on a large customer."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "nist-csf-2.0", "ref": "GV.OC-01" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OC-02" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OC-04" }
+      ]
+    },
+    {
+      "code": "GOV-15",
+      "title": "Agree how much risk leadership accepts and how to respond",
+      "description": "Leadership has agreed what managing security risk should achieve, how much risk it will accept and the preferred ways to respond, and security risks sit alongside the organisation's other business risks. Without a stated appetite, every decision becomes a debate and staff cannot tell which risks to escalate.",
+      "guidance": [
+        "Agree a few security risk objectives with leadership, such as keeping critical services running and customer data out of the wrong hands.",
+        "Set the appetite threshold on the risk scale in this product, and write a short statement of what leadership will and will not accept.",
+        "State the preferred response for each risk level, for example reduce or avoid above the threshold, and accept with sign-off below it.",
+        "Report the top security risks in the same register or meeting as financial, legal and operational risks.",
+        "Give staff and suppliers a clear route for raising a new security risk, and say who receives it.",
+        "Note opportunities too, such as a security investment that helps win customers or lowers insurance costs."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-01" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-02" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-03" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-04" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-05" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RM-07" }
+      ]
+    },
+    {
+      "code": "GOV-16",
+      "title": "Keep leadership accountable for security, funded and reviewing results",
+      "description": "A named senior leader answers for security risk, the programme has the people and budget it needs, and leadership reviews its results on a fixed schedule and changes course when they fall short. Without that, security depends on the goodwill of a few people and slips down the agenda until an incident forces it back.",
+      "guidance": [
+        "Name one member of senior leadership as accountable for security risk, and record the decision in the minutes.",
+        "Put security on the leadership agenda at least every quarter, with a short report on risks, incidents, audit findings and open actions.",
+        "Agree a yearly security budget and staffing plan from the risk strategy, and record any request that was turned down and why.",
+        "Track a few measures that show whether security works, such as time to patch or overdue risk actions, and watch the trend.",
+        "Review the strategy each year against new risks, duties and results, and record what leadership decided to change.",
+        "Ask leaders to follow the rules visibly themselves, for example by completing training and reporting their own mistakes."
+      ],
+      "category": "governance",
+      "mappings": [
+        { "framework": "nist-csf-2.0", "ref": "GV.RR-01" },
+        { "framework": "nist-csf-2.0", "ref": "GV.RR-03" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OV-01" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OV-02" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OV-03" }
+      ]
+    }
+  ]
+}

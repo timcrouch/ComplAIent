@@ -1,0 +1,37 @@
+{
+  "name": "@isms/worker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "node --watch --env-file=../../.env --import @swc-node/register/esm-register src/main.ts",
+    "build": "isms-build-js",
+    "typecheck": "tsc -p .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "node --env-file=../../.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "4.3.1",
+    "@isms/ai": "workspace:*",
+    "@isms/config": "workspace:*",
+    "@isms/database": "workspace:*",
+    "@isms/domain": "workspace:*",
+    "@isms/jobs": "workspace:*",
+    "@isms/telemetry": "workspace:*",
+    "@opentelemetry/api": "1.10.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@isms/tooling": "workspace:*",
+    "@swc-node/register": "1.12.1",
+    "@swc/core": "1.16.21",
+    "@types/node": "26.6.6",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

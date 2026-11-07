@@ -1,0 +1,87 @@
+{
+  "home": {
+    "eyebrow": "ComplAIent ISMS",
+    "greeting": {
+      "morning": "Good morning, {name}.",
+      "afternoon": "Good afternoon, {name}.",
+      "evening": "Good evening, {name}.",
+      "morningNoName": "Good morning.",
+      "afternoonNoName": "Good afternoon.",
+      "eveningNoName": "Good evening."
+    },
+    "empty": {
+      "title": "Your security workspace is ready.",
+      "body": "Once your organisation is set up, this is where you'll see how secure you are and what needs your attention.",
+      "upcomingTitle": "What will appear here",
+      "upcomingStatus": "After setup",
+      "posture": "How secure your organisation is",
+      "posturePlain": "A plain-language picture of your security, based on your own records.",
+      "attention": "What needs your attention",
+      "attentionPlain": "Decisions, reviews and exceptions waiting for you.",
+      "next": "What to do next",
+      "nextPlain": "Clear next steps, so nothing important slips.",
+      "bodyDone": "As your team adds risks, controls and evidence, this is where you will see how secure you are and what needs your attention.",
+      "upcomingStatusDone": "As records arrive"
+    },
+    "hint": {
+      "member": "An administrator will set up your organisation.",
+      "admin": "Start by telling us about your organisation. It takes a few minutes, and you can change any answer later.",
+      "setupAction": "Set up your organisation",
+      "adminDone": "You can check or change your answers at any time.",
+      "reviewSetup": "Review setup",
+      "memberDone": "Your organisation is set up. Your administrator decides who does what here."
+    },
+    "setupDone": "Your organisation is set up.",
+    "statements": {
+      "title": "What needs you",
+      "none": "Nothing needs you right now.",
+      "approvalsWaiting": "{count, plural, one {# decision needs your approval} other {# decisions need your approval}}",
+      "toReview": "{count, plural, one {# risk is waiting for your review} other {# risks are waiting for your review}}",
+      "aboveAppetite": "{count, plural, one {# risk is above your appetite} other {# risks are above your appetite}}",
+      "evidenceMissing": "{count, plural, one {# evidence item is missing} other {# evidence items are missing}}",
+      "tasksOpen": "{count, plural, one {# task is waiting for you} other {# tasks are waiting for you}}",
+      "actionsOverdue": "{count, plural, one {# action is overdue} other {# actions are overdue}}",
+      "reviewsDue": "{count, plural, one {# risk is due for review} other {# risks are due for review}}",
+      "concernsUpdated": "{count, plural, one {Your concern was reviewed} other {# of your concerns were reviewed}}"
+    },
+    "dimensions": {
+      "title": "Your records at a glance",
+      "intro": "Counted from the records you can see. Nothing here is estimated.",
+      "controls": {
+        "title": "Controls",
+        "count": "{count, plural, one {accepted control} other {accepted controls}}",
+        "sentence": "{part} of {whole, plural, one {# accepted control has} other {# accepted controls have}} evidence",
+        "none": "No accepted controls yet"
+      },
+      "evidence": {
+        "title": "Evidence",
+        "count": "{count, plural, one {evidence file} other {evidence files}}",
+        "sentence": "{part} of {whole, plural, one {# risk is} other {# risks are}} missing evidence",
+        "none": "No risks yet"
+      },
+      "risks": {
+        "title": "Risks",
+        "count": "{count, plural, one {risk} other {risks}}",
+        "sentence": "{part} of {whole, plural, one {# risk is} other {# risks are}} above your appetite",
+        "none": "No risks yet"
+      },
+      "tasks": {
+        "title": "Tasks",
+        "count": "{count, plural, one {open task} other {open tasks}}",
+        "sentence": "{part} of {whole, plural, one {# open task is} other {# open tasks are}} overdue",
+        "none": "No open tasks"
+      }
+    },
+    "concerns": {
+      "title": "Your concerns",
+      "all": "All your concerns"
+    },
+    "tasks": {
+      "title": "Your tasks",
+      "all": "All your tasks",
+      "due": "Due {date}",
+      "noDue": "No due date",
+      "overdue": "Overdue"
+    }
+  }
+}

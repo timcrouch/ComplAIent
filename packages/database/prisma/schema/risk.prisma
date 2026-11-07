@@ -1,0 +1,170 @@
+// Risks, their versions, assets, controls and approvals.
+
+enum RiskState {
+  proposed
+  in_review
+  approved
+  returned
+  closed
+}
+
+enum RiskTreatment {
+  avoid
+  mitigate
+  transfer
+  accept
+}
+
+enum ControlSuggestionStatus {
+  none
+  pending
+  ready
+  failed
+}
+
+model Risk {
+  id                       String                  @id @default(uuid(7)) @db.Uuid
+  /// Human-readable number (R-<n>); the sequence is usable by the app role through default privileges.
+  reference                Int                     @unique @default(autoincrement())
+  title                    String
+  scenario                 String
+  threat                   String
+  consequence              String
+  existingSafeguards       String                  @default("")
+  toConfirm                String[]
+  /// likelihood, impact, aiLikelihood and aiImpact are 1-5 when set (check constraints in the migration).
+  likelihood               Int?
+  impact                   Int?
+  /// Expected after treatment; 1-5 when set (check constraints in the migration, Plan 5).
+  residualLikelihood       Int?
+  residualImpact           Int?
+  riskScaleId              String?                 @db.Uuid
+  aiLikelihood             Int?
+  aiImpact                 Int?
+  aiReasoning              String?
+  treatment                RiskTreatment?
+  treatmentNote            String                  @default("")
+  state                    RiskState               @default(proposed)
+  version                  Int                     @default(1)
+  ownerId                  String?                 @db.Uuid
+  reporterId               String                  @db.Uuid
+  reviewerId               String?                 @db.Uuid
+  submittedAt              DateTime?               @db.Timestamptz(3)
+  approvedAt               DateTime?               @db.Timestamptz(3)
+  closedAt                 DateTime?               @db.Timestamptz(3)
+  closedById               String?                 @db.Uuid
+  /// Next periodic review (Plan 6); set when the risk is approved.
+  nextReviewDue            DateTime?               @db.Date
+  siteId                   String?                 @db.Uuid
+  departmentId             String?                 @db.Uuid
+  aiAssisted               Boolean
+  controlSuggestion        ControlSuggestionStatus @default(none)
+  controlSuggestionFailure String?
+  createdAt                DateTime                @default(now()) @db.Timestamptz(3)
+  updatedAt                DateTime                @updatedAt @db.Timestamptz(3)
+
+  riskScale    RiskScale?           @relation(fields: [riskScaleId], references: [id], onDelete: Restrict)
+  owner        User?                @relation("RiskOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  reporter     User                 @relation("RiskReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  reviewer     User?                @relation("RiskReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+  closedBy     User?                @relation("RiskClosedBy", fields: [closedById], references: [id], onDelete: Restrict)
+  site         Site?                @relation(fields: [siteId], references: [id], onDelete: Restrict)
+  department   Department?          @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  versions     RiskVersion[]
+  assets       RiskAsset[]
+  controls     RiskControl[]
+  evidence     Evidence[]
+  tasks        Task[]
+  approvals    Approval[]
+  conversation ConcernConversation?
+
+  @@index([state])
+  @@index([reporterId])
+  @@index([ownerId])
+  @@index([siteId])
+  @@index([departmentId])
+  // The risk list's keyset order.
+  @@index([updatedAt, id])
+}
+
+/// Append-only: the app role may INSERT and SELECT but not UPDATE, DELETE or TRUNCATE.
+model RiskVersion {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  riskId        String   @db.Uuid
+  version       Int
+  snapshot      Json
+  changedFields String[]
+  changedById   String   @db.Uuid
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+
+  risk      Risk @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  changedBy User @relation("RiskVersionChangedBy", fields: [changedById], references: [id], onDelete: Restrict)
+
+  @@unique([riskId, version])
+}
+
+model RiskAsset {
+  riskId  String @db.Uuid
+  assetId String @db.Uuid
+
+  risk  Risk  @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Restrict)
+
+  @@id([riskId, assetId])
+}
+
+enum RiskControlStatus {
+  suggested
+  accepted
+  rejected
+}
+
+enum SuggestionSource {
+  ai
+  person
+}
+
+model RiskControl {
+  id              String            @id @default(uuid(7)) @db.Uuid
+  riskId          String            @db.Uuid
+  controlId       String            @db.Uuid
+  status          RiskControlStatus
+  reason          String            @default("")
+  source          SuggestionSource
+  suggestedById   String?           @db.Uuid
+  /// The AI interaction that produced this suggestion (source = ai).
+  aiInteractionId String?           @db.Uuid
+  decidedById     String?           @db.Uuid
+  decidedAt       DateTime?         @db.Timestamptz(3)
+  createdAt       DateTime          @default(now()) @db.Timestamptz(3)
+
+  risk          Risk           @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  control       Control        @relation(fields: [controlId], references: [id], onDelete: Restrict)
+  suggestedBy   User?          @relation("RiskControlSuggestedBy", fields: [suggestedById], references: [id], onDelete: Restrict)
+  decidedBy     User?          @relation("RiskControlDecidedBy", fields: [decidedById], references: [id], onDelete: Restrict)
+  aiInteraction AiInteraction? @relation(fields: [aiInteractionId], references: [id], onDelete: Restrict)
+
+  @@unique([riskId, controlId])
+}
+
+enum ApprovalDecision {
+  approved
+  returned
+}
+
+/// Append-only. The unique key makes a double approval of one version impossible.
+model Approval {
+  id         String           @id @default(uuid(7)) @db.Uuid
+  riskId     String           @db.Uuid
+  version    Int
+  decision   ApprovalDecision
+  comment    String           @default("")
+  approverId String           @db.Uuid
+  snapshot   Json
+  createdAt  DateTime         @default(now()) @db.Timestamptz(3)
+
+  risk     Risk @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  approver User @relation("ApprovalApprover", fields: [approverId], references: [id], onDelete: Restrict)
+
+  @@unique([riskId, version, decision])
+}

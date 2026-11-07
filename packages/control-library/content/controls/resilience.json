@@ -1,0 +1,144 @@
+{
+  "controls": [
+    {
+      "code": "RES-01",
+      "title": "Know how fast each critical service must return, and prove it can",
+      "description": "A recovery plan nobody has tried usually fails on the day. For each business activity that cannot stop for long, its owner sets how much downtime and data loss is tolerable, and the systems behind it have tested plans that meet those limits.",
+      "guidance": [
+        "Trace each critical process to every system it needs, including hidden ones such as sign-in, DNS, certificates and suppliers' platforms.",
+        "Ask each business owner how long their process can be down and how much recent data it can lose, and have leadership agree the answers.",
+        "Run a real recovery test at least yearly, time it, and compare the result with the agreed limits.",
+        "Write a recovery plan per critical system: restore order, people involved and where to find credentials when the directory is down.",
+        "Close any gap between the agreed limits and the test result, or have leadership accept the longer outage in writing.",
+        "Update the plans whenever a critical system, supplier or hosting location changes."
+      ],
+      "category": "resilience",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.30"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(c)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.IM-04"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.RP-02"
+        }
+      ]
+    },
+    {
+      "code": "RES-02",
+      "title": "Run a crisis without dropping your guard or losing control",
+      "description": "In a crisis, people bypass controls to keep the business going, and attackers know it. A small crisis team with clear authority makes the calls, every security shortcut is approved, recorded and reversed afterwards, and protection keeps working at backup sites and in fallback processes.",
+      "guidance": [
+        "Name a crisis team with a leader, a deputy and roles for IT, communications, legal and the business, and say who can call it together.",
+        "Keep a decision log throughout every crisis: what was decided, by whom, when and why.",
+        "Agree in advance which controls may be relaxed in an emergency, who approves it and the deadline to restore them.",
+        "Keep sealed emergency admin accounts for when normal sign-in is down, check them quarterly and change their passwords after each use.",
+        "Give backup sites, temporary laptops and paper fallbacks the same monitoring and access rules as the normal set-up.",
+        "Rehearse a realistic scenario with the crisis team every year, such as ransomware striking over a weekend."
+      ],
+      "category": "resilience",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.29"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(c)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.RP-04"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.CO-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.CO-04"
+        }
+      ]
+    },
+    {
+      "code": "RES-03",
+      "title": "Keep backups that ransomware cannot reach and restores that work",
+      "description": "Attackers now hunt for backups and wipe them before encrypting everything else. You keep enough copies, including one that cannot be changed or deleted from your own network, and recent restore drills show you can bring back systems and personal data in time.",
+      "guidance": [
+        "Run backup systems under separate admin accounts with their own multi-factor sign-in, outside your everyday directory.",
+        "Keep at least one copy offline or in storage that cannot be altered until its retention ends, away from the main site.",
+        "Set how often each system is backed up from the data-loss limit agreed for it, including cloud office suites and other online services.",
+        "Alert on every failed or missed backup job and fix it within one working day.",
+        "Encrypt backups, and keep the keys where you can still reach them if the main site is lost.",
+        "Each month, restore a random sample of files and one full system, and restore a whole critical service at least yearly."
+      ],
+      "category": "resilience",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.13"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(c)"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 32"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.DS-11"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "RC.RP-03"
+        }
+      ]
+    },
+    {
+      "code": "RES-04",
+      "title": "Remove single points of failure and keep spare capacity",
+      "description": "Critical services fail when one server, link or supplier breaks, or when demand outgrows what you planned for. Their weak points are known, the most important have a working spare, and nobody learns from an outage that a disk, link or licence pool was full.",
+      "guidance": [
+        "Map each critical service end to end and mark every part with no spare, including people with knowledge nobody else has.",
+        "Add a standby or second instance where the cost of downtime justifies it, in a separate room, site or cloud region.",
+        "Test failover at least yearly by actually switching over, not only by checking the configuration.",
+        "Track use of storage, computing power, network links and licences, and alert well before any of them reaches its limit.",
+        "Forecast demand with the business ahead of peaks such as month-end, product launches or seasonal sales.",
+        "Ask cloud and hosting providers what happens when a whole region or data centre fails, and design around the answer."
+      ],
+      "category": "resilience",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.6"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.14"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(c)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.IR-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.IR-04"
+        }
+      ]
+    }
+  ]
+}

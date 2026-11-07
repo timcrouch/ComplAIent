@@ -1,0 +1,39 @@
+# gitleaks configuration for the CI security job (`gitleaks git` over the full history).
+# Extends the default rule set. Each allow-list needs BOTH a path and a value match
+# (condition = "AND"), so any other secret in the same file is still reported.
+
+title = "isms"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Dev-only placeholders in .env.example: every value starts with dev-placeholder-"
+condition = "AND"
+paths = ['''^\.env\.example$''']
+regexes = ['''^dev-placeholder-[a-z0-9-]+$''']
+
+[[allowlists]]
+description = "Keycloak realm import: the client secret is substituted from the environment"
+condition = "AND"
+paths = ['''^infrastructure/docker/keycloak/realm-isms\.json$''']
+regexes = ['''^\$\{OIDC_CLIENT_SECRET\}$''']
+
+[[allowlists]]
+description = "Test fixtures: values in test code that name themselves as fake"
+condition = "AND"
+paths = ['''^(apps|packages)/[^/]+/test/''', '''^e2e/''']
+regexes = ['''(?i)(fake|dummy|placeholder|not-a-real)''']
+
+[[allowlists]]
+description = "CI test-only AI secrets key: base64 of the ASCII digits 0123456789abcdef twice"
+condition = "AND"
+paths = ['''^\.github/workflows/ci\.yml$''']
+# gitleaks also decodes the base64 value and reports the decoded digits.
+regexes = ['''^MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=$''', '''^0123456789abcdef0123456789abcdef$''']
+
+[[allowlists]]
+description = "Web unit test: made-up OpenRouter key used to check the key form never echoes it"
+condition = "AND"
+paths = ['''^apps/web/test/settings/''']
+regexes = ['''^sk-or-v1-e2e-0123456789abcdef-WXYZ$''']

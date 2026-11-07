@@ -1,0 +1,48 @@
+{
+  "name": "@isms/ai",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "isms-dist": "./dist/index.js",
+      "default": "./src/index.ts"
+    },
+    "./testing": {
+      "isms-dist": "./dist/testing.js",
+      "default": "./src/testing.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "node --env-file=../../.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts",
+    "build": "isms-build-js"
+  },
+  "dependencies": {
+    "@isms/database": "workspace:*",
+    "@isms/domain": "workspace:*",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@huggingface/transformers": "4.3.1",
+    "@isms/config": "workspace:*",
+    "@isms/tooling": "workspace:*",
+    "@types/node": "26.6.6",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  },
+  "peerDependencies": {
+    "@huggingface/transformers": "4.3.1"
+  },
+  "peerDependenciesMeta": {
+    "@huggingface/transformers": {
+      "optional": true
+    }
+  }
+}

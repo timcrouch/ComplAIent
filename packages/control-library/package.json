@@ -1,0 +1,43 @@
+{
+  "name": "@isms/control-library",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "content"
+  ],
+  "exports": {
+    ".": {
+      "isms-dist": "./dist/index.js",
+      "default": "./src/index.ts"
+    },
+    "./testing": {
+      "isms-dist": "./dist/testing.js",
+      "default": "./src/testing.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "node --env-file=../../.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts",
+    "seed": "tsx --env-file=../../.env src/cli/seed.ts",
+    "seed:test": "tsx --env-file=../../.env src/cli/seed.ts --test",
+    "build": "isms-build-js"
+  },
+  "dependencies": {
+    "@isms/config": "workspace:*",
+    "@isms/database": "workspace:*",
+    "@isms/domain": "workspace:*",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@isms/tooling": "workspace:*",
+    "@types/node": "26.6.6",
+    "eslint": "10.13.0",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

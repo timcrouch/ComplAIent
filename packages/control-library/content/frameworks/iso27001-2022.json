@@ -1,0 +1,485 @@
+{
+  "framework": {
+    "key": "iso27001",
+    "name": "ISO/IEC 27001",
+    "publisher": "ISO/IEC",
+    "summary": "International standard for running an information security management system. Its Annex A lists 93 reference controls that you choose from after assessing your risks. Relevant to any organisation seeking certification or a structured security programme."
+  },
+  "version": {
+    "key": "iso27001-2022",
+    "label": "2022"
+  },
+  "groups": [
+    { "key": "A.5", "title": "Organisational controls" },
+    { "key": "A.6", "title": "People controls" },
+    { "key": "A.7", "title": "Physical controls" },
+    { "key": "A.8", "title": "Technological controls" }
+  ],
+  "requirements": [
+    {
+      "ref": "A.5.1",
+      "title": "Everyone can find the current, leadership-backed security ground rules and has confirmed reading them.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.2",
+      "title": "Everyone knows which security tasks they own and who is accountable.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.3",
+      "title": "No single person can both perform and approve a sensitive task alone.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.4",
+      "title": "Line managers set the example and hold their teams to security expectations.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.5",
+      "title": "When regulators, police or emergency services must be involved, the right contacts are already known.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.6",
+      "title": "The security team swaps early warnings and know-how with trusted peers in its industry.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.7",
+      "title": "Up-to-date knowledge of likely attackers and their methods shapes day-to-day defences.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.8",
+      "title": "Every project considers security risks from the start through to delivery.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.9",
+      "title": "Everything worth protecting, from databases to laptops, is recorded with a named owner.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.10",
+      "title": "Staff know what they may and may not do with company information and equipment.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.11",
+      "title": "Anyone leaving or changing role gives back laptops, badges and files before access ends.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.12",
+      "title": "A simple scheme ranks information by the harm its exposure, alteration or loss would cause.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.13",
+      "title": "Sensitive information carries a visible marker that tells people how to handle it.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.14",
+      "title": "Data shared by email, file transfer or courier, internally or externally, cannot be intercepted or misdirected.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.15",
+      "title": "Who gets into which buildings, data and applications follows need-to-know and least privilege.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.16",
+      "title": "Every account traces back to one real person or system, and orphaned accounts are removed.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.17",
+      "title": "Passwords, tokens and keys are handed out securely, and users know how to guard them.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.18",
+      "title": "Joiners, movers and leavers have permissions adjusted promptly, and stale rights are regularly pruned.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.19",
+      "title": "Before relying on a vendor, the organisation weighs what could go wrong and sets safeguards.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.20",
+      "title": "Vendor contracts leave no doubt about what protection the supplier must deliver.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.21",
+      "title": "Hardware, software and services bought in come from trustworthy, risk-assessed sources.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.22",
+      "title": "Vendors stay held to their security commitments, and their service changes never arrive unannounced.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.23",
+      "title": "Each cloud provider is vetted, its shared-responsibility split is clear, and leaving it is planned.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.24",
+      "title": "Before anything goes wrong, the incident team, its playbooks and escalation contacts are in place.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.25",
+      "title": "Each reported warning sign is triaged to decide whether it counts as an incident.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.26",
+      "title": "When an incident hits, the team contains it, removes the cause and restores normal service.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.27",
+      "title": "After each incident, root causes are reviewed and safeguards adjusted so it does not recur.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.28",
+      "title": "Proof relating to an incident is secured so it can support legal or disciplinary action.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.29",
+      "title": "Even in a crisis or outage, safeguards are not dropped to keep the business going.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.30",
+      "title": "IT services can be restored within the times the business needs after an outage.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.31",
+      "title": "Every legal and customer obligation touching security is tracked, owned and kept current.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.32",
+      "title": "Software licences, copyrights, trademarks and patents belonging to others are respected.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.33",
+      "title": "Important business files survive intact and unaltered for as long as they must be retained.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.34",
+      "title": "Duties owed to people whose details the organisation holds are mapped and honoured daily.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.35",
+      "title": "An assessor independent of the security function audits how protection is actually run.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.36",
+      "title": "Spot checks and self-assessments reveal where departments drift from the organisation's own requirements.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.5.37",
+      "title": "Step-by-step runbooks for day-to-day IT tasks are available to whoever performs them.",
+      "group": "A.5"
+    },
+    {
+      "ref": "A.6.1",
+      "title": "People are vetted before joining and again over time, scaled to role and risk.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.2",
+      "title": "Every hire signs up to clear protection obligations, matched by commitments from the organisation.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.3",
+      "title": "Everyone gets security know-how matched to their job, refreshed as the threat picture evolves.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.4",
+      "title": "Breaking security policy has clear, proportionate consequences that everyone knows in advance.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.5",
+      "title": "People who move on remain bound by duties that outlast their job, such as secrecy.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.6",
+      "title": "Staff, contractors and partners commit in writing to keep what they learn private.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.7",
+      "title": "Home and travelling workers use safeguarded connections, devices and workspaces.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.6.8",
+      "title": "Anyone who spots something odd knows exactly who to tell, and tells them fast.",
+      "group": "A.6"
+    },
+    {
+      "ref": "A.7.1",
+      "title": "Fences, walls and controlled doors mark where public space ends and protected space begins.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.2",
+      "title": "Doors to restricted spaces open only for people with permission, and every entry is logged.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.3",
+      "title": "Buildings and internal spaces are physically hardened so outsiders cannot simply walk in.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.4",
+      "title": "Cameras, alarms or guards detect anyone getting into buildings without permission.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.5",
+      "title": "Fire, flood, storms and deliberate physical attack cannot easily knock out facilities.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.6",
+      "title": "Extra rules apply to anyone spending time in high-security zones.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.7",
+      "title": "Papers are locked away and unattended computers locked so nothing sensitive is on show.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.8",
+      "title": "Servers and devices sit where theft, damage and prying eyes are least likely.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.9",
+      "title": "Equipment taken home or to clients is guarded against theft, loss and snooping.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.10",
+      "title": "Every data-carrying item, from USB stick to backup tape, is tracked until safely destroyed.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.11",
+      "title": "Generators, UPS units and resilient cooling keep systems up when building services fail.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.12",
+      "title": "Cable routes are concealed and shielded, so a single cut or tap cannot compromise operations.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.13",
+      "title": "Devices get scheduled upkeep by qualified people, so they keep working and data stays safe.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.7.14",
+      "title": "Before any device is scrapped or passed on, someone confirms nothing sensitive remains on it.",
+      "group": "A.7"
+    },
+    {
+      "ref": "A.8.1",
+      "title": "Staff laptops, phones and tablets are locked down, encrypted and managed wherever they are used.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.2",
+      "title": "Admin accounts are few, individually approved, separate from everyday logins and reviewed often.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.3",
+      "title": "Each user sees only the data their job justifies, enforced by the systems themselves.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.4",
+      "title": "Code repositories and pipelines are open only to the developers and services that need them.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.5",
+      "title": "Sign-in strength, such as MFA, rises with how much damage a stolen account could do.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.6",
+      "title": "Systems never run out of processing power, storage or bandwidth as the business grows.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.7",
+      "title": "Viruses and ransomware are stopped by tooling, backed by staff who recognise warning signs.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.8",
+      "title": "Known software flaws are patched or mitigated before attackers can exploit them.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.9",
+      "title": "Servers, devices and cloud services run hardened baselines, and unapproved drift is caught.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.10",
+      "title": "Data that has served its purpose is reliably destroyed wherever it is held.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.11",
+      "title": "Sensitive data is hidden or disguised wherever full values are not needed.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.12",
+      "title": "Unauthorised outflows of confidential data, by email, upload or USB, are spotted and stopped.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.13",
+      "title": "Recovery points exist for everything that matters, and restores are proven to work in practice.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.14",
+      "title": "Duplicate capacity keeps essential IT running if one component fails.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.15",
+      "title": "Systems leave a tamper-resistant trail that investigators and monitoring can rely on.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.16",
+      "title": "Suspicious activity across the estate is spotted early and investigated as a possible incident.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.17",
+      "title": "Every server and device shows the same correct time, so event timelines line up.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.18",
+      "title": "Tools that could sidestep built-in protections are available only to approved staff, case by case.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.19",
+      "title": "Only approved software can be put onto live production systems.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.20",
+      "title": "Routers, switches and firewalls are hardened and administered so traffic cannot be tampered with.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.21",
+      "title": "Internet links and network providers deliver the safeguards and uptime the organisation has specified.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.22",
+      "title": "Network zones stop a breach in one area from spreading freely to the rest.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.23",
+      "title": "Staff browsing is screened so dangerous or forbidden sites never load.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.24",
+      "title": "Strong, approved encryption protects data, and its secret keys are generated, stored and retired safely.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.25",
+      "title": "Engineering teams follow a defined method that weaves protection into planning, coding, testing and release.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.26",
+      "title": "Every new or purchased app has signed-off protection criteria before work begins.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.27",
+      "title": "Architects apply an agreed playbook of defensive patterns, like least privilege and defence in depth.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.28",
+      "title": "Programmers write code that avoids common weaknesses and resists attack.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.29",
+      "title": "New and changed systems must pass protection checks before they go live.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.30",
+      "title": "Contracted developers work to set expectations, and their code is checked before acceptance.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.31",
+      "title": "Work in progress cannot affect live systems because build and trial areas are kept apart.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.32",
+      "title": "Every alteration to live technology is assessed, authorised, tested and logged before release.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.33",
+      "title": "Test environments use made-up or masked data, never raw customer records without safeguards.",
+      "group": "A.8"
+    },
+    {
+      "ref": "A.8.34",
+      "title": "Reviewers and management agree scope and timing in advance, so inspections never disrupt production.",
+      "group": "A.8"
+    }
+  ]
+}

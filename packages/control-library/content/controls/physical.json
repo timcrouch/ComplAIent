@@ -1,0 +1,223 @@
+{
+  "controls": [
+    {
+      "code": "PHY-01",
+      "title": "Add barriers the closer someone gets to what matters most",
+      "description": "A reception desk, an open office and a server room need very different protection. Each site has a simple plan showing what each room holds, and an intruder meets more obstacles at every step towards your servers, records and control rooms.",
+      "guidance": [
+        "Draw a simple plan of each site marking public areas, staff-only areas and restricted rooms such as server, records or control rooms.",
+        "Have a security adviser or your insurer test how long the doors, windows and vents of each restricted room would hold out against a determined intruder, and fix the weakest first.",
+        "In shared buildings, agree with the landlord who controls the outer doors, out-of-hours access and cleaning staff.",
+        "At production and warehouse sites, include control rooms, network cabinets on the shop floor and loading bays.",
+        "Re-check the zone plan whenever you move, refit or take on new space."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.1"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.3"
+        }
+      ]
+    },
+    {
+      "code": "PHY-02",
+      "title": "Stop strangers walking in, and know who entered restricted rooms",
+      "description": "Tailgating, lost badges and unaccompanied visitors are the easiest ways in. Only people with a current reason can open the doors to staff and restricted areas, and after any incident you can say who was in a given room on a given night.",
+      "guidance": [
+        "Tie badge rights to the role-based access rules, and cancel badges automatically from the HR leaver feed.",
+        "Send visitors a pre-registered pass that only works at reception, and have the host collect them there.",
+        "Use turnstiles or interlocking doors where tailgating is a real risk, such as data centre entrances.",
+        "Make lost badges easy to report and cancel within the hour, any day of the week.",
+        "Keep a register of physical keys, and change the lock when one goes missing.",
+        "Each quarter, send every restricted room's owner the list of badges that open it, and remove any they do not recognise."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.2"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-06"
+        }
+      ]
+    },
+    {
+      "code": "PHY-03",
+      "title": "Detect break-ins quickly and make sure someone responds",
+      "description": "A lock only slows an intruder down; you also need to know when someone gets past it. Entrances and restricted rooms are watched, especially out of hours, so a break-in raises an alert that reaches someone who will act on it.",
+      "guidance": [
+        "Fit intrusion alarms to outer doors and restricted rooms, connected to a monitoring service or to on-call staff.",
+        "Point cameras at entrances and restricted room doors rather than at workstations, and follow data protection rules on signs and retention.",
+        "Have the access control system alert when a door is forced or held open.",
+        "Agree response times with the monitoring service, and test the whole alarm path at least twice a year.",
+        "Review footage and entry logs after any physical incident."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.4"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.CM-02"
+        }
+      ]
+    },
+    {
+      "code": "PHY-04",
+      "title": "Keep fire, water and storms from knocking out critical rooms",
+      "description": "One burst pipe or electrical fire can destroy a server room and the only copy of what it holds. The things that could flood, burn or batter each site are known, and critical rooms are placed and equipped to spot damage early and stop it spreading.",
+      "guidance": [
+        "Check each site for local hazards, such as flood zones, severe weather or a neighbouring chemical plant, and record them as risks.",
+        "Keep critical rooms away from basements, water pipes and roof drains, and fit water leak sensors.",
+        "Fit smoke detection that alerts someone at once, use a gas or mist suppression system your fire engineer signs off for IT rooms, and keep cardboard out.",
+        "At exposed sites, protect against vehicle impact, vandalism or arson, for example with bollards or fencing.",
+        "Have fire and flood equipment inspected as local regulations require, and keep the records."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.5"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.IR-02"
+        }
+      ]
+    },
+    {
+      "code": "PHY-05",
+      "title": "Set house rules for anyone working in a restricted room",
+      "description": "Getting into a server or records room legitimately does not end the risk: people inside can photograph, remove or damage things. Everyone who goes in knows what is expected of them inside, and nobody from outside works there out of sight.",
+      "guidance": [
+        "Have people leave phones and bags in lockers outside the server or records room, with a clear exception route for tools the job needs.",
+        "Book outside workers in through the room's owner, who stays with them or hands them to someone who will.",
+        "Never let anyone into a vault or the most sensitive rooms alone: two authorised people go in together, and the entry log names both of them.",
+        "After outside work, walk round to check that nothing was left behind, moved or plugged in.",
+        "Display the rules at the door and brief everyone who gets access for the first time."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.6"
+        }
+      ]
+    },
+    {
+      "code": "PHY-06",
+      "title": "Make sure nothing sensitive is left on show when you step away",
+      "description": "Cleaners, visitors and passers-by see whatever is left on desks, walls and unlocked screens. Nothing confidential can be read by someone walking past an empty desk, into a meeting room after a meeting, or watching a shared screen.",
+      "guidance": [
+        "Set a short automatic screen lock centrally, and teach a one-key shortcut for locking on the way out.",
+        "Make digital the default, so fewer sensitive printouts exist to be left around.",
+        "With hot-desking, ask people to clear the desk completely at the end of the day, and give them a locker.",
+        "Make the last person out of a meeting room responsible for wiping it, and put a reminder by the door.",
+        "Run occasional evening walk-rounds and share the results by team, without naming individuals.",
+        "Share a single window, not the whole desktop, in calls with outsiders."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.7"
+        }
+      ]
+    },
+    {
+      "code": "PHY-07",
+      "title": "Place equipment and cables where they are hard to tamper with",
+      "description": "A server under a desk, a network cabinet in a corridor or an exposed cable run is an open invitation to theft, sabotage or a hidden listening device. Critical kit lives behind locks, and the links it depends on are out of reach.",
+      "guidance": [
+        "Put servers, network switches and storage in locked rooms or cabinets, not in shared office space.",
+        "Disable network ports in public spaces such as meeting rooms and reception, or connect them only to a guest network.",
+        "Run critical links through conduit or closed ceilings, and use two separate routes for connections you cannot lose.",
+        "Keep an up-to-date photo of every patch panel, and compare it on each visit to spot anything new.",
+        "In factories and warehouses, put equipment in enclosures suited to the floor and away from vehicle routes."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.8"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.12"
+        }
+      ]
+    },
+    {
+      "code": "PHY-08",
+      "title": "Keep critical systems running when power, cooling or connectivity fail",
+      "description": "Equipment that loses power or overheats goes down just as surely as one that is attacked. You know how long each critical room keeps running when the building's power, cooling or internet link fails, and that time is long enough to switch over or shut down cleanly.",
+      "guidance": [
+        "Know how many minutes the batteries last, and which systems shut down first when they run out.",
+        "Once a year, cut mains power at a quiet time and watch the switchover from start to finish.",
+        "Where outages must be ridden out, add a generator and keep a fuel delivery contract for it.",
+        "Send temperature alarms from critical rooms to whoever is on call, so someone is woken before equipment overheats.",
+        "For sites that cannot work offline, test running a full day on the backup internet link.",
+        "Agree with the landlord how they will warn you of planned work on power or cooling."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.11"
+        }
+      ]
+    },
+    {
+      "code": "PHY-09",
+      "title": "Service equipment on schedule without exposing the data it holds",
+      "description": "Neglected hardware fails at the worst moment, and careless repairs can expose data. Critical equipment is serviced on a plan, and nobody outside your control gets to work on it while your data is readable.",
+      "guidance": [
+        "Keep faulty drives under a no-return clause in every hardware support contract.",
+        "Give remote support a session that you start, watch and end.",
+        "Compare firmware and configuration with your baseline before a repaired device rejoins the network.",
+        "Track overdue servicing in the risk register, like any other open risk.",
+        "Watch hardware health alerts, such as failing disks or fans, and act before they cause an outage.",
+        "Have one of your own staff stay with any engineer working on site, and before a device is sent away for repair, take its drives out or confirm they are encrypted."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.13"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.PS-03"
+        }
+      ]
+    },
+    {
+      "code": "PHY-10",
+      "title": "Protect laptops and phones from theft and snooping on the move",
+      "description": "Devices are left in cars, hotel rooms and trains every day, and a lost device must not mean lost data. Portable devices are encrypted and can be located and wiped remotely, and people know how to keep them safe away from the office.",
+      "guidance": [
+        "Encrypt the full disk of every laptop, and require a PIN or biometric on every phone and tablet.",
+        "Enrol portable devices in device management so you can locate, lock and wipe them remotely.",
+        "Keep laptops with you on planes and trains, never in checked bags or visible in a parked car.",
+        "Make reporting a lost device within the hour a simple step that carries no blame.",
+        "Issue clean travel devices for trips to high-risk countries, and check them before they reconnect.",
+        "Give equipment you install at customer or remote sites, such as kiosks or plant controllers, a lockable housing and a check on each service visit."
+      ],
+      "category": "physical",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.9"
+        }
+      ]
+    }
+  ]
+}

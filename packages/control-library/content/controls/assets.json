@@ -1,0 +1,202 @@
+{
+  "controls": [
+    {
+      "code": "AST-01",
+      "title": "Know what you own, where it lives and who looks after it",
+      "description": "You cannot protect a laptop, database or cloud account that nobody knows exists. A current register lists the hardware, software, cloud services and important data stores you rely on, and names for each one the person who decides who may use it and keeps its entry right.",
+      "guidance": [
+        "Fill the register from sources that already exist: device management, cloud billing, network scans and purchase records.",
+        "Record for each entry where it is located or hosted, the business process it supports and its sensitivity level.",
+        "List data stores as well as devices: shared drives, cloud tenants, databases and spreadsheets the business depends on.",
+        "Compare scan results with the register each month and chase anything unknown until it has an owner or is removed.",
+        "Update the entry as part of moving, reassigning, losing or retiring an item, not as a clean-up afterwards."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.9"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-02"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-07"
+        }
+      ]
+    },
+    {
+      "code": "AST-02",
+      "title": "Settle the everyday questions about using work devices, accounts and data",
+      "description": "Staff improvise when nobody has said whether they may forward work email to a private address, install their own apps or paste customer data into an AI chatbot. Short, plain rules answer these questions before they come up, and the rules get stricter as the data gets more sensitive.",
+      "guidance": [
+        "Keep the rules to one or two pages of do's and don'ts, with examples taken from your own work.",
+        "Cover private use of work devices, personal devices used for work, public AI tools, personal cloud storage and social media.",
+        "For each sensitivity level, say where the data may be stored, who it may be shared with and whether it may be printed.",
+        "Ask every new starter and contractor to confirm they have read the rules before their accounts go live.",
+        "Revisit the rules whenever a new kind of tool appears that staff are likely to try."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.10"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        }
+      ]
+    },
+    {
+      "code": "AST-03",
+      "title": "Recover company equipment and data before anyone's last day",
+      "description": "Laptops, phones, badges and keys that stay with former staff or contractors are a route back into your systems and premises. Each departure has a checklist of what that person holds, and an item is ticked off only once it is back or its data has been wiped.",
+      "guidance": [
+        "Generate the checklist from the asset register, so it lists exactly what was issued to that person.",
+        "Have HR tell IT and facilities about every leaver, contractors included, as soon as the end date is known.",
+        "For personal phones used for work, remove the work profile or work apps remotely on the last day.",
+        "Ask the leaver to move work files from local or personal folders to shared storage, and have their manager confirm it.",
+        "Escalate missing items within a week, and block or remotely wipe any device that has not come back.",
+        "When someone changes team, collect the equipment and files their new role no longer needs."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.11"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-08"
+        }
+      ]
+    },
+    {
+      "code": "AST-04",
+      "title": "Rate information by potential harm and make the rating visible",
+      "description": "People can only protect what they recognise as sensitive. Every document, email and data store carries one of a few plain levels, set according to the damage it could do in the wrong hands, so anyone handling it knows which rules apply.",
+      "guidance": [
+        "Keep to three or four levels with everyday names, such as Public, Internal, Confidential and Restricted, with an example of each.",
+        "Rate by the worst realistic harm, including tampering or loss of access: a payment file may be Restricted for that reason alone.",
+        "Rate anything protected by law or a customer contract, such as personal or payment data, at least Confidential.",
+        "Let the person who creates information set its level, and default to Internal when unsure.",
+        "Show the level wherever someone will meet the information, on screen or on paper, so nobody has to guess.",
+        "Use tools that suggest a level and warn before a highly rated file is sent outside the organisation."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.12"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.13"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-05"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-07"
+        }
+      ]
+    },
+    {
+      "code": "AST-05",
+      "title": "Make sure shared information reaches only the people meant to get it",
+      "description": "Many leaks happen in transit: an email to the wrong address, an unencrypted attachment, a shared link anyone can open. Staff know which channels they may use for each sensitivity level, and regular exchanges with partners run over routes agreed and protected in advance.",
+      "guidance": [
+        "Publish a short table of approved ways to share each level, such as encrypted email, managed file transfer or a client portal.",
+        "Turn on warnings for external recipients and a short send delay so people can stop a misdirected email.",
+        "Make shared links expire and require sign-in by default, and block open links for Confidential data.",
+        "Before sending sensitive data to a new recipient, confirm the address through a channel you already trust.",
+        "For data that flows to a partner every week or month, set up one fixed, encrypted route together and name a contact on each side.",
+        "For papers or drives that must travel, use a service that tracks each parcel to a signature, and have the recipient confirm arrival."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.14"
+        }
+      ]
+    },
+    {
+      "code": "AST-06",
+      "title": "Keep calls, chats and crisis contact secure, even during an outage",
+      "description": "Unprotected calls and messages can be overheard or read by others, and a major attack can take down the very email and chat you would use to respond. Everyday voice, video and messaging run on encrypted tools you manage, and a separate, tested channel lets key people reach each other in a crisis.",
+      "guidance": [
+        "Approve one set of encrypted tools for calls, video and chat, and say which consumer messaging apps are not allowed for work.",
+        "Limit meetings to invited or signed-in participants, and make recording and external guest access opt-in.",
+        "Set up an emergency channel that does not depend on your own email, directory or network, such as a separate workspace or phone tree.",
+        "Keep the crisis contact list, with mobile numbers, in that channel and on paper with each key person.",
+        "Test the emergency channel at least twice a year, acting as if your main systems were down.",
+        "Agree a callback rule or code phrase so people can confirm who they are talking to during a crisis."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.14"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(j)"
+        }
+      ]
+    },
+    {
+      "code": "AST-07",
+      "title": "Stop data walking out on USB sticks, old disks and scrapped devices",
+      "description": "Data often escapes on small or forgotten things: a USB stick, a backup disk left in a car, a copier hard drive returned at lease end. Removable drives are issued, encrypted and logged, and every drive you get rid of has a paper trail showing what happened to the data on it.",
+      "guidance": [
+        "Block unknown USB storage on work computers by default, and allow only encrypted drives you have issued and registered.",
+        "Use a courier that tracks each case of backup media to a signature, and record what left and what arrived.",
+        "Use the drive's built-in cryptographic erase or have it shredded, and keep the erase report or destruction certificate against each serial number.",
+        "Remember hidden storage: printers, copiers, network gear, phones and production machines with built-in computers.",
+        "Choose a certified disposal firm, and mark each item as disposed in the asset register once its paperwork is filed.",
+        "Shred paper rated Confidential or above, or use locked disposal bins; never put it in normal recycling."
+      ],
+      "category": "assets",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.10"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.7.14"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-08"
+        }
+      ]
+    }
+  ]
+}

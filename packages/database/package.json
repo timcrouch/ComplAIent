@@ -1,0 +1,46 @@
+{
+  "name": "@isms/database",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "isms-dist": "./dist/index.js",
+      "default": "./src/index.ts"
+    },
+    "./testing": {
+      "isms-dist": "./dist/test-db.js",
+      "default": "./src/test-db.ts"
+    }
+  },
+  "scripts": {
+    "generate": "prisma generate",
+    "postinstall": "prisma generate",
+    "typecheck": "prisma generate && tsc -p .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "node --env-file=../../.env ./node_modules/vitest/vitest.mjs run --config vitest.integration.config.ts",
+    "db:migrate": "node --env-file=../../.env ./node_modules/prisma/build/index.js migrate deploy",
+    "db:migrate:test": "DATABASE_OWNER_URL=\"$(node --env-file=../../.env -p 'process.env.DATABASE_OWNER_TEST_URL')\" node --env-file=../../.env ./node_modules/prisma/build/index.js migrate deploy",
+    "db:validate": "DATABASE_OWNER_URL=\"$(node --env-file=../../.env -p 'process.env.DATABASE_OWNER_TEST_URL')\" node --env-file=../../.env ./node_modules/prisma/build/index.js migrate diff --from-config-datasource --to-schema prisma/schema --exit-code",
+    "build": "prisma generate && isms-build-js"
+  },
+  "dependencies": {
+    "@isms/config": "workspace:*",
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@isms/tooling": "workspace:*",
+    "@types/node": "26.6.6",
+    "@types/pg": "8.23.1",
+    "eslint": "10.13.0",
+    "prisma": "7.10.1",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

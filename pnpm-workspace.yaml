@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "e2e"
+
+overrides:
+  "@huggingface/transformers>onnxruntime-node": "npm:onnxruntime-web@1.30.0"
+  "@huggingface/transformers>onnxruntime-web": "1.30.0"

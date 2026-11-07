@@ -1,0 +1,157 @@
+{
+  "controls": [
+    {
+      "code": "PRV-01",
+      "title": "Keep a record of every way you use personal data",
+      "description": "A maintained record lists each activity that uses personal data, with its purpose, the people and data involved, who receives it, any transfers abroad and how long it is kept. It is the starting point for every other privacy duty, and a regulator can ask to see it.",
+      "guidance": [
+        "Ask each department which activities use information about people, such as payroll, recruitment or marketing.",
+        "For each activity, record the purpose, types of data, people affected, recipients, transfers abroad and retention period.",
+        "Note the systems and service providers involved and the security measures that protect the data.",
+        "Name an owner for each entry and update the record whenever a process or system changes.",
+        "If you process personal data for clients, keep a separate record of that work."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.34" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 30" },
+        { "framework": "nist-csf-2.0", "ref": "ID.AM-07" }
+      ]
+    },
+    {
+      "code": "PRV-02",
+      "title": "Confirm a legal basis and tell people how you use their data",
+      "description": "Each use of personal data rests on a documented legal ground, such as a contract, a legal duty or consent, and the people affected are told in clear language what happens to their data. Hidden or unjustified processing is unlawful however well the data is protected.",
+      "guidance": [
+        "Record the legal basis for each activity in the processing record.",
+        "Where you rely on consent, make it a clear opt-in, record it, and make withdrawing it as easy as giving it.",
+        "Where you rely on legitimate interests, write down how you weighed your interest against the people's.",
+        "Publish privacy notices for customers, staff and job applicants in plain language.",
+        "Check that each notice matches what you actually do, and update it before your practice changes."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.34" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(a)" }
+      ]
+    },
+    {
+      "code": "PRV-03",
+      "title": "Collect only the data you need, for purposes you have stated",
+      "description": "Each activity collects just the personal data its stated purpose requires, and the data is not reused for an unrelated purpose without a fresh check. Data you never hold cannot be leaked or misused.",
+      "guidance": [
+        "Review forms and data feeds and remove fields that no stated purpose needs.",
+        "Before using existing data for a new purpose, check whether it fits the original one and record the decision.",
+        "Use aggregated or pseudonymised data for reporting, analysis and testing wherever possible.",
+        "Do not copy live personal data into test systems unless it has been masked."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(b)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(c)" }
+      ]
+    },
+    {
+      "code": "PRV-04",
+      "title": "Keep personal data accurate and delete it once its purpose ends",
+      "description": "Personal data is correct where accuracy matters, people can get mistakes fixed quickly, and each type of data has a retention period after which it is deleted or anonymised. Wrong data can harm the people it describes, and old data adds risk with no benefit.",
+      "guidance": [
+        "Let people update their own details where practical, for example through a self-service profile.",
+        "Correct reported errors promptly and pass the correction on to anyone the data was shared with.",
+        "Set a retention period for each type of personal data and note it in the processing record.",
+        "Automate deletion or anonymisation at the end of the period where systems allow it.",
+        "Run a yearly clean-up of shared drives, mailboxes and exports where personal data builds up."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(d)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(e)" }
+      ]
+    },
+    {
+      "code": "PRV-05",
+      "title": "Protect personal data in line with the harm a breach would cause",
+      "description": "Security measures for personal data are chosen according to how sensitive it is and how many people it concerns, and they guard against disclosure, alteration and loss. Health, financial and children's data, and large volumes of any personal data, need stronger protection.",
+      "guidance": [
+        "Identify which systems hold personal data, and which hold sensitive types such as health data.",
+        "Limit access to those systems to staff who need it, and log who views or exports the data.",
+        "Encrypt personal data on laptops and removable media and when it travels outside your network.",
+        "Use pseudonymisation where the task does not need to identify people.",
+        "Test these measures regularly and include personal data systems in your backup and recovery plans."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.34" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(f)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 32" }
+      ]
+    },
+    {
+      "code": "PRV-06",
+      "title": "Show with evidence that you meet data protection law",
+      "description": "A leadership-approved data protection policy and named responsibilities are in place, and the organisation keeps the records, assessments, contracts and decisions that prove it follows the principles. The measures are revisited as processing and risks change. Without evidence, compliance cannot be shown to a regulator.",
+      "guidance": [
+        "Adopt a data protection policy approved by leadership and name the person who leads on privacy.",
+        "Appoint a data protection officer where the law requires one, with direct access to leadership.",
+        "Keep an evidence file: processing record, impact assessments, processor contracts, training records and key decisions.",
+        "Review the measures at least once a year and whenever processing, systems or risks change.",
+        "Report privacy status to leadership, including requests from individuals, complaints and incidents."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.34" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(2)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 24" }
+      ]
+    },
+    {
+      "code": "PRV-07",
+      "title": "Build privacy into new systems and set defaults to the minimum",
+      "description": "When a system, product or process that uses personal data is planned or changed, privacy safeguards are designed in from the outset, and default settings expose and keep the least data necessary. Adding privacy later is harder, and most users never change the defaults.",
+      "guidance": [
+        "Add privacy questions to design reviews and change requests for anything that touches personal data.",
+        "Decide on pseudonymisation, short retention and limited access during design, not after launch.",
+        "Ship settings so that profile visibility, sharing and tracking stay off or private until the person turns them on.",
+        "By default, limit who can see each record and how long it is kept.",
+        "Keep a short note of the privacy decisions made for each system as evidence."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "gdpr-2016-679", "ref": "Art. 25(1)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 25(2)" }
+      ]
+    },
+    {
+      "code": "PRV-08",
+      "title": "Assess privacy impact before starting any high-risk processing",
+      "description": "Before processing that is likely to pose a high risk to people begins, such as large-scale monitoring, profiling that significantly affects people, or sensitive data at scale, the organisation assesses the risk, decides on safeguards and records the outcome. If high risk remains, it consults the supervisory authority first.",
+      "guidance": [
+        "Screen new or changed processing against your regulator's published list of high-risk activities.",
+        "Describe the processing, test whether it is necessary and proportionate, and assess the risks to people.",
+        "Record the safeguards chosen and the risk that remains, signed off by the business owner.",
+        "Seek and record the advice of your data protection officer, if you have one.",
+        "Consult the supervisory authority before starting if high risk remains after safeguards."
+      ],
+      "category": "privacy",
+      "mappings": [{ "framework": "gdpr-2016-679", "ref": "Art. 35" }]
+    },
+    {
+      "code": "PRV-09",
+      "title": "Vet and contract every provider that handles personal data for you",
+      "description": "Any provider that processes personal data on the organisation's behalf is checked for adequate safeguards before use and signs a contract with the terms the law requires, including acting only on your instructions. You stay responsible for what providers do with your data.",
+      "guidance": [
+        "Identify every provider that stores or processes personal data for you, including cloud and payroll services.",
+        "Check each provider's security and privacy safeguards before signing, in proportion to the data involved.",
+        "Use a data processing agreement covering instructions, confidentiality, security, sub-processors, assistance, deletion and audits.",
+        "Require notice and a right to object before a provider adds or changes a sub-processor.",
+        "Confirm the data is returned or deleted when the contract ends."
+      ],
+      "category": "privacy",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.20" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 28" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-06" }
+      ]
+    }
+  ]
+}

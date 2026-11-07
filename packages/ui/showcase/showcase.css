@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "../src/tokens/tokens.css";
+@source "./";
+
+/* The web app sets --isms-font-sans from next/font; the showcase uses Google Fonts. */
+:root {
+  --isms-font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--isms-font-sans);
+  -webkit-font-smoothing: antialiased;
+}

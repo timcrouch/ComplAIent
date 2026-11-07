@@ -1,0 +1,9 @@
+# osv-scanner configuration for the CI security job (scans pnpm-lock.yaml).
+# Every ignore is narrow, dated and expires; re-check it before the date.
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-02-01
+reason = """minimatch 10.2.6 (moderate, glob-pattern DoS), added 2026-11-04. Dev tooling only \
+(eslint 10.x requires minimatch ^10.2.6; the fix is minimatch 11). Not in any image: Trivy \
+scans them. Remove when eslint accepts minimatch 11."""

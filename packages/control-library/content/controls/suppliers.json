@@ -1,0 +1,107 @@
+{
+  "controls": [
+    {
+      "code": "SUP-01",
+      "title": "List your suppliers and rank them by the risk they carry",
+      "description": "Every supplier with access to your systems, data or premises, or whose failure would disrupt you, is listed with an owner and a risk rating, and is checked before contract in proportion to that rating. You cannot manage risks from suppliers you have not identified.",
+      "guidance": [
+        "Build the list from purchasing records, contracts and the systems each supplier touches.",
+        "Rate each supplier on the data it handles, the access it has and how hard it would be to replace.",
+        "Ask high-risk suppliers for evidence such as certifications, recent audit reports or answers to a security questionnaire.",
+        "Record the outcome and any conditions before the contract is signed.",
+        "For each critical supplier, note how you would switch away and get your data back."
+      ],
+      "category": "suppliers",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.19" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(d)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.OC-05" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-01" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-03" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-04" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-06" },
+        { "framework": "nist-csf-2.0", "ref": "ID.AM-04" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-10" }
+      ]
+    },
+    {
+      "code": "SUP-02",
+      "title": "Put the protection you expect from suppliers in signed contracts",
+      "description": "Every protection you expect from a supplier is written into a contract it has signed, so you can enforce it if things go wrong. Promises made in sales meetings or emails are hard to enforce.",
+      "guidance": [
+        "Keep a clause library with a basic set for every supplier and an extra set for those holding sensitive data or admin access.",
+        "Set a hard deadline, in hours, for the supplier to tell you of a breach that touches your data.",
+        "Keep the power to verify: an audit right, or a yearly independent assurance report you can rely on.",
+        "Ban silent handovers: the supplier names its subcontractors and asks before adding one.",
+        "Agree up front how your data comes back, in what format, and when it is wiped at their end."
+      ],
+      "category": "suppliers",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.20" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(d)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-02" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-05" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-08" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-10" }
+      ]
+    },
+    {
+      "code": "SUP-03",
+      "title": "Find out what is inside the technology you buy",
+      "description": "Hidden weaknesses in the parts, libraries and subcontractors behind a product can reach you through a routine update. For technology you depend on, you know what it is built from, how its maker fixes flaws and how long it will be supported.",
+      "guidance": [
+        "Ask makers of software you depend on for a software bill of materials (SBOM) and their target time to fix known flaws.",
+        "Make passing your security clauses down to their subcontractors a contract condition, and ask for the subcontractor list.",
+        "Buy hardware and software only from the maker or its authorised resellers, and accept only signed updates.",
+        "Subscribe to each key vendor's security advisories and assign someone to act on them.",
+        "Record vendor end-of-support dates in your asset list and plan replacements a year ahead."
+      ],
+      "category": "suppliers",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.21" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(d)" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(e)" },
+        { "framework": "nist-csf-2.0", "ref": "ID.RA-09" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-09" }
+      ]
+    },
+    {
+      "code": "SUP-04",
+      "title": "Keep checking that key suppliers still protect you after signing",
+      "description": "A supplier that was safe at signing may not stay that way. High-risk suppliers are re-checked on a schedule, and anything they change that affects your data, such as where it is hosted or who handles it, is assessed before you agree.",
+      "guidance": [
+        "Re-check high-risk suppliers at least yearly, using their service reports, audit reports and incident history.",
+        "Use regular meetings with key suppliers to go through incidents, open issues and what they plan next.",
+        "Ask to be told before your data moves to a new country or a new handler, and assess the move before agreeing.",
+        "Raise contract breaches formally and track the agreed fixes to completion.",
+        "Re-rate a supplier when what it does for you, or its own situation, changes."
+      ],
+      "category": "suppliers",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.22" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(d)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-07" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-09" },
+        { "framework": "nist-csf-2.0", "ref": "DE.CM-06" }
+      ]
+    },
+    {
+      "code": "SUP-05",
+      "title": "Agree who secures what before your data goes into a cloud service",
+      "description": "Each cloud service you rely on has a written split of security duties between you and the provider, a hardened configuration and a tested way to get your data out. Many cloud breaches stem from customer-side settings rather than from the provider.",
+      "guidance": [
+        "Keep a list of approved cloud services and give staff a way to request new ones.",
+        "For each service, write down who is responsible for accounts, configuration, backups, encryption and logs.",
+        "Apply a secure baseline configuration and check it for drift automatically where tools allow.",
+        "Check where data is stored and processed, and whether that meets your legal and contract duties.",
+        "Document how you would export your data and move to another provider, and test the export."
+      ],
+      "category": "suppliers",
+      "mappings": [
+        { "framework": "iso27001-2022", "ref": "A.5.23" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(d)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-02" }
+      ]
+    }
+  ]
+}

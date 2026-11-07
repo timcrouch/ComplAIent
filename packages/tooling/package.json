@@ -1,0 +1,32 @@
+{
+  "name": "@isms/tooling",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "bin": {
+    "isms-build-js": "./build-js.mjs"
+  },
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./eslint": "./eslint.config.js",
+    "./prettier": "./prettier.config.js",
+    "./vitest": "./vitest.base.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@eslint/js": "10.0.1",
+    "@swc/core": "1.16.21",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "dependency-cruiser": "18.7.2"
+  }
+}

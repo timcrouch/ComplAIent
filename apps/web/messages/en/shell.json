@@ -1,0 +1,79 @@
+{
+  "app": {
+    "name": "ComplAIent ISMS",
+    "tagline": "Compliance that thinks ahead",
+    "description": "ComplAIent ISMS: compliance, AI and enterprise information security in one workspace.",
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "label": "Primary",
+    "home": "Home",
+    "library": "Controls",
+    "organisation": "Organisation",
+    "settings": "Settings",
+    "report": "Report a concern",
+    "risks": "Risks",
+    "tasks": "Tasks",
+    "reports": "Reports"
+  },
+  "reportButton": {
+    "label": "Report a concern",
+    "shortcutMac": "⌘⇧R",
+    "shortcutOther": "Ctrl Shift R"
+  },
+  "search": {
+    "button": "Search or jump to…",
+    "shortcutMac": "⌘K",
+    "shortcutOther": "Ctrl K"
+  },
+  "palette": {
+    "title": "Command palette",
+    "placeholder": "Search or jump to…",
+    "empty": "No matches",
+    "results": "{count, plural, one {# result} other {# results}}",
+    "navigate": "Navigate",
+    "select": "Select",
+    "close": "Close",
+    "escapeKey": "Esc",
+    "goHome": "Go to Home",
+    "switchTheme": "Switch theme",
+    "signOut": "Sign out",
+    "setUp": "Set up your organisation",
+    "goLibrary": "Go to Controls",
+    "report": "Report a concern"
+  },
+  "ui": {
+    "dialog": {
+      "close": "Close"
+    },
+    "aiBadge": {
+      "suggested": "Suggested by AI",
+      "draft": "AI draft"
+    }
+  },
+  "account": {
+    "trigger": "Account menu",
+    "title": "Account",
+    "signOut": "Sign out"
+  },
+  "theme": {
+    "legend": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "viewMode": {
+    "legend": "View mode",
+    "guided": "Guided",
+    "professional": "Professional",
+    "executive": "Executive",
+    "about": "About view modes",
+    "aboutText": "Changes how much detail you see. It never changes what you can do.",
+    "saveFailed": "We couldn't save your view. Please try again."
+  },
+  "notFound": {
+    "title": "This page doesn't exist",
+    "body": "The link may be out of date, or the page may have moved.",
+    "home": "Go to Home"
+  }
+}

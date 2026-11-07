@@ -1,0 +1,41 @@
+{
+  "name": "@isms/telemetry",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "isms-dist": "./dist/index.js",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "build": "isms-build-js"
+  },
+  "dependencies": {
+    "@isms/config": "workspace:*",
+    "@opentelemetry/api": "1.10.0",
+    "@opentelemetry/exporter-prometheus": "0.300.0",
+    "@opentelemetry/exporter-trace-otlp-http": "0.300.0",
+    "@opentelemetry/instrumentation-http": "0.300.0",
+    "@opentelemetry/instrumentation-ioredis": "0.72.0",
+    "@opentelemetry/instrumentation-nestjs-core": "0.71.0",
+    "@opentelemetry/instrumentation-pg": "0.77.0",
+    "@opentelemetry/resources": "3.0.0",
+    "@opentelemetry/sdk-node": "0.300.0",
+    "pino": "10.4.0"
+  },
+  "devDependencies": {
+    "@isms/tooling": "workspace:*",
+    "@types/node": "26.6.6",
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}

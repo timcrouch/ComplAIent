@@ -1,0 +1,28 @@
+# Build context for infrastructure/docker/Dockerfile.*. Secrets never enter an image:
+# every .env file is excluded except the committed dev placeholders.
+# Patterns use **/ so they match in every directory, not only at the root (Next's
+# standalone output would otherwise copy apps/web/.env* into the image).
+**/.env
+**/.env.*
+!.env.example
+**/*.key
+**/*.pem
+**/id_rsa*
+
+.git
+.github
+.superpowers
+**/node_modules
+**/dist
+**/.next
+**/coverage
+**/*.tsbuildinfo
+packages/database/src/generated
+packages/ui/showcase/dist
+apps/web/next-env.d.ts
+test-results
+playwright-report
+e2e/.auth
+.DS_Store
+docs
+**/.cache

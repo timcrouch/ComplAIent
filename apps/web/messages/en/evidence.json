@@ -1,0 +1,165 @@
+{
+  "evidence": {
+    "title": "Evidence",
+    "intro": "Files that show the controls work. Each file keeps its SHA-256 fingerprint, so anyone can check later that it hasn't changed.",
+    "empty": "No evidence yet.",
+    "listLabel": "Evidence files",
+    "upload": "Upload evidence",
+    "request": "Request evidence",
+    "needsControl": "Accept a control first: evidence always supports an accepted control.",
+    "downloadLabel": "Download",
+    "sha256": "SHA-256",
+    "copy": "Copy SHA-256",
+    "copied": "SHA-256 copied.",
+    "copyFailed": "We couldn't copy it. Select the fingerprint and copy it yourself.",
+    "uploadedBy": "Uploaded by {name}",
+    "collected": "Collected {date}",
+    "supports": "Supports",
+    "supportsLabel": "Controls it supports",
+    "classificationLabel": "Classification: {value}",
+    "classification": {
+      "internal": "Internal",
+      "confidential": "Confidential",
+      "restricted": "Restricted"
+    },
+    "uploadDialog": {
+      "title": "Upload evidence",
+      "description": "Choose the file and the controls it shows working. The file can't be changed afterwards.",
+      "taskTitle": "Upload the file for {title}",
+      "taskDescription": "The file goes to whoever asked for it, and this task is then done.",
+      "file": "File",
+      "fileHint": "PDF, PNG, JPEG, WebP, text, CSV, Word, Excel or PowerPoint, up to {size}.",
+      "controls": "Controls it supports",
+      "classification": "Classification",
+      "collectedAt": "Collected on",
+      "collectedHint": "Leave empty to use today.",
+      "submit": "Upload",
+      "uploading": "Uploading…",
+      "cancel": "Cancel",
+      "done": "{name} uploaded."
+    },
+    "requestDialog": {
+      "title": "Request evidence",
+      "description": "Ask a colleague for a file. They'll find the request in their tasks.",
+      "person": "Person",
+      "choosePerson": "Choose a person",
+      "control": "Control",
+      "chooseControl": "Choose a control",
+      "taskTitle": "What you need",
+      "details": "Details",
+      "dueDate": "Due date",
+      "dueHint": "Optional.",
+      "submit": "Send request",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "done": "Request sent to {name}."
+    },
+    "errors": {
+      "fileRequired": "Choose a file.",
+      "empty": "The file is empty. Choose another file.",
+      "tooLarge": "The file is larger than {size}. Choose a smaller file.",
+      "typeNotAllowed": "This kind of file can't be uploaded. Use PDF, PNG, JPEG, WebP, text, CSV, Word, Excel or PowerPoint.",
+      "unreadable": "We couldn't read the file. Please choose it again.",
+      "controlsRequired": "Choose at least one control.",
+      "controlNotAccepted": "That control is no longer accepted on this risk. Reload the page and choose again.",
+      "taskClosed": "This request is already closed.",
+      "personRequired": "Choose a person.",
+      "controlRequired": "Choose a control.",
+      "titleRequired": "Say what you need.",
+      "descriptionRequired": "Add some details.",
+      "invalid": "Something in the form isn't accepted. Check it and try again.",
+      "forbidden": "You can't add evidence here.",
+      "notFound": "This is no longer open to you.",
+      "unavailable": "We couldn't send that. Please try again in a moment."
+    },
+    "download": {
+      "notFound": "This file doesn't exist, or you can't download it.",
+      "unavailable": "The file couldn't be downloaded right now. Please try again in a moment."
+    }
+  },
+  "tasks": {
+    "pageTitle": "Tasks · {app}",
+    "eyebrow": "Your work",
+    "title": "Tasks",
+    "intro": "What you have been asked to do: send a file, finish an action or look at a risk again.",
+    "empty": "Nothing to do right now.",
+    "listLabel": "Your tasks",
+    "status": {
+      "open": "Open",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "overdue": "Overdue",
+    "due": "Due {date}",
+    "noDue": "No due date",
+    "control": "For control {code} · {title}",
+    "controlTitle": "For control: {title}",
+    "risk": "Risk {reference}",
+    "reviewTitle": "Review {reference}: {title}",
+    "completedByApproval": "Completed when the risk was approved",
+    "doneNote": "Note: {note}",
+    "upload": "Upload the file",
+    "completed": "{title} is done.",
+    "kind": {
+      "evidence_request": "Evidence request",
+      "treatment_action": "Action",
+      "periodic_review": "Review this risk"
+    },
+    "markDone": "Mark done",
+    "openRisk": "Risks due for review",
+    "riskOnly": "Risk {reference}",
+    "doneDialogTitle": "Mark done: {title}",
+    "doneDialogDescription": "You can leave a note about what was done.",
+    "noteLabel": "Note (optional)",
+    "doneSubmit": "Mark done"
+  },
+  "approval": {
+    "title": "Approval",
+    "intro": "A complete risk is submitted for approval. Someone who didn't report it approves it, or returns it with a comment.",
+    "submit": "Submit for approval",
+    "submitting": "Submitting…",
+    "submitted": "Submitted for approval.",
+    "blockersTitle": "Before you can submit",
+    "blockers": {
+      "missingLikelihood": "Set how likely it is.",
+      "missingImpact": "Set how bad it would be.",
+      "missingTreatment": "Choose how to handle the risk.",
+      "missingOwner": "Choose an owner.",
+      "unresolvedToConfirm": "Resolve the questions to confirm."
+    },
+    "waiting": "Waiting for approval.",
+    "reviewer": "Submitted by {name}",
+    "rule": {
+      "reviewerMayApprove": "Its reviewer or an approver may approve it.",
+      "independentApprover": "Someone other than its reviewer must approve it."
+    },
+    "noEligibleApprover": "No one else can approve this yet — an administrator can give the approver role to someone",
+    "refusal": {
+      "reporter": "You reported this risk, so someone else must approve it.",
+      "reviewerNeedsIndependent": "This risk is above your appetite or accepted, so someone other than its reviewer must approve it.",
+      "notApprover": "You don't hold the approver role for this risk."
+    },
+    "comment": "Comment",
+    "commentHint": "Optional when you approve. Needed when you return the risk.",
+    "commentRequired": "Write why you're returning the risk.",
+    "approve": "Approve",
+    "return": "Return",
+    "approved": "Risk approved.",
+    "returned": "Risk returned with your comment.",
+    "decisionsTitle": "Decisions",
+    "decisionsLabel": "Approval decisions",
+    "decision": {
+      "approved": "Approved by {name}",
+      "returned": "Returned by {name}"
+    },
+    "decisionMeta": "Version {version} · {date}",
+    "errors": {
+      "invalidTransition": "This risk is no longer waiting for that step. Reload the page to see where it is.",
+      "invalid": "That comment isn't accepted. Check it and try again.",
+      "forbidden": "You can't do this for this risk.",
+      "notFound": "This risk is no longer open to you.",
+      "notAccepted": "That wasn't accepted. Please reload and try again.",
+      "unavailable": "We couldn't send that. Please try again in a moment."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+# Accepted unfixed HIGH or CRITICAL findings in the container images (Ruling R29).
+# One CVE per line, each preceded by a comment with the reason, the date added and an
+# expiry date (`exp:YYYY-MM-DD` after the id makes Trivy stop ignoring it on that date):
+#   # <package> in <image>: <why it is accepted>. Added YYYY-MM-DD.
+#   CVE-YYYY-NNNNN exp:YYYY-MM-DD
+# Empty: no finding is accepted as of 2026-11-04.

@@ -1,0 +1,131 @@
+{
+  "settings": {
+    "ai": {
+      "pageTitle": "AI assistant · Settings · {app}",
+      "eyebrow": "Settings",
+      "title": "AI assistant",
+      "intro": "The AI assistant helps people describe concerns and suggests controls and frameworks. It never saves or approves anything by itself. Everything works with it off.",
+      "errors": {
+        "forbidden": "Your role doesn't include changing AI settings.",
+        "unavailable": "That didn't save. Please try again in a minute.",
+        "notAccepted": "That change wasn't accepted. Reload the page and try again.",
+        "secretsKeyMissing": "The server has no secrets key (AI_SECRETS_KEY), so a provider key can't be stored or used. Ask whoever runs the server to set one.",
+        "keyUnreadable": "The saved key can't be read, because the server's secrets key has changed since it was saved. Save the key again.",
+        "privacyOff": "Turn on both privacy switches first.",
+        "noKey": "Save a key first.",
+        "modelNotOffered": "That model is no longer offered. Choose another one."
+      },
+      "readiness": {
+        "title": "Status",
+        "overall": {
+          "ready": "The AI assistant is on and ready.",
+          "disabled": "The AI assistant is off.",
+          "noKey": "The AI assistant can't run: no key is saved.",
+          "privacyOff": "AI is paused until both privacy switches are on.",
+          "privacyOffZeroRetention": "AI is paused until zero data retention is on.",
+          "noModel": "The AI assistant is on, but some purposes still need a model.",
+          "secretsKeyMissing": "The AI assistant can't run: the server has no secrets key.",
+          "keyUnreadable": "The AI assistant can't run: the saved key can't be read."
+        },
+        "purposesLabel": "Readiness for each purpose",
+        "conversation": {
+          "ready": "Conversation ready",
+          "noModel": "Conversation needs a model",
+          "waiting": "Conversation not available yet"
+        },
+        "controls": {
+          "ready": "Control suggestions ready",
+          "noModel": "Control suggestions need a model",
+          "waiting": "Control suggestions not available yet"
+        },
+        "frameworks": {
+          "ready": "Framework suggestions ready",
+          "noModel": "Framework suggestions need a model",
+          "waiting": "Framework suggestions not available yet"
+        }
+      },
+      "purposes": {
+        "conversation": "Conversation",
+        "controls": "Control suggestions",
+        "frameworks": "Framework suggestions"
+      },
+      "key": {
+        "title": "Provider key",
+        "description": "The key is stored encrypted and can never be shown again, only its last 4 characters.",
+        "label": "OpenRouter key",
+        "hint": "Paste the whole key. It is cleared from this page as soon as it is saved.",
+        "invalid": "Enter the whole key: 20 to 200 characters, with no spaces.",
+        "status": "A key is set · ends in {last4} · set by {name} on {date}",
+        "none": "No key is saved yet.",
+        "save": "Save key",
+        "saving": "Saving…",
+        "saved": "Key saved.",
+        "replace": "Replace",
+        "cancelReplace": "Cancel",
+        "remove": "Remove",
+        "removed": "Key removed.",
+        "confirmTitle": "Remove the OpenRouter key?",
+        "confirmBody": "The AI assistant stops working until a new key is saved. Nothing else changes.",
+        "confirmRemove": "Remove key",
+        "confirmCancel": "Keep key",
+        "confirmClose": "Close"
+      },
+      "privacy": {
+        "title": "Privacy",
+        "description": "Both must be on before any request leaves the workspace.",
+        "euOnly": "EU-only routing",
+        "euOnlyHint": "Requests go only to AI providers hosted in the EU.",
+        "zeroRetention": "Zero data retention",
+        "zeroRetentionHint": "Providers must not store your prompts or answers.",
+        "paused": "AI is paused until both are on.",
+        "pausedZeroRetention": "AI is paused until zero data retention is on.",
+        "nonEuWarning": "EU-only routing is off: requests may be processed outside the EU. Development only.",
+        "saved": "Privacy settings saved."
+      },
+      "models": {
+        "title": "Models",
+        "description": "Choose the model each purpose uses. The list shows only models offered with EU routing and zero retention.",
+        "notChosen": "Not chosen",
+        "save": "Save models",
+        "saving": "Saving…",
+        "saved": "Models saved.",
+        "unavailable": {
+          "privacyOff": "Models can be chosen once both privacy switches are on.",
+          "noKey": "Models can be chosen once a key is saved.",
+          "secretsKeyMissing": "Models can't be listed: the server has no secrets key.",
+          "keyUnreadable": "Models can't be listed: the saved key can't be read. Save the key again.",
+          "provider": "OpenRouter didn't list its models just now. Reload the page to try again."
+        }
+      },
+      "test": {
+        "title": "Test connection",
+        "description": "Sends one harmless request with the saved key and settings.",
+        "button": "Test connection",
+        "testing": "Testing…",
+        "ok": "Connected. {model} answered the test request.",
+        "reasons": {
+          "noKey": "No key is saved yet. Save a key first.",
+          "privacyOff": "Turn on both privacy switches first. No request was sent.",
+          "secretsKeyMissing": "The server has no secrets key, so the saved key can't be used.",
+          "keyUnreadable": "The saved key can't be read. Save the key again.",
+          "auth": "The key was rejected by OpenRouter. Check it and save it again.",
+          "regionNotAllowed": "Your OpenRouter plan doesn't include EU-only routing. Upgrade to a Business plan, or turn EU-only routing off (development only).",
+          "noEndpoint": "No EU-hosted provider available for this model. Choose another model.",
+          "rateLimited": "OpenRouter is receiving too many requests. Try again in a minute.",
+          "timeout": "OpenRouter didn't answer in time. Try again in a minute.",
+          "unavailable": "OpenRouter couldn't be reached. Try again later."
+        }
+      },
+      "master": {
+        "title": "AI assistant on or off",
+        "label": "AI assistant on/off",
+        "hint": "When it is off, nobody sees AI help. Reporting, controls and frameworks all work without it.",
+        "on": "The AI assistant is on.",
+        "off": "The AI assistant is off."
+      },
+      "switchOn": "On",
+      "switchOff": "Off",
+      "saving": "Saving…"
+    }
+  }
+}

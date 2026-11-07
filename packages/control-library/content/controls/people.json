@@ -1,0 +1,189 @@
+{
+  "controls": [
+    {
+      "code": "PPL-01",
+      "title": "Check people are who they claim before trusting them with access",
+      "description": "Someone with a false identity or an invented track record can be inside your systems on their first day. The deeper a role reaches into money, data or systems, the more you have confirmed about the person in it, and the more often you look again.",
+      "guidance": [
+        "Define check levels per role group, from identity and right to work for everyone to deeper checks for high-trust roles.",
+        "Ask HR or legal to confirm each check is allowed where the person works, and collect only the data each check needs.",
+        "Confirm qualifications and past employment with the issuer or employer directly, not only from documents the candidate supplies.",
+        "Require agencies and contractors to check their people to your levels, and ask for proof for high-trust roles.",
+        "Repeat checks for high-trust roles every few years, or ask people to declare relevant changes in their circumstances.",
+        "Start new hires on a starter profile and lift it only when HR marks their checks complete."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.1"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-02"
+        }
+      ]
+    },
+    {
+      "code": "PPL-02",
+      "title": "Make security part of what people sign when they join",
+      "description": "Duties that are not in the contract are hard to enforce and easy to forget. Employment contracts and contractor agreements make the security rules binding, so every person has agreed to follow them before they get access.",
+      "guidance": [
+        "Add a clause to standard contracts that makes the security rules, including those for using work devices and data, binding by reference, as they are updated.",
+        "Cover confidentiality, ownership of the work people produce and the duty to report security concerns.",
+        "Use matching clauses in contractor, agency and freelancer agreements, adapted with legal advice.",
+        "Tell new hires how you handle their own personal data, and agree any monitoring of work systems with staff representatives where required.",
+        "Collect signed contracts before the start date and keep them where HR can produce them on request.",
+        "State in the contract that breaking the security rules can lead to the steps in your fair-response approach."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.2"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "GV.RR-04"
+        }
+      ]
+    },
+    {
+      "code": "PPL-03",
+      "title": "Train people to recognise and stop the attacks aimed at them",
+      "description": "Many attacks start by tricking a person, so people are a strong defence once they know what to look for. Staff can spot the tricks currently used against organisations like yours, and the people attackers target most, such as finance, the helpdesk and leaders, are drilled hardest.",
+      "guidance": [
+        "Cover the basics at induction: spotting phishing, locking screens, installing updates, using the password manager and reporting fast.",
+        "Add role-specific modules: payment fraud for finance, secure coding for developers, caller verification for the helpdesk.",
+        "Keep refreshers short and frequent, such as ten minutes a quarter, and build them around real attacks seen recently.",
+        "Run practice phishing emails, coach those who click rather than shaming them, and track how many people report.",
+        "Include leaders and board members, and record completion per person so managers can chase what is overdue.",
+        "When a security rule changes, tell the people it affects in a short note that says what to do differently."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.3"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AT-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AT-02"
+        }
+      ]
+    },
+    {
+      "code": "PPL-04",
+      "title": "Respond to rule-breaking fairly so mistakes surface and abuse stops",
+      "description": "If people fear punishment for honest errors they hide them, and if deliberate misuse goes unchecked the rules lose their force. A written approach agreed with HR treats honest errors as a chance to learn and keeps sanctions for negligence and deliberate misuse.",
+      "guidance": [
+        "Agree the approach with HR, legal and any staff representatives, and publish it alongside the security rules.",
+        "Promise that people who promptly report their own honest mistakes will not be sanctioned for the mistake itself.",
+        "Give the person a chance to explain, involve HR early and keep a confidential record of what was decided.",
+        "Apply the same approach to contractors through their agreements, for example by removing them from your work.",
+        "Look for the system fault behind repeated errors before blaming individuals."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.4"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "GV.RR-04"
+        }
+      ]
+    },
+    {
+      "code": "PPL-05",
+      "title": "Bind people to secrecy in writing, including after they leave",
+      "description": "What someone learns at work does not leave their head when they leave the job. Anyone given confidential information has first promised in writing to keep it private, and that promise is clear about how long it lasts beyond their time with you.",
+      "guidance": [
+        "Keep standard confidentiality terms for staff, contractors, partners and visitors, drafted with legal advice for each country you work in.",
+        "Get them signed before any confidential material is shared, including during sales talks, due diligence or tenders.",
+        "Record signed agreements in your contract system with an end date, so it warns you before one lapses.",
+        "At exit, give leavers a written reminder of their continuing duties and ask them to confirm they hold no company data.",
+        "When someone changes role, tell them which information they may no longer use."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.5"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.6"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        }
+      ]
+    },
+    {
+      "code": "PPL-06",
+      "title": "Protect company information when people work from home or travel",
+      "description": "Outside the office, screens can be overlooked, home networks are shared and devices are easier to lose. People working elsewhere use managed devices and protected connections, and follow a few simple rules for handling sensitive work.",
+      "guidance": [
+        "Allow work data only on company-managed devices, or on personal ones through a managed, separate work profile.",
+        "Connect to company systems through a VPN or an access gateway that checks the device's health first.",
+        "Ask people to take confidential calls where they cannot be overheard, and to use privacy screens in public places.",
+        "Provide shredders to people who must print confidential material at home, or do not allow printing it there.",
+        "Give simple home network advice: change the router's default password and keep its software up to date.",
+        "Set rules for working abroad, since some countries restrict encryption or let border officials inspect devices."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.7"
+        }
+      ]
+    },
+    {
+      "code": "PPL-07",
+      "title": "Make reporting anything suspicious quick, easy and safe",
+      "description": "The first person to notice a phishing email, an odd sign-in prompt or a lost laptop can stop an attack early, but only if they speak up straight away. One easy route, open to staff and contractors, takes reports at any hour, and those who report get thanks and feedback, never blame.",
+      "guidance": [
+        "Offer a report button in the email client and one address or number for everything else, monitored outside office hours too.",
+        "Give examples of what to report: suspicious messages, unexpected prompts, lost devices, strangers in restricted areas, data sent to the wrong person.",
+        "Tell people to report even when unsure or when they caused the problem themselves.",
+        "Ask people to leave the evidence as it is: not to forward the suspicious email to colleagues or try to clean the device themselves.",
+        "Acknowledge each report quickly, pass it into the incident process and tell the reporter what happened."
+      ],
+      "category": "people",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.6.8"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        }
+      ]
+    }
+  ]
+}

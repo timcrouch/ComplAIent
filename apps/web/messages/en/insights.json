@@ -1,0 +1,218 @@
+{
+  "insights": {
+    "header": {
+      "now": "Now {score}",
+      "expected": "Expected {score}",
+      "accepted": "Accepted at {score}",
+      "above": "above appetite",
+      "within": "within appetite"
+    },
+    "residual": {
+      "likelihood": "Expected likelihood",
+      "impact": "Expected impact",
+      "fieldLabel": "Expected after treatment",
+      "hint": "How likely and how serious you expect it to be once the treatment is done. Set both to see the expected score.",
+      "notSet": "Not set",
+      "level": "{value} · {label}",
+      "notWorse": "Treatment should not make the risk worse. Lower the expected likelihood or raise the current one."
+    },
+    "view": {
+      "label": "Risk view",
+      "list": "List",
+      "map": "Map",
+      "basisLabel": "Map basis",
+      "now": "Now",
+      "expected": "Expected",
+      "treatedShown": "Treated risks: shown",
+      "treatedHidden": "Treated risks: hidden",
+      "showTreated": "Show",
+      "hideTreated": "Hide",
+      "treatedRisks": "treated risks"
+    },
+    "map": {
+      "label": "Risk map",
+      "caption": "Risks by likelihood and impact. Each cell with risks links to those risks.",
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "axisLikelihood": "Likelihood ↑",
+      "axisImpact": "Impact →",
+      "cellLabel": "{above, select, true {Above appetite} other {Within appetite}}: {count, plural, one {# risk} other {# risks}}, likelihood {likelihood}, impact {impact}",
+      "above": "Above appetite",
+      "within": "Within appetite",
+      "legendTitle": "Legend",
+      "legendAbove": "Above appetite: the score is higher than {threshold}, the most the organisation accepts.",
+      "legendWithin": "Within appetite: the score is acceptable.",
+      "showTable": "Show as table",
+      "tableCaption": "Risks per likelihood and impact",
+      "colLikelihood": "Likelihood",
+      "colImpact": "Impact",
+      "colScore": "Score",
+      "colAppetite": "Appetite",
+      "colCount": "Risks",
+      "empty": "No risks to place yet.",
+      "unscored": "{count, plural, one {# risk is not scored yet} other {# risks are not scored yet}}",
+      "noExpectedYet": "No risks have an expected score yet. A risk appears here once its expected score after treatment is entered.",
+      "noExpectedLink": "{count, plural, one {Show the # risk} other {Show the # risks}}",
+      "unplaced": "{count, plural, one {# risk has no expected score yet} other {# risks have no expected score yet}}",
+      "cellChip": "Likelihood: {likelihood} × Impact: {impact} ({basis, select, residual {Expected} other {Now}})",
+      "clearCell": "Show all risks",
+      "legendRegion": "Shaded cells are above your appetite; the line marks where appetite ends."
+    },
+    "journey": {
+      "label": "Where this risk is on its way to approval",
+      "steps": {
+        "reported": "Reported",
+        "under_review": "Being reviewed",
+        "awaiting_approval": "Waiting for approval",
+        "approved": "Approved",
+        "closed": "Treated"
+      },
+      "status": {
+        "done": "Done",
+        "current": "Current",
+        "upcoming": "Upcoming"
+      },
+      "stepBy": "{date} · {name}",
+      "waitingOwner": "Waiting on {name}",
+      "noOwner": "No owner yet",
+      "ruleReviewerMayApprove": "The reviewer {name} or an approver can approve",
+      "ruleIndependent": "Needs an independent approver: {names}",
+      "ruleIndependentNoNames": "Needs an independent approver",
+      "andMore": "{names} and {count} more",
+      "waiting": "Waiting {unit, select, day {{count, plural, one {# day} other {# days}}} hour {{count, plural, one {# hour} other {# hours}}} minute {{count, plural, one {# minute} other {# minutes}}} other {less than a minute}}",
+      "returned": "{count, plural, one {Returned # time} other {Returned # times}}",
+      "returnLine": "{date} · {name}: {comment}",
+      "reassessed": "Reassessed",
+      "reviewDue": "Next review due {date}",
+      "reviewNoDate": "No review date is set"
+    },
+    "picture": {
+      "title": "Risk picture",
+      "more": "Open the map",
+      "movementTitle": "Last 12 weeks",
+      "legendReported": "Reported",
+      "legendApproved": "Approved",
+      "legendClosed": "Marked as treated",
+      "legendNote": "Each group of bars is one week: risks reported, approved and marked as treated.",
+      "barReported": "{count} reported, week of {week}",
+      "barApproved": "{count} approved, week of {week}",
+      "barClosed": "{count} marked as treated, week of {week}",
+      "showTable": "Show as table",
+      "tableCaption": "Risks reported, approved and marked as treated per week",
+      "colWeek": "Week of",
+      "colReported": "Reported",
+      "colApproved": "Approved",
+      "colClosed": "Marked as treated"
+    },
+    "noteDialog": {
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "required": "Write a short note first."
+    },
+    "lifecycle": {
+      "title": "Review and closing",
+      "intro": "An approved risk is looked at again from time to time. Say it has been dealt with, that it is still accurate, or look at it again.",
+      "nextReview": "Next review due {date}",
+      "dueForReview": "Due for review since {date}",
+      "noReviewDate": "No review date is set.",
+      "treated": "Marked as treated on {date} by {name}.",
+      "close": "Mark as treated",
+      "confirm": "Confirm still accurate",
+      "reassess": "Reassess",
+      "openActions": "Finish or cancel the open actions first",
+      "close_dialog": {
+        "title": "Mark this risk as treated",
+        "description": "Say what was done. The risk stays on record and leaves the map unless you include treated risks.",
+        "label": "What was done",
+        "submit": "Mark as treated",
+        "done": "The risk is marked as treated."
+      },
+      "confirm_dialog": {
+        "title": "Confirm this risk is still accurate",
+        "description": "The next review moves on. You can leave a note.",
+        "label": "Note (optional)",
+        "submit": "Confirm still accurate",
+        "done": "Confirmed as still accurate."
+      },
+      "reassess_dialog": {
+        "title": "Reassess this risk",
+        "description": "The risk goes back to proposed so it can be assessed and approved again.",
+        "label": "Why is it being reassessed?",
+        "submit": "Reassess",
+        "done": "The risk is open for reassessment."
+      },
+      "errors": {
+        "openTreatmentActions": "There are still open actions. Finish or cancel them first.",
+        "riskClosed": "This risk is already marked as treated.",
+        "invalidTransition": "The risk can't be changed that way any more. Reload and try again."
+      }
+    },
+    "plan": {
+      "title": "Treatment plan",
+      "progress": "{done} of {total} done{overdue, plural, =0 {} other {, # overdue}}",
+      "progressLabel": "Treatment plan progress",
+      "empty": "No actions yet.",
+      "listLabel": "Treatment actions",
+      "assignee": "Assigned to {name}",
+      "due": "Due {date}",
+      "noDue": "No due date",
+      "overdue": "Overdue",
+      "status": {
+        "open": "Open",
+        "done": "Done",
+        "cancelled": "Cancelled"
+      },
+      "control": "Control {code} · {title}",
+      "doneBy": "Done by {name}",
+      "cancelledWhy": "Cancelled: {reason}",
+      "add": "Add action",
+      "markDone": "Mark done",
+      "cancel": "Cancel action",
+      "noPeople": "You can't list people here, so actions can't be assigned.",
+      "added": "Action added.",
+      "completed": "Action marked done.",
+      "cancelled": "Action cancelled.",
+      "form": {
+        "title": "Add an action",
+        "description": "Something that has to be done to treat this risk. The person you choose gets it as a task.",
+        "actionTitle": "What needs doing",
+        "details": "Details (optional)",
+        "assignee": "Who will do it",
+        "chooseAssignee": "Choose a person",
+        "dueDate": "Due date",
+        "control": "Accepted control (optional)",
+        "noControl": "No control",
+        "submit": "Add action",
+        "saving": "Adding…",
+        "cancel": "Cancel",
+        "titleRequired": "Say what needs doing.",
+        "assigneeRequired": "Choose who will do it.",
+        "dueRequired": "Choose a due date."
+      },
+      "doneDialog": {
+        "title": "Mark this action done",
+        "description": "You can leave a note about what was done.",
+        "label": "Note (optional)",
+        "submit": "Mark done"
+      },
+      "cancelDialog": {
+        "title": "Cancel this action",
+        "description": "It will not count towards the plan.",
+        "label": "Why is it cancelled?",
+        "submit": "Cancel action"
+      },
+      "errors": {
+        "taskNotAssignee": "Only the person it is assigned to, or a reviewer, can do that.",
+        "invalidTransition": "This task isn't completed here. Evidence requests are done by uploading the file; reviews by confirming the review.",
+        "dueDatePast": "Choose today or a later date.",
+        "taskClosed": "This action is already closed.",
+        "riskClosed": "This risk is already marked as treated, so actions can't be added.",
+        "treatmentIsAccept": "An accepted risk has no treatment plan.",
+        "invalid": "Something in the form isn't accepted. Check it and try again.",
+        "forbidden": "You can't change this plan.",
+        "notFound": "This is no longer open to you.",
+        "unavailable": "We couldn't save that. Please try again in a moment."
+      }
+    }
+  }
+}

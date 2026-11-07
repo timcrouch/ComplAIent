@@ -1,0 +1,235 @@
+{
+  "reports": {
+    "files": {
+      "notFound": "There is no such report file.",
+      "invalid": "That report link isn't valid. Go back to the report and download it again.",
+      "forbidden": "You don't have access to this report.",
+      "tooLarge": "This report has too many risks for one file. Narrow it with a filter and try again.",
+      "unavailable": "We couldn't prepare the file just now. Try again in a moment."
+    },
+    "pageTitle": "Reports – {app}",
+    "eyebrow": "Reports",
+    "title": "Reports",
+    "intro": "Files and pages to share with auditors, managers and the board. Each one shows only the risks you are allowed to see.",
+    "cards": {
+      "register": {
+        "title": "Risk register",
+        "purpose": "Every risk you can see, with owner, scores, treatment and open actions.",
+        "hint": "Large registers: use Excel. The PDF holds up to 1,000 risks and Excel up to 5,000."
+      },
+      "soa": {
+        "title": "Statement of Applicability",
+        "purpose": "For each requirement of a framework: does it apply, why, and which controls meet it."
+      },
+      "board": {
+        "title": "Board pack",
+        "purpose": "A short summary for leadership: the headline numbers, the top risks, both risk maps and a narrative."
+      }
+    },
+    "actions": {
+      "open": "Open",
+      "excel": "Excel",
+      "pdf": "PDF"
+    },
+    "registerLinks": {
+      "label": "Download the register",
+      "excel": "Download as Excel",
+      "pdf": "Download as PDF",
+      "hint": "Large registers: use Excel.",
+      "cellHint": "The map-cell filter is not applied to downloads."
+    },
+    "soaPage": {
+      "pageTitle": "Statement of Applicability – {app}",
+      "eyebrow": "Reports",
+      "title": "Statement of Applicability",
+      "intro": "Whether each requirement applies to your organisation, and why. The hint is only a suggestion; you decide.",
+      "back": "All reports",
+      "frameworkLabel": "Framework",
+      "noFramework": "No framework is confirmed yet. Confirm one in the control library to build the statement.",
+      "summary": "{decided} of {total} decided",
+      "groupHeading": "{title} · {decided} of {total} decided",
+      "otherGroup": "Other requirements",
+      "onlyUndecided": "Only undecided",
+      "nothingUndecided": "Every requirement has a decision.",
+      "empty": "This framework has no requirements.",
+      "table": {
+        "caption": "Requirements of {framework}",
+        "groupCaption": "{framework}: {group}",
+        "ref": "Requirement",
+        "applicability": "Applicable?",
+        "justification": "Justification",
+        "controls": "Controls",
+        "risks": "Risks",
+        "actions": "Actions"
+      },
+      "applicable": "Applicable",
+      "notApplicable": "Not applicable",
+      "undecided": "Not decided yet",
+      "decidedBy": "Decided by {name} on {date}",
+      "noControls": "No controls mapped",
+      "noRisks": "None",
+      "fullText": "Full requirement text (your organisation's licensed copy)",
+      "hint": {
+        "used": "Used by {refs}",
+        "usedHidden": "Used by {refs}, and {count, plural, one {# risk} other {# risks}} outside your scope",
+        "onlyHidden": "Used by {count, plural, one {# risk} other {# risks}} outside your scope",
+        "unused": "No risk uses its controls yet"
+      },
+      "status": {
+        "implementedTested": "Implemented and tested",
+        "implementedNotTested": "Implemented, not tested",
+        "implementedIneffective": "Implemented, not effective",
+        "notImplemented": "Not implemented"
+      },
+      "edit": "Edit",
+      "editLabel": "Edit applicability of {ref}",
+      "downloads": {
+        "label": "Download the statement",
+        "excel": "Download as Excel",
+        "pdf": "Download as PDF"
+      },
+      "frameworkGone": "That framework is not confirmed; showing {label}."
+    },
+    "dialog": {
+      "title": "Applicability of {ref}",
+      "applicability": "Does this requirement apply to your organisation?",
+      "applicable": "Applicable",
+      "notApplicable": "Not applicable",
+      "justification": "Justification",
+      "justificationHint": "Say why, in a sentence or two. Auditors read this.",
+      "save": "Save decision",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "choice": "Choose Applicable or Not applicable.",
+        "justification": "Write a justification of 1 to 2000 characters.",
+        "forbidden": "You don't have permission to decide applicability.",
+        "unavailable": "We couldn't save that just now. Try again in a moment.",
+        "stale": "This requirement or framework changed while you were editing. Reload to see the current statement.",
+        "reload": "Reload"
+      },
+      "close": "Close"
+    },
+    "board": {
+      "pageTitle": "Board pack – {app}",
+      "eyebrow": "Reports",
+      "title": "Board pack",
+      "intro": "A short summary for leadership. Every number comes from your risk records.",
+      "back": "All reports",
+      "period": "{start} to {end}",
+      "periodLabel": "Period",
+      "download": "Download PDF",
+      "tiles": {
+        "title": "The headline numbers",
+        "smallPrint": "Above appetite uses today's appetite. Reported, approved and treated count {period}. Overdue actions and reviews due are as of now.",
+        "label": {
+          "openRisks": "Open risks",
+          "aboveAppetite": "Above appetite",
+          "reported": "Reported",
+          "approved": "Approved",
+          "closed": "Treated",
+          "overdueActions": "Overdue actions",
+          "reviewsDue": "Reviews due"
+        },
+        "change": {
+          "vsPeriod": "vs {period}",
+          "sincePeriod": "since {date}",
+          "previous30": "previous 30 days",
+          "noChange": "No change {when}",
+          "now": "now",
+          "more": "more",
+          "fewer": "fewer"
+        }
+      },
+      "movement": {
+        "title": "Movement over 12 weeks",
+        "summary": "Weekly movement over {weeks} weeks: {reported} reported, {approved} approved, {treated} treated. {open, plural, one {# risk was} other {# risks were}} open at the end of the last week.",
+        "openAxis": "Open risks",
+        "legend": {
+          "reported": "Reported",
+          "approved": "Approved",
+          "closed": "Treated",
+          "openAtEnd": "Open at week end"
+        },
+        "showTable": "Show as table",
+        "tableCaption": "Weekly movement, the numbers behind the chart",
+        "week": "Week of"
+      },
+      "owners": {
+        "title": "By risk owner",
+        "caption": "Risks by owner, most open risks first",
+        "owner": "Owner",
+        "owned": "Owned",
+        "open": "Open",
+        "treated": "Treated (in the period)",
+        "overdue": "Overdue actions",
+        "bar": "Open + treated now",
+        "unassigned": "Unassigned",
+        "empty": "No owned risks in scope.",
+        "footnote": "Bar: where owned risks stand now (open and treated). Treated column: in the selected period."
+      },
+      "topRisks": {
+        "title": "Top risks",
+        "empty": "No open risk is above appetite.",
+        "owner": "Owner: {name}",
+        "noOwner": "No owner yet",
+        "scores": "Score {score}, expected {residual}",
+        "scoreOnly": "Score {score}, no expected score yet",
+        "treatment": {
+          "avoid": "Treatment: avoid",
+          "mitigate": "Treatment: mitigate",
+          "transfer": "Treatment: transfer",
+          "accept": "Treatment: accept"
+        },
+        "noTreatment": "No treatment chosen yet",
+        "actions": "{done} of {total} {total, plural, one {action} other {actions}} done",
+        "noActions": "No actions yet"
+      },
+      "maps": {
+        "title": "Risk maps",
+        "now": "Now",
+        "expected": "Expected after treatment",
+        "open": "Open the risk map"
+      },
+      "narrative": {
+        "title": "Summary",
+        "none": "No summary has been approved for this period yet.",
+        "scoped": "A summary is shared for the whole organisation only.",
+        "approvedBy": "Approved by {name} on {date}",
+        "aiAssisted": "Drafted with AI assistance",
+        "label": "Summary for the board",
+        "draft": "Draft a summary",
+        "drafting": "Drafting…",
+        "write": "Write a summary",
+        "edit": "Replace the summary",
+        "use": "Use in board pack",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "aiBadge": "AI draft",
+        "checkEverySentence": "AI draft: check every sentence",
+        "errors": {
+          "empty": "Write a summary first.",
+          "tooLong": "Keep the summary to 6,000 characters.",
+          "figures": "The summary mentions figures that aren't in your records. Check the numbers against the headline numbers above and try again.",
+          "unverifiable": "The draft used figures that aren't in your records, so it was thrown away. Try again, or write the summary yourself.",
+          "aiUnavailable": "The AI can't draft a summary right now. You can write one yourself.",
+          "forbidden": "Your role doesn't include approving the summary. Ask your security lead.",
+          "unavailable": "We couldn't do that just now. Your text is still here, so please try again in a minute."
+        },
+        "replaceHint": "Your edits replace the current summary. Match each figure to its label before you approve.",
+        "announce": {
+          "drafting": "Drafting a summary…",
+          "ready": "Draft ready. Check every sentence.",
+          "saved": "Summary saved for the board pack."
+        }
+      },
+      "periodGone": "That period is no longer available; showing {label}.",
+      "last30Days": "the last 30 days"
+    },
+    "glance": {
+      "title": "At a glance",
+      "intro": "Where things stand for {period}, from your risk records.",
+      "link": "Open the board pack"
+    }
+  }
+}

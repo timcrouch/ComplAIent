@@ -1,0 +1,32 @@
+// Reports: Statement of Applicability decisions and approved board narratives.
+
+/// One row per requirement the CISO has decided: applicable or not applicable, with a
+/// justification (check constraint 1-2000 characters in the migration). Absent row = not decided yet.
+model RequirementApplicability {
+  requirementId String   @id @db.Uuid
+  applicable    Boolean
+  justification String
+  decidedById   String   @db.Uuid
+  decidedAt     DateTime @db.Timestamptz(3)
+
+  requirement Requirement @relation(fields: [requirementId], references: [id], onDelete: Restrict)
+  decidedBy   User        @relation("ApplicabilityDecidedBy", fields: [decidedById], references: [id], onDelete: Restrict)
+}
+
+/// Append-only: the app role has no UPDATE, DELETE or TRUNCATE (migration). The text check is 1-6000.
+/// A pack shows the newest row whose key and both dates match its period (P7-R12).
+model BoardNarrative {
+  id              String   @id @default(uuid(7)) @db.Uuid
+  periodKey       String
+  periodStart     DateTime @db.Date
+  periodEnd       DateTime @db.Date
+  text            String
+  aiInteractionId String?  @db.Uuid
+  approvedById    String   @db.Uuid
+  approvedAt      DateTime @db.Timestamptz(3)
+
+  approvedBy    User           @relation("BoardNarrativeApprovedBy", fields: [approvedById], references: [id], onDelete: Restrict)
+  aiInteraction AiInteraction? @relation(fields: [aiInteractionId], references: [id], onDelete: Restrict)
+
+  @@index([periodKey, approvedAt])
+}

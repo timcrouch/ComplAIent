@@ -1,0 +1,46 @@
+// Concern conversations (guided risk reporting).
+
+enum ConversationStatus {
+  open
+  submitted
+  abandoned
+}
+
+model ConcernConversation {
+  id            String             @id @default(uuid(7)) @db.Uuid
+  reporterId    String             @db.Uuid
+  status        ConversationStatus @default(open)
+  questionCount Int                @default(0)
+  toConfirm     String[]
+  draft         Json?
+  riskId        String?            @unique @db.Uuid
+  createdAt     DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime           @updatedAt @db.Timestamptz(3)
+
+  reporter User             @relation("ConcernReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  risk     Risk?            @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  messages ConcernMessage[]
+
+  @@index([reporterId])
+}
+
+enum ConcernRole {
+  reporter
+  assistant
+}
+
+/// Append-only: the app role may INSERT and SELECT but not UPDATE, DELETE or TRUNCATE.
+model ConcernMessage {
+  id             String      @id @default(uuid(7)) @db.Uuid
+  conversationId String      @db.Uuid
+  seq            Int
+  role           ConcernRole
+  text           String
+  chips          String[]
+  notSure        Boolean     @default(false)
+  createdAt      DateTime    @default(now()) @db.Timestamptz(3)
+
+  conversation ConcernConversation @relation(fields: [conversationId], references: [id], onDelete: Restrict)
+
+  @@unique([conversationId, seq])
+}

@@ -1,0 +1,30 @@
+version: 2
+
+# Weekly updates. Minor and patch updates are grouped into one PR per ecosystem; majors come
+# as individual PRs so each can be reviewed against the version rulings.
+updates:
+  - package-ecosystem: npm
+    # The pnpm workspace root: pnpm-lock.yaml covers every package.
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      npm-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: docker
+    directory: /infrastructure/docker
+    schedule:
+      interval: weekly
+    groups:
+      docker-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]

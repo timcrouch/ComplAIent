@@ -1,0 +1,88 @@
+// Evidence and evidence-request tasks.
+
+enum EvidenceClassification {
+  internal
+  confidential
+  restricted
+}
+
+/// Append-only. sha256 is 64 lowercase hex characters and sizeBytes > 0 (check constraints in the migration).
+model Evidence {
+  id             String                 @id @default(uuid(7)) @db.Uuid
+  riskId         String                 @db.Uuid
+  taskId         String?                @db.Uuid
+  objectKey      String                 @unique
+  fileName       String
+  sha256         String                 @db.Char(64)
+  sizeBytes      Int
+  mimeType       String
+  classification EvidenceClassification @default(internal)
+  uploadedById   String                 @db.Uuid
+  collectedAt    DateTime               @db.Timestamptz(3)
+  createdAt      DateTime               @default(now()) @db.Timestamptz(3)
+
+  risk       Risk                  @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  task       Task?                 @relation(fields: [taskId], references: [id], onDelete: Restrict)
+  uploadedBy User                  @relation("EvidenceUploadedBy", fields: [uploadedById], references: [id], onDelete: Restrict)
+  controls   EvidenceControl[]
+  tests      ControlTestEvidence[]
+
+  @@index([riskId])
+}
+
+/// Insert-only: the app role may not UPDATE, DELETE or TRUNCATE.
+model EvidenceControl {
+  evidenceId String @db.Uuid
+  controlId  String @db.Uuid
+
+  evidence Evidence @relation(fields: [evidenceId], references: [id], onDelete: Restrict)
+  control  Control  @relation(fields: [controlId], references: [id], onDelete: Restrict)
+
+  @@id([evidenceId, controlId])
+  // The evidence-missing count looks up by control alone; the key cannot serve that.
+  @@index([controlId])
+}
+
+enum TaskKind {
+  evidence_request
+  treatment_action
+  periodic_review
+}
+
+enum TaskStatus {
+  open
+  done
+  cancelled
+}
+
+model Task {
+  id              String     @id @default(uuid(7)) @db.Uuid
+  kind            TaskKind
+  title           String
+  description     String     @default("")
+  assigneeId      String     @db.Uuid
+  requestedById   String     @db.Uuid
+  dueDate         DateTime?  @db.Date
+  status          TaskStatus @default(open)
+  riskId          String     @db.Uuid
+  controlId       String?    @db.Uuid
+  completedAt     DateTime?  @db.Timestamptz(3)
+  completionNote  String     @default("")
+  completedById   String?    @db.Uuid
+  cancelledReason String     @default("")
+  cancelledById   String?    @db.Uuid
+  createdAt       DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime   @updatedAt @db.Timestamptz(3)
+
+  assignee    User       @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: Restrict)
+  requestedBy User       @relation("TaskRequestedBy", fields: [requestedById], references: [id], onDelete: Restrict)
+  risk        Risk       @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  control     Control?   @relation(fields: [controlId], references: [id], onDelete: Restrict)
+  completedBy User?      @relation("TaskCompletedBy", fields: [completedById], references: [id], onDelete: Restrict)
+  cancelledBy User?      @relation("TaskCancelledBy", fields: [cancelledById], references: [id], onDelete: Restrict)
+  evidence    Evidence[]
+
+  @@index([assigneeId, status])
+  // Requests per risk, and per control on a risk (removing a control checks for open ones).
+  @@index([riskId, controlId])
+}

@@ -1,0 +1,199 @@
+/*
+ * Clear Glass design tokens for Tailwind CSS 4.
+ * Values mirror src/tokens/tokens.ts (test/contrast.test.ts keeps them in sync).
+ *
+ * Usage in an app stylesheet:
+ *   @import "tailwindcss";
+ *   @import "@isms/ui/tokens.css";
+ *
+ * Theme: light by default, dark when the OS prefers it, and either can be forced
+ * with data-theme="light" | "dark" on any element (themes nest).
+ */
+
+/* Let Tailwind find the classes used by @isms/ui components. */
+@source "../";
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --isms-bg: #f3f5fb;
+  --isms-bg-gradient-from: #f3f5fb;
+  --isms-bg-gradient-to: #f4f1fa;
+  --isms-surface: rgba(255, 255, 255, 0.78);
+  --isms-surface-border: rgba(255, 255, 255, 0.9);
+  --isms-control-border: #8088a3;
+  --isms-text: #141a2e;
+  --isms-text-muted: #5b6380;
+  --isms-accent: #4f3fd9;
+  --isms-accent-text: #ffffff;
+  --isms-accent-soft: #e6e3ff;
+  --isms-ok: #167a4c;
+  --isms-ok-soft: #ddf3e8;
+  --isms-attention: #9c5906;
+  --isms-attention-soft: #fdebd3;
+  --isms-critical: #b42318;
+  --isms-critical-soft: #fde5e3;
+  --isms-info: #4f3fd9;
+  --isms-info-soft: #e6e3ff;
+  --isms-chart-blue: #1b5fb8;
+  --isms-chart-blue-soft: #dce9fa;
+  --isms-chart-teal: #0a6a64;
+  --isms-chart-teal-soft: #d6f0ed;
+  --isms-focus-ring: #4f3fd9;
+  --isms-overlay: rgba(20, 26, 46, 0.24);
+  --isms-shadow-sm: 0 1px 2px rgba(20, 26, 46, 0.05), 0 4px 14px rgba(20, 26, 46, 0.05);
+  --isms-shadow-lg: 0 2px 6px rgba(20, 26, 46, 0.06), 0 18px 44px rgba(20, 26, 46, 0.14);
+  /* Inner top highlight that gives glass surfaces their edge. */
+  --isms-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --isms-bg: #0b0e17;
+  --isms-bg-gradient-from: #0b0e17;
+  --isms-bg-gradient-to: #110e1f;
+  --isms-surface: rgba(30, 35, 56, 0.66);
+  --isms-surface-border: rgba(255, 255, 255, 0.07);
+  --isms-control-border: #6b7493;
+  --isms-text: #e9ecf5;
+  --isms-text-muted: #98a1bc;
+  --isms-accent: #8e80ff;
+  --isms-accent-text: #0e0b26;
+  --isms-accent-soft: #231e4d;
+  --isms-ok: #4fd69c;
+  --isms-ok-soft: #0e2a20;
+  --isms-attention: #f2b55a;
+  --isms-attention-soft: #33250f;
+  --isms-critical: #ff8f8a;
+  --isms-critical-soft: #3a1618;
+  --isms-info: #8e80ff;
+  --isms-info-soft: #231e4d;
+  --isms-chart-blue: #7db2ff;
+  --isms-chart-blue-soft: #12264a;
+  --isms-chart-teal: #4dd0c4;
+  --isms-chart-teal-soft: #0c2e2b;
+  --isms-focus-ring: #a79cff;
+  --isms-overlay: rgba(3, 5, 12, 0.6);
+  --isms-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32), 0 6px 18px rgba(0, 0, 0, 0.22);
+  --isms-shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.4), 0 24px 56px rgba(0, 0, 0, 0.5);
+  --isms-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --isms-bg: #0b0e17;
+    --isms-bg-gradient-from: #0b0e17;
+    --isms-bg-gradient-to: #110e1f;
+    --isms-surface: rgba(30, 35, 56, 0.66);
+    --isms-surface-border: rgba(255, 255, 255, 0.07);
+    --isms-control-border: #6b7493;
+    --isms-text: #e9ecf5;
+    --isms-text-muted: #98a1bc;
+    --isms-accent: #8e80ff;
+    --isms-accent-text: #0e0b26;
+    --isms-accent-soft: #231e4d;
+    --isms-ok: #4fd69c;
+    --isms-ok-soft: #0e2a20;
+    --isms-attention: #f2b55a;
+    --isms-attention-soft: #33250f;
+    --isms-critical: #ff8f8a;
+    --isms-critical-soft: #3a1618;
+    --isms-info: #8e80ff;
+    --isms-info-soft: #231e4d;
+    --isms-chart-blue: #7db2ff;
+    --isms-chart-blue-soft: #12264a;
+    --isms-chart-teal: #4dd0c4;
+    --isms-chart-teal-soft: #0c2e2b;
+    --isms-focus-ring: #a79cff;
+    --isms-overlay: rgba(3, 5, 12, 0.6);
+    --isms-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.32), 0 6px 18px rgba(0, 0, 0, 0.22);
+    --isms-shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.4), 0 24px 56px rgba(0, 0, 0, 0.5);
+    --isms-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+}
+
+:root {
+  /* Label and value type for record details (DetailList); mirrors tokens.type. */
+  --isms-label-size: 13px;
+  --isms-label-weight: 500;
+  --isms-label-leading: 1.45;
+  --isms-value-size: 15px;
+  --isms-value-weight-short: 500;
+  --isms-value-weight-long: 400;
+  --isms-value-leading: 1.6;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+    --motion-slow: 0ms;
+  }
+}
+
+@theme inline {
+  /*
+   * Runtime-resolved: apps set --isms-font-sans (e.g. to the next/font
+   * variable for Plus Jakarta Sans); otherwise the system stack is used.
+   */
+  --font-sans: var(
+    --isms-font-sans,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif
+  );
+
+  --color-bg: var(--isms-bg);
+  --color-bg-gradient-from: var(--isms-bg-gradient-from);
+  --color-bg-gradient-to: var(--isms-bg-gradient-to);
+  --color-surface: var(--isms-surface);
+  --color-surface-border: var(--isms-surface-border);
+  --color-control-border: var(--isms-control-border);
+  --color-fg: var(--isms-text);
+  --color-fg-muted: var(--isms-text-muted);
+  --color-accent: var(--isms-accent);
+  --color-on-accent: var(--isms-accent-text);
+  --color-accent-soft: var(--isms-accent-soft);
+  --color-ok: var(--isms-ok);
+  --color-ok-soft: var(--isms-ok-soft);
+  --color-attention: var(--isms-attention);
+  --color-attention-soft: var(--isms-attention-soft);
+  --color-critical: var(--isms-critical);
+  --color-critical-soft: var(--isms-critical-soft);
+  --color-info: var(--isms-info);
+  --color-info-soft: var(--isms-info-soft);
+  --color-chart-blue: var(--isms-chart-blue);
+  --color-chart-blue-soft: var(--isms-chart-blue-soft);
+  --color-chart-teal: var(--isms-chart-teal);
+  --color-chart-teal-soft: var(--isms-chart-teal-soft);
+  --color-focus-ring: var(--isms-focus-ring);
+  --color-overlay: var(--isms-overlay);
+
+  /* text-label / text-value set size and line height; the label also sets its weight. */
+  --text-label: var(--isms-label-size);
+  --text-label--line-height: var(--isms-label-leading);
+  --text-label--font-weight: var(--isms-label-weight);
+  --text-value: var(--isms-value-size);
+  --text-value--line-height: var(--isms-value-leading);
+  --font-weight-value-short: var(--isms-value-weight-short);
+  --font-weight-value-long: var(--isms-value-weight-long);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-glass: var(--isms-highlight), var(--isms-shadow-sm);
+  --shadow-float: var(--isms-highlight), var(--isms-shadow-lg);
+
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

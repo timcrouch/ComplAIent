@@ -1,0 +1,108 @@
+// Base: generator, datasource, identity, roles and the audit trail.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ViewMode {
+  guided
+  professional
+  executive
+}
+
+enum Role {
+  administrator
+  ciso
+  risk_owner
+  risk_approver
+  contributor
+  viewer
+  auditor
+}
+
+enum ScopeType {
+  ORGANISATION
+  SITE
+  DEPARTMENT
+}
+
+model User {
+  id          String    @id @default(uuid(7)) @db.Uuid
+  idpIssuer   String
+  idpSubject  String
+  email       String
+  displayName String
+  viewMode    ViewMode?
+  lastSeenAt  DateTime? @db.Timestamptz(3)
+
+  roleAssignments        RoleAssignment[]            @relation("AssignedTo")
+  grantedRoleAssignments RoleAssignment[]            @relation("GrantedBy")
+  reviewedMappings       ControlRequirementMapping[] @relation("MappingReviewedBy")
+  setupCompletions       Organisation[]              @relation("SetupCompletedBy")
+  confirmedFrameworks    OrganisationFramework[]     @relation("FrameworkConfirmedBy")
+  riskScales             RiskScale[]
+  ownedAssets            Asset[]
+
+  risksOwned              Risk[]                     @relation("RiskOwner")
+  risksReported           Risk[]                     @relation("RiskReporter")
+  risksReviewed           Risk[]                     @relation("RiskReviewer")
+  riskVersionsChanged     RiskVersion[]              @relation("RiskVersionChangedBy")
+  riskControlsSuggested   RiskControl[]              @relation("RiskControlSuggestedBy")
+  riskControlsDecided     RiskControl[]              @relation("RiskControlDecidedBy")
+  evidenceUploaded        Evidence[]                 @relation("EvidenceUploadedBy")
+  tasksAssigned           Task[]                     @relation("TaskAssignee")
+  tasksRequested          Task[]                     @relation("TaskRequestedBy")
+  tasksCompleted          Task[]                     @relation("TaskCompletedBy")
+  tasksCancelled          Task[]                     @relation("TaskCancelledBy")
+  risksClosed             Risk[]                     @relation("RiskClosedBy")
+  controlTests            ControlTest[]              @relation("ControlTestTestedBy")
+  applicabilityDecided    RequirementApplicability[] @relation("ApplicabilityDecidedBy")
+  boardNarrativesApproved BoardNarrative[]           @relation("BoardNarrativeApprovedBy")
+  approvals               Approval[]                 @relation("ApprovalApprover")
+  concernConversations    ConcernConversation[]      @relation("ConcernReporter")
+  aiKeysSet               AiSettings[]               @relation("AiKeySetBy")
+  aiSettingsUpdated       AiSettings[]               @relation("AiSettingsUpdatedBy")
+  aiInteractions          AiInteraction[]            @relation("AiInteractionActor")
+
+  @@unique([idpIssuer, idpSubject])
+}
+
+model RoleAssignment {
+  id           String    @id @default(uuid(7)) @db.Uuid
+  userId       String    @db.Uuid
+  role         Role
+  scopeType    ScopeType
+  /// Set exactly when scopeType = SITE / DEPARTMENT, the other NULL (check constraint in the migration).
+  siteId       String?   @db.Uuid
+  departmentId String?   @db.Uuid
+  grantedById  String    @db.Uuid
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+
+  user       User        @relation("AssignedTo", fields: [userId], references: [id])
+  grantedBy  User        @relation("GrantedBy", fields: [grantedById], references: [id])
+  site       Site?       @relation(fields: [siteId], references: [id], onDelete: Restrict)
+  department Department? @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  // Recreated as NULLS NOT DISTINCT (org scope has NULL ids) in migration 20261104000100_organisation_setup.
+  @@unique([userId, role, scopeType, siteId, departmentId])
+}
+
+model AuditEvent {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  occurredAt  DateTime @default(now()) @db.Timestamptz(3)
+  actorUserId String?  @db.Uuid
+  action      String
+  objectType  String
+  objectId    String
+  beforeRef   Json?
+  afterRef    Json?
+  requestId   String
+  traceId     String?
+
+  @@index([objectType, objectId, occurredAt])
+}

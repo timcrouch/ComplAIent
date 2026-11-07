@@ -1,0 +1,31 @@
+{
+  "status": {
+    "signInUnavailable": {
+      "title": "We can't reach sign-in right now",
+      "body": "You are still signed in, but we can't renew your session at the moment. Please try again in a minute.",
+      "retry": "Try again"
+    },
+    "signInRejected": {
+      "title": "This account can't be used here",
+      "body": "You signed in, but this account can't be used with this workspace. It may be missing an email address. Please contact your administrator.",
+      "retry": "Try again"
+    },
+    "unavailable": {
+      "title": "We can't load your workspace right now",
+      "body": "Something on our side isn't responding. Please try again in a minute.",
+      "retry": "Try again"
+    },
+    "forbidden": {
+      "title": "This part of the workspace isn't open to you",
+      "body": "Your role doesn't include it. If you need it for your work, ask an administrator.",
+      "retry": "Go to Home"
+    }
+  },
+  "auth": {
+    "signInFailed": {
+      "title": "Sign-in did not complete",
+      "body": "Your sign-in could not be completed. Please try again.",
+      "retry": "Try again"
+    }
+  }
+}

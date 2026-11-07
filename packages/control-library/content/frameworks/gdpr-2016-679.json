@@ -1,0 +1,78 @@
+{
+  "framework": {
+    "key": "gdpr",
+    "name": "GDPR",
+    "publisher": "European Union",
+    "summary": "EU law on how information about people is collected, used and protected. Applies if you are based in the EU, or offer goods or services to, or monitor the behaviour of, people in the EU."
+  },
+  "version": {
+    "key": "gdpr-2016-679",
+    "label": "Regulation (EU) 2016/679"
+  },
+  "requirements": [
+    {
+      "ref": "Art. 5(1)(a)",
+      "title": "Every use of personal data has a legal basis, is fair and is explained openly."
+    },
+    {
+      "ref": "Art. 5(1)(b)",
+      "title": "Personal data serves only the specified purposes it was collected for, or compatible ones."
+    },
+    {
+      "ref": "Art. 5(1)(c)",
+      "title": "Only the personal data actually needed for the purpose is collected and kept."
+    },
+    {
+      "ref": "Art. 5(1)(d)",
+      "title": "Personal data is kept correct and up to date, and errors are fixed promptly."
+    },
+    {
+      "ref": "Art. 5(1)(e)",
+      "title": "Data that identifies people is kept no longer than the purpose requires."
+    },
+    {
+      "ref": "Art. 5(1)(f)",
+      "title": "Personal data is protected against unauthorised use, loss and damage by suitable measures."
+    },
+    {
+      "ref": "Art. 5(2)",
+      "title": "The organisation can show, with evidence, that it follows the data protection principles."
+    },
+    {
+      "ref": "Art. 24",
+      "title": "The organisation takes appropriate, risk-based measures for its processing and keeps them under review."
+    },
+    {
+      "ref": "Art. 25(1)",
+      "title": "Privacy protection is designed into systems from the planning stage and applied throughout processing."
+    },
+    {
+      "ref": "Art. 25(2)",
+      "title": "Default settings limit personal data use to what each purpose strictly needs."
+    },
+    {
+      "ref": "Art. 28",
+      "title": "Service providers handling personal data on our behalf are vetted and bound by contract."
+    },
+    {
+      "ref": "Art. 30",
+      "title": "A record lists each processing activity with its purpose, data, recipients and retention."
+    },
+    {
+      "ref": "Art. 32",
+      "title": "Personal data is protected by security measures that match the risk involved."
+    },
+    {
+      "ref": "Art. 33",
+      "title": "Notifiable breaches reach the authority without undue delay, within 72 hours where feasible, else with reasons."
+    },
+    {
+      "ref": "Art. 34",
+      "title": "People are told promptly when a breach puts their rights and freedoms at high risk."
+    },
+    {
+      "ref": "Art. 35",
+      "title": "Processing likely to pose high risk is assessed for privacy impact before it starts."
+    }
+  ]
+}

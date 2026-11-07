@@ -1,0 +1,422 @@
+{
+  "controls": [
+    {
+      "code": "OPS-01",
+      "title": "Make a lost or hacked laptop or phone a non-event",
+      "description": "Laptops and phones hold mail, files and saved sign-ins, and they leave the building every day. Company data opens only on devices you can see, patch and erase from afar, so a stolen or infected one costs you hardware, not information.",
+      "guidance": [
+        "Make company apps check at sign-in that the device is company-managed and healthy, and refuse it otherwise.",
+        "Push operating system and browser updates automatically, and cut off devices that fall more than two weeks behind.",
+        "Practise a remote lock and wipe each quarter, so the helpdesk knows the steps when a real loss is reported.",
+        "Keep work data on personal phones in a separate work profile that you can erase without touching the owner's photos.",
+        "Turn on full-disk encryption on every device and hold the recovery keys centrally, so IT can unlock a device for its owner and nobody else can.",
+        "Retire or isolate devices whose maker no longer ships security updates, including shop-floor tablets and kiosks."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.1"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        }
+      ]
+    },
+    {
+      "code": "OPS-02",
+      "title": "Stop harmful code from running on any machine you own",
+      "description": "Ransomware and data-stealing tools usually arrive through an attachment, a download or a booby-trapped document. Every computer and server runs protection that blocks known threats and suspicious behaviour, reports to someone who is watching, and cannot quietly be switched off.",
+      "guidance": [
+        "Install behaviour-based endpoint protection on every laptop and server, sending its alerts to your monitoring team or provider.",
+        "Alert at once if protection is disabled, uninstalled or stops reporting on any machine.",
+        "Block macros in office files that came from the internet, and open email attachments in a sandbox at the mail gateway first.",
+        "On machines that cannot run protection software, such as machine controllers, allow only approved programs and keep them off the office network.",
+        "Prove each new machine reports correctly by dropping a harmless test file that protection tools are built to flag.",
+        "Scan files arriving through upload portals and partner transfers before staff open them."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.7"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.PS-05"
+        }
+      ]
+    },
+    {
+      "code": "OPS-03",
+      "title": "Close known security holes before attackers can use them",
+      "description": "Most break-ins use weaknesses that already have a fix. Every flaw that matters has a fix-by date, the riskiest are closed in days rather than months, and leadership can see which are overdue and why.",
+      "guidance": [
+        "Scan internet-facing systems weekly and internal ones at least monthly, including cloud accounts and containers.",
+        "Set fix deadlines by severity and exposure, for example 48 hours for a flaw being actively exploited on an internet-facing system.",
+        "Watch public lists of vulnerabilities known to be exploited in the wild, and treat a match in your estate as an emergency.",
+        "Give firewalls, VPN gateways and other edge devices the shortest deadline, because attackers target them first.",
+        "Where a fix cannot be applied, record a compensating measure, an owner and an expiry date, and review it monthly.",
+        "Rescan after patching to confirm the flaw is gone, and report overdue items to leadership each month."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.8"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.RA-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.PS-02"
+        }
+      ]
+    },
+    {
+      "code": "OPS-04",
+      "title": "Build every system from a hardened baseline and catch drift",
+      "description": "Systems set up by hand drift apart, keep insecure factory settings and collect software nobody approved. A new server, laptop or cloud account comes up safe by default because a script builds it, and software or settings nobody approved are spotted within a day.",
+      "guidance": [
+        "Write each baseline as code in version control, noting every setting you change from the vendor default and why.",
+        "Build servers and laptops from images or scripts that apply the baseline, never by hand.",
+        "Install software on live systems only through your deployment tool or pipeline, from a catalogue of approved, supported packages.",
+        "Run a tool that compares live settings with the baseline every day and opens a ticket for each difference.",
+        "Use cloud policy rules that refuse risky settings, such as publicly readable storage, before they are created.",
+        "Alert when software missing from the catalogue appears on a server, then remove it or put it through approval."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.9"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.19"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.PS-01"
+        }
+      ]
+    },
+    {
+      "code": "OPS-05",
+      "title": "Stop old data piling up where breaches and lawsuits can find it",
+      "description": "Data kept past its use stays exposed to every breach and every legal request, and personal data held too long breaks the law. Retention periods are built into the systems themselves, and deletion reaches copies, exports and backups as well as the main record.",
+      "guidance": [
+        "Trace every erasure request from a person through all the systems that hold their data, and record when each was done.",
+        "Let backups expire on a cycle that matches the retention schedule, so deleted records do not live on indefinitely.",
+        "Turn the retention schedule into automatic purge jobs that log each run. Pause them for data under a legal hold until a named person lifts it, or under a minimum retention duty until it expires.",
+        "Twice a year, hunt for forgotten exports in shared drives, old test databases and mailbox attachments, and purge them.",
+        "For encrypted stores, destroy the key as a fast way to make every copy of the data unreadable at once.",
+        "Close a supplier exit only once the provider confirms in writing, with a date, that your data is gone from its systems."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.10"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 5(1)(e)"
+        }
+      ]
+    },
+    {
+      "code": "OPS-06",
+      "title": "Show people only the parts of sensitive records their task needs",
+      "description": "Many jobs need to find a record, not read all of it. Screens, reports and data feeds hide or replace sensitive parts, such as account numbers or health details, unless the task really needs them, which shrinks the harm if an account or a report leaks.",
+      "guidance": [
+        "Show support and call-centre staff only the last digits of card, account and ID numbers by default.",
+        "Give analysts pseudonymous identifiers, and keep the key that links them back to people in a separate system with its own access.",
+        "Make revealing a full value a deliberate, logged action with a reason, open only to the roles that need it.",
+        "Share statistics rather than row-level data with partners and researchers wherever the purpose allows.",
+        "Before calling a data set anonymous, check whether it could be matched with other data to single people out again.",
+        "Record which fields are hidden in which systems, so a new report or interface does not quietly expose them."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.11"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 32"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.DS-10"
+        }
+      ]
+    },
+    {
+      "code": "OPS-07",
+      "title": "Notice and stop sensitive data leaving through the wrong channels",
+      "description": "Data walks out through personal email, cloud uploads, chat tools and AI services far more often than through hackers. Tools watch the routes out for your most sensitive information, warn or block when it heads somewhere it should not go, and alert someone when large volumes move.",
+      "guidance": [
+        "Start with a few rules for your highest-rated data, such as customer lists, payment files or design drawings, and widen them later.",
+        "Warn people first and block only once the rules are tuned, so normal work does not grind to a halt.",
+        "Block uploads of company data to personal cloud storage and to AI tools you have not approved.",
+        "Alert on unusual bulk downloads or mail forwarding, especially in the weeks before someone leaves.",
+        "Review alerts and false alarms weekly, and adjust the rules together with the data owners.",
+        "Agree the monitoring with staff representatives where the law requires it, and tell staff what is checked."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.12"
+        }
+      ]
+    },
+    {
+      "code": "OPS-08",
+      "title": "Keep activity records you can rely on in an investigation",
+      "description": "Without good records you cannot tell what an attacker did, when, or whether they are still inside. The events that matter are collected centrally, out of reach of the people and systems they describe, stamped from one shared clock and kept long enough to look back over a slow attack.",
+      "guidance": [
+        "Decide per system which events matter, starting with sign-ins, admin actions, changes to rights and access to sensitive records.",
+        "Send logs to a central store that system administrators cannot edit or delete, and alert when a source goes silent.",
+        "Keep logs for at least a year, or longer where law or contracts require, and know where older ones are archived.",
+        "Point every server, network device and cloud service at the same internal time source, itself synced to a trusted public one.",
+        "Keep passwords, card numbers and needless personal details out of log entries, and limit who can search the logs.",
+        "Twice a year, check that the logs can actually answer a question such as 'who changed this firewall rule last March?'"
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.15"
+        },
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.17"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.PS-04"
+        }
+      ]
+    },
+    {
+      "code": "OPS-09",
+      "title": "Spot attackers early and have someone ready to act at any hour",
+      "description": "Attackers often spend days inside a network before they strike, while the clues sit unread in logs. Alerts are built around the attacks you fear most, reach a person who can act at any hour, and are tested to prove they fire.",
+      "guidance": [
+        "List the attacks that would hurt most, such as ransomware, payment fraud or theft of designs, and write a detection for the early signs of each.",
+        "Cover nights and weekends with an on-call rota or a managed detection provider, with agreed response times.",
+        "Alert on signs such as sign-ins from two distant places within minutes, new mail forwarding rules or mass file renames.",
+        "Each quarter, run harmless simulations of real attack techniques and fix any detection that stays quiet.",
+        "Tune noisy alerts every month, so the team trusts what reaches them.",
+        "Hand every confirmed alert into the incident process with its evidence attached."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.16"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(b)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.CM-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.CM-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.CM-09"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.AE-02"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.AE-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "DE.AE-06"
+        }
+      ]
+    },
+    {
+      "code": "OPS-10",
+      "title": "Lock down the network so only expected traffic gets through",
+      "description": "Firewalls and routers that allow too much, run old firmware or can be managed from anywhere give attackers an easy route in. Traffic is refused unless a recorded business need allows it, network equipment is kept current, and unknown devices cannot simply plug in.",
+      "guidance": [
+        "Refuse all inbound traffic from the internet by default, and give each allowed rule an owner and a ticket reference.",
+        "Review firewall rules every quarter and remove any rule nobody can explain.",
+        "Require multi-factor sign-in for remote access, and close remote desktop and file-sharing ports exposed to the internet.",
+        "Let devices join wired and wireless networks only after they prove they are company-managed, and send the rest to a guest network.",
+        "Back up network device settings automatically and compare each backup with the last, to spot changes nobody logged.",
+        "Update the one diagram of your networks, internet links and partner connections in the same ticket as each network change."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.20"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "ID.AM-03"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.IR-01"
+        }
+      ]
+    },
+    {
+      "code": "OPS-11",
+      "title": "Know what your internet, DNS and connectivity providers must deliver",
+      "description": "If your internet link, DNS or protection against traffic floods fails, every service you run goes dark at once. Your domain names, DNS and internet links are hard to hijack, have a fallback, and come from providers whose outage and incident duties are fixed in the contract.",
+      "guidance": [
+        "List every connectivity, DNS, content delivery and flood protection service you rely on, with an internal owner for each.",
+        "Put availability targets, outage notice times and support hours into the contract, and track the provider's reports against them.",
+        "Protect your domain names: lock them at the registrar, use multi-factor sign-in on the registrar account and renew automatically.",
+        "Ask providers how your traffic is kept apart from other customers' and how quickly they report incidents that affect you.",
+        "Test once a year that flood protection and failover to a second link actually work."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.21"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(d)"
+        }
+      ]
+    },
+    {
+      "code": "OPS-12",
+      "title": "Divide the network so one infected machine cannot reach everything",
+      "description": "In a flat network, one phished laptop can reach the payment server, the backups and the production line. Office, production, payment and backup systems sit in separate zones, and crossing from one to another is possible only for connections someone has approved.",
+      "guidance": [
+        "Put office devices, servers, production or machine networks, guest Wi-Fi and backup systems in zones of their own.",
+        "Allow traffic between zones only for listed connections, and block the rest by default.",
+        "Place machine controllers and other systems that cannot be patched in a zone that talks only to the systems they must.",
+        "Give each cloud environment its own account or subscription and private network, connected to others only where needed.",
+        "Once a year, test from an ordinary laptop which servers and ports you can actually reach, and close the surprises.",
+        "Revisit the zone design whenever you add a site, a production line or a major system."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.22"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.IR-01"
+        }
+      ]
+    },
+    {
+      "code": "OPS-13",
+      "title": "Keep staff away from dangerous websites without spying on them",
+      "description": "One click on a fake sign-in page or a poisoned download can undo every other defence. Company devices look up websites through a filtering service that blocks known malicious and phishing sites wherever the device is, while browsing is not watched beyond what security needs.",
+      "guidance": [
+        "Use a protective DNS or web filtering service that works on company devices both in the office and away from it.",
+        "Block known malicious, phishing and newly registered domains, using threat feeds that update automatically.",
+        "Offer a quick way to ask for a wrongly blocked site to be allowed, answered within one working day.",
+        "Do not inspect traffic to banking, health or similar personal sites, and tell staff what the filter records.",
+        "Keep filter logs for incident investigations, with access limited to the security team."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.23"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        }
+      ]
+    },
+    {
+      "code": "OPS-14",
+      "title": "Make stolen data unreadable, and keep the keys out of reach",
+      "description": "Encryption protects you only if it is switched on where data is exposed, uses methods that are still strong and its keys are guarded better than the data. Whoever finds a stolen laptop, an intercepted message or a copied backup sees only noise, and an expired certificate never takes a service down.",
+      "guidance": [
+        "Require encryption on laptops, phones and removable drives, for backups, and for personal or sensitive data in databases and on the move.",
+        "Keep a short list of approved algorithms and key lengths, based on your national cyber security agency's guidance, and retire old ones on a timetable.",
+        "Store keys in a key management service or hardware module, apart from the data they protect, with every use logged.",
+        "Track every certificate with its expiry date and renew automatically, so an expired certificate never takes a service down.",
+        "Give every key a named owner, and if it may have leaked, start replacing it at once using a short drill you rehearse yearly.",
+        "List where you rely on public-key encryption today, so you can move to quantum-resistant methods when guidance calls for it."
+      ],
+      "category": "operations",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.24"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(h)"
+        },
+        {
+          "framework": "gdpr-2016-679",
+          "ref": "Art. 32"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.DS-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.DS-02"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,254 @@
+{
+  "controls": [
+    {
+      "code": "ACC-01",
+      "title": "Grant access by what each job needs, not by who asks",
+      "description": "Access piles up when it is granted on request and never questioned. Each role has a defined set of systems, data and rooms it may use, agreed with the business owners, and everything else stays closed until the work requires it.",
+      "guidance": [
+        "Define standard access bundles for common roles, so most requests are a choice of role rather than a custom list.",
+        "Have the business owner of each system or data set approve who may use it, separately from IT.",
+        "Drive building and room badge rights from the same role definitions, so a role change updates both.",
+        "Record every exception to a standard bundle with a reason and an end date.",
+        "Flag combinations that let one person both make and approve a risky change, such as creating and paying a supplier."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.15"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-05"
+        }
+      ]
+    },
+    {
+      "code": "ACC-02",
+      "title": "Give every person and system its own traceable account",
+      "description": "When accounts are shared or left behind after people go, nobody can tell who did what, and attackers reuse the forgotten ones. Any action in your systems, including one run by a script, can be traced back to a person who answers for it.",
+      "guidance": [
+        "Create staff accounts from the HR record, and contractor accounts from a sponsor's request that carries an end date.",
+        "Use one central directory as the source of identities, and connect applications to it instead of creating local accounts.",
+        "Run scripts and integrations under their own accounts, recorded in the asset register next to the system that uses them, and block those accounts from signing in interactively.",
+        "Where a machine only takes one login, such as a shop-floor terminal, keep its password in the vault and make each person check it out, so the vault shows who used it.",
+        "Each month, compare the directory with the HR and contractor lists and chase every account nobody can explain.",
+        "Never reissue an old username to a new person, so past logs stay attributable."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.16"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-01"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-04"
+        }
+      ]
+    },
+    {
+      "code": "ACC-03",
+      "title": "Make stolen or guessed passwords useless to attackers",
+      "description": "Stolen passwords remain one of the commonest ways in. Every password and key in use is unique, hard to guess and stored where an intruder cannot harvest it, and one that leaks stops working within hours.",
+      "guidance": [
+        "Give everyone a company password manager and expect a unique, long passphrase for every account.",
+        "Reject passwords that appear in known breach lists, rather than forcing complex rules or frequent changes.",
+        "Have the helpdesk call back on the number in the HR system, never one the caller gives, before resetting anything.",
+        "Let new starters set their own password and second factor through a self-service link that expires within a day.",
+        "Keep API keys and certificates in a secrets store, and scan code repositories and tickets for exposed secrets.",
+        "Treat a leaked password or key as an incident: revoke it within hours and check where it was used."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.17"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(g)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-04"
+        }
+      ]
+    },
+    {
+      "code": "ACC-04",
+      "title": "Change access on the day someone starts, switches role or leaves",
+      "description": "Access that arrives late slows work, and access that outlives the need is a gift to attackers. Changes follow HR events on the day they happen, and system owners regularly re-confirm who can use their systems and remove whatever is no longer justified.",
+      "guidance": [
+        "Trigger account changes from HR events, automatically where possible, so start, transfer and end dates drive access.",
+        "When someone changes role, remove what the old role needed after a short handover period instead of only adding the new access.",
+        "Disable a leaver's accounts at the end of their last working day, and before the conversation when someone is dismissed.",
+        "Have system owners re-confirm user access every quarter for sensitive systems and at least yearly for the rest.",
+        "Track each review to completion, and remove any access the owner does not confirm."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.5.18"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        }
+      ]
+    },
+    {
+      "code": "ACC-05",
+      "title": "Keep admin powers rare, separate and closely watched",
+      "description": "An attacker holding one admin account can switch off your defences and reach everything. Admin power is something people pick up for a task and put down again, and the security team hears about it whenever anyone gains it.",
+      "guidance": [
+        "Keep admin sign-ins off the laptop and account people use every day, so one phishing click cannot reach admin rights.",
+        "Grant admin rights for a limited time on request where your tools allow it, instead of permanently.",
+        "Keep shared emergency admin passwords in a vault that records each checkout and changes the password after use.",
+        "Record admin sessions or actions on critical systems, and have someone other than the admin review them.",
+        "Alert the security team whenever anyone is added to an admin group, in your directory or in a cloud service.",
+        "Every quarter, list everyone who holds standing admin rights and take away each right its holder cannot still justify."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.2"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-05"
+        }
+      ]
+    },
+    {
+      "code": "ACC-06",
+      "title": "Make systems enforce who can see which records",
+      "description": "Rules on paper do not stop someone opening a file their job does not need. Applications, file shares and databases are set up so each user sees and changes only the data their role allows, and those settings are tested rather than assumed.",
+      "guidance": [
+        "Assign permissions in each system to roles or groups, never to individuals one at a time.",
+        "Make new shares, folders and team sites private by default, with owners adding people as needed.",
+        "Hide or mask sensitive fields, such as salaries or full card numbers, from roles that do not need them.",
+        "Scan file shares and cloud storage for content open to everyone or to outside users, and fix what you find.",
+        "After each major release, sign in as a sample role and try to reach data that role should not see."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.3"
+        }
+      ]
+    },
+    {
+      "code": "ACC-07",
+      "title": "Make sure nobody can slip unreviewed changes into the code you ship",
+      "description": "Whoever can change your code or build pipeline can plant a backdoor in everything you ship. Repositories and pipelines are private, changes go in only through reviewed requests, and write access is held only by the people and services that need it.",
+      "guidance": [
+        "Keep repositories private and grant access by team, since code reveals your weaknesses and often hides secrets.",
+        "Protect main branches so every change needs approval from someone other than its author.",
+        "Give build pipelines their own narrowly scoped credentials, held in the pipeline's secrets store and not in code.",
+        "Require a second sign-in factor and signed commits for everyone with write access.",
+        "Alert on unusual activity such as mass cloning, changes to branch protection or new deploy keys.",
+        "Protect internal package registries and build tools the same way, and treat scripts, infrastructure code and machine control programs like application code."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.4"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(e)"
+        }
+      ]
+    },
+    {
+      "code": "ACC-08",
+      "title": "Require a second sign-in factor wherever a stolen password would hurt",
+      "description": "A password alone is easily phished or guessed. The more an account can do, the stronger the proof needed to use it: a second factor for all remote and cloud access, and phishing-resistant methods such as passkeys or hardware keys for admins and other high-risk roles.",
+      "guidance": [
+        "Route staff sign-in through single sign-on, so one policy covers email, remote access, cloud services and business applications.",
+        "Turn off sign-in methods that skip the second factor, such as legacy email protocols.",
+        "Prefer number matching or phishing-resistant factors to codes sent by text message.",
+        "Ask for fresh proof of identity when risk changes: a new device, an unusual location or a sensitive action.",
+        "Slow down or lock sign-in after repeated failures, and alert on failures spread across many accounts.",
+        "Offer a second factor on customer and partner portals too, at least for actions such as changing bank details."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.5"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(j)"
+        },
+        {
+          "framework": "nis2-2022-2555",
+          "ref": "Art. 21(2)(i)"
+        },
+        {
+          "framework": "nist-csf-2.0",
+          "ref": "PR.AA-03"
+        }
+      ]
+    },
+    {
+      "code": "ACC-09",
+      "title": "Deny attackers the admin tools they use once inside your network",
+      "description": "Some tools can switch off protection, change permissions or read raw data, which makes them as useful to an attacker as to an administrator. Standard users cannot start them, and your security tools raise an alert whenever one runs somewhere it is not expected.",
+      "guidance": [
+        "Find out which tools in your environment can do this, including the scripting tools built into operating systems.",
+        "Use application allow-listing so standard user accounts cannot start them.",
+        "Restrict built-in scripting for standard users to signed scripts, since attackers rely on it once inside.",
+        "Uninstall admin tool kits from servers when a project ends, and check every quarter that none have come back.",
+        "Have your endpoint protection alert when one of these tools runs outside an approved account or machine."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.18"
+        }
+      ]
+    },
+    {
+      "code": "ACC-10",
+      "title": "End idle or finished sessions so an open login cannot be reused",
+      "description": "A session left open in a browser, on a shared terminal or over a remote connection lets the next person act under someone else's name. Systems end sessions after a period of inactivity, when the user signs out and when a set maximum length is reached, so a forgotten login is not a way in.",
+      "guidance": [
+        "Set idle timeouts centrally for each kind of system, shorter for admin consoles and systems holding sensitive data.",
+        "Make signing out end the session on the server and cancel its tokens, not just close the window.",
+        "Close remote access and VPN connections automatically after inactivity and at a maximum session length.",
+        "Limit how long single sign-on and application sessions last before people must sign in again."
+      ],
+      "category": "access",
+      "mappings": [
+        {
+          "framework": "iso27001-2022",
+          "ref": "A.8.5"
+        }
+      ]
+    }
+  ]
+}

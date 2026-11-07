@@ -1,0 +1,264 @@
+{
+  "setup": {
+    "title": "Set up your organisation",
+    "pageTitle": "{step} · Set up your organisation · {app}",
+    "loading": "Loading your setup…",
+    "stepsLabel": "Setup steps",
+    "stepOf": "Step {current} of {total}",
+    "done": "Done",
+    "whyLabel": "Why we ask",
+    "continue": "Save and continue",
+    "back": "Back",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "steps": {
+      "organisation": "Organisation",
+      "sites": "Sites and teams",
+      "frameworks": "Frameworks",
+      "riskAppetite": "Risk appetite",
+      "people": "People",
+      "review": "Review"
+    },
+    "organisation": {
+      "title": "About your organisation",
+      "why": "Your answers describe your organisation for everyone who uses this workspace.",
+      "name": "Organisation name",
+      "nameHint": "The name people know your organisation by.",
+      "description": "What does your organisation do?",
+      "descriptionHint": "A sentence or two in your own words, such as what you offer and to whom.",
+      "headcount": "Roughly how many people work here?",
+      "headcountHint": "Include employees and regular contractors. An estimate is fine."
+    },
+    "sites": {
+      "title": "Where you work",
+      "why": "Sites are the places your organisation works from. Records can then say where information and equipment are kept.",
+      "sitesTitle": "Sites",
+      "sitesHint": "Add each office, branch or other location. You need at least one.",
+      "siteLegend": "Site {number}",
+      "siteName": "Site name",
+      "country": "Country",
+      "countryChoose": "Choose a country",
+      "addSite": "Add a site",
+      "removeSite": "Remove {name}",
+      "unnamedSite": "site {number}",
+      "departmentsTitle": "Departments",
+      "departmentsHint": "Optional — add teams if some people should only see their own area.",
+      "departmentLegend": "Department {number}",
+      "departmentName": "Department name",
+      "addDepartment": "Add a department",
+      "removeDepartment": "Remove {name}",
+      "unnamedDepartment": "department {number}",
+      "remove": "Remove"
+    },
+    "continueOnly": "Continue",
+    "frameworks": {
+      "title": "Frameworks you follow",
+      "why": "Frameworks are the standards and laws your security is measured against. Controls and reports are organised around the ones you choose.",
+      "legend": "Frameworks your organisation follows",
+      "hint": "Not sure? GDPR applies to most organisations that handle personal data of people in the EU. You can change this later.",
+      "requirements": "{count, plural, one {# requirement} other {# requirements}}",
+      "none": "No frameworks are available yet, because the control library has not been loaded. Ask whoever runs this workspace to load it.",
+      "suggest": {
+        "button": "Suggest from your answers",
+        "busy": "Suggesting…",
+        "intro": "The AI assistant can suggest frameworks from your organisation's answers. Nothing is chosen for you: check each suggestion yourself.",
+        "badge": "Suggested by AI",
+        "arrived": "{count, plural, one {# framework suggested.} other {# frameworks suggested.}} Check each one before you save.",
+        "noneNew": "No new frameworks to suggest from your answers.",
+        "unavailable": "The AI assistant isn't available right now. You can choose your frameworks yourself.",
+        "profileFirst": "Save your organisation's profile first, so there are answers to suggest from.",
+        "failed": "Suggestions couldn't be fetched. Try again, or choose your frameworks yourself."
+      }
+    },
+    "riskAppetite": {
+      "title": "How much risk you accept",
+      "why": "Your risk appetite decides which risks you can accept as they are and which need a closer look. You can change it later.",
+      "legend": "Choose a starting point",
+      "presets": {
+        "cautious": {
+          "label": "Cautious",
+          "description": "Accept only small risks. Most risks get a closer look."
+        },
+        "balanced": {
+          "label": "Balanced",
+          "description": "Accept everyday risks and look closely at serious ones."
+        },
+        "bold": {
+          "label": "Bold",
+          "description": "Accept more risk to move faster. Only the most serious risks get a closer look."
+        }
+      },
+      "current": {
+        "label": "Keep your current setting",
+        "description": "The setting saved earlier for this workspace."
+      },
+      "rule": "Above appetite when a risk scores more than {threshold}.",
+      "previewTitle": "What this means",
+      "caption": "Each square is one combination of likelihood and impact. A risk’s score is its likelihood multiplied by its impact.",
+      "gridLabel": "Risk appetite for every score",
+      "scrollHint": "Swipe sideways to see every likelihood.",
+      "likelihood": "Likelihood",
+      "impact": "Impact",
+      "within": "Within appetite",
+      "above": "Above appetite"
+    },
+    "people": {
+      "title": "Who does what",
+      "why": "Roles decide what each person can see and do. Give each person only what their work needs.",
+      "signInNote": "People appear here after they sign in for the first time.",
+      "listLabel": "People in this workspace",
+      "noRoles": "No role yet",
+      "wholeOrganisation": "Whole organisation",
+      "change": "Change roles",
+      "changeFor": "Change roles for {name}",
+      "saved": "Roles saved for {name}.",
+      "dialog": {
+        "title": "Roles for {name}",
+        "description": "Choose where the roles apply, then what {name} does there.",
+        "scopeType": "Where do these roles apply?",
+        "scopeTypes": {
+          "organisation": "Whole organisation",
+          "site": "One site",
+          "department": "One department"
+        },
+        "site": "Which site?",
+        "department": "Which department?",
+        "chooseSite": "Choose a site",
+        "chooseDepartment": "Choose a department",
+        "rolesLegend": "Roles here",
+        "save": "Save roles",
+        "cancel": "Cancel"
+      }
+    },
+    "review": {
+      "title": "Check and finish",
+      "why": "Here is everything you have told us. Change anything that is not right, then finish setup.",
+      "edit": "Edit",
+      "editStep": "Edit {step}",
+      "notAnswered": "Not answered yet",
+      "none": "None",
+      "headcount": "About {count, plural, one {# person} other {# people}}",
+      "sites": "Sites",
+      "departments": "Departments",
+      "appetite": "{preset}. Above appetite when a risk scores more than {threshold}.",
+      "customAppetite": "Your own setting",
+      "missingTitle": "Still to do",
+      "missingHint": "Answer these steps, then you can finish setup:",
+      "ready": "Every step has an answer. You can finish setup now.",
+      "finished": "Setup was finished on {date}. You can still change any answer: use Edit on the step.",
+      "goHome": "Go to Home",
+      "finish": "Finish setup",
+      "finishing": "Finishing…"
+    },
+    "errors": {
+      "summary": "Some answers need another look. Each one has a note next to it.",
+      "name": "Enter your organisation's name in plain text, up to 200 characters.",
+      "description": "Describe what your organisation does, up to 2,000 characters.",
+      "headcount": "Enter a whole number of people, for example 40.",
+      "siteName": "Enter a name for this site in plain text, up to 120 characters.",
+      "siteNameDuplicate": "Another site already has this name. Give each site its own name.",
+      "country": "Choose the country this site is in.",
+      "sitesRequired": "Add at least one site.",
+      "departmentName": "Enter a name for this department in plain text, up to 120 characters.",
+      "departmentNameDuplicate": "Another department already has this name. Give each department its own name.",
+      "siteInUse": "This site is still linked to other records, so it can't be removed. We've put it back, and nothing was saved.",
+      "departmentInUse": "This department is still linked to other records, so it can't be removed. We've put it back, and nothing was saved.",
+      "staleSite": "Someone else changed this list while you were editing. Reload the page to see the latest version.",
+      "forbidden": "Your role doesn't allow changing these answers. Ask an administrator.",
+      "unavailable": "We couldn't save your answers just now. Your answers are still here, so please try again in a minute.",
+      "notAccepted": "We couldn't accept these answers. Please check them and try again.",
+      "frameworks": "Choose at least one framework your organisation follows.",
+      "lastAdministrator": "Someone must stay an administrator of the whole organisation. Give this role to another person first.",
+      "duplicateRoleAssignment": "This person already has one of these roles here. Reload the page to see their current roles.",
+      "scope": "Choose the site or department these roles apply to.",
+      "setupIncomplete": "Some steps still need an answer before you can finish.",
+      "changed": "Someone else changed this while you were working. Reload the page to see the latest version."
+    },
+    "reviewInterval": {
+      "title": "How often risks are reviewed",
+      "label": "Review risks every N months",
+      "hint": "Approved and treated risks come back to their owner for review after this long.",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "errors": {
+        "months": "Enter a whole number of months from 1 to 36, for example 12.",
+        "forbidden": "Your role doesn't allow changing this. Ask an administrator.",
+        "unavailable": "We couldn't save this just now. Please try again in a minute.",
+        "notAccepted": "We couldn't accept this answer. Finish the earlier steps, then try again."
+      }
+    },
+    "demo": {
+      "title": "Demo and training",
+      "on": "Demo mode is on",
+      "load": {
+        "button": "Load sample data",
+        "description": "Replace everything with a year of sample activity for Isarwerk Finanz AG (sample).",
+        "confirm": "Replace everything with sample data"
+      },
+      "reset": {
+        "button": "Reset everything",
+        "description": "Delete all data and settings and return to a fresh install.",
+        "confirm": "Delete everything"
+      },
+      "loading": "Loading sample data…",
+      "resetting": "Resetting…",
+      "dialog": {
+        "loadTitle": "Load sample data?",
+        "resetTitle": "Reset everything?",
+        "intro": "This permanently deletes, for everyone:",
+        "deletes": [
+          "Risks",
+          "Evidence files",
+          "History and the audit trail",
+          "Settings, including the AI provider key",
+          "Everyone's sign-in"
+        ],
+        "after": "You will be signed out, and so will everyone else. This cannot be undone.",
+        "label": {
+          "name": "Type the organisation name to confirm",
+          "reset": "Type RESET to confirm"
+        },
+        "hintName": "Type exactly: {expected}",
+        "hintReset": "No organisation is set up yet, so type RESET in capital letters.",
+        "cancel": "Cancel"
+      },
+      "errors": {
+        "confirmationMismatch": "That text doesn't match. Type it exactly as shown, then try again.",
+        "recentAuth": "For safety, please sign in again to confirm it is you. Then try once more.",
+        "forbidden": "Your role doesn't allow this. Ask an administrator.",
+        "unavailable": "We couldn't do this just now. Nothing was confirmed as changed, so please check and try again in a minute."
+      }
+    }
+  },
+  "roles": {
+    "administrator": {
+      "label": "Administrator",
+      "description": "Sets up the workspace and decides who does what."
+    },
+    "ciso": {
+      "label": "Security lead",
+      "description": "Leads security: reviews risks, controls and their mappings."
+    },
+    "risk_owner": {
+      "label": "Risk owner",
+      "description": "Looks after the risks in their area."
+    },
+    "risk_approver": {
+      "label": "Risk approver",
+      "description": "Approves important risk decisions."
+    },
+    "contributor": {
+      "label": "Contributor",
+      "description": "Reports concerns and provides evidence when asked."
+    },
+    "viewer": {
+      "label": "Viewer",
+      "description": "Sees approved risks."
+    },
+    "auditor": {
+      "label": "Auditor",
+      "description": "Reads everything, including history, but changes nothing."
+    }
+  }
+}

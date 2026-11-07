@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- ComplAIent brand mark (docs/brand/logos/01-assured-spark.svg): accent tile (--isms-accent #4f3fd9), shield with check and AI spark. -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8e80ff"/>
+      <stop offset="1" stop-color="#4f3fd9"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#tile)"/>
+  <path d="M32 12 17 18v12c0 9.5 6.3 17.6 15 21.5 8.7-3.9 15-12 15-21.5V18L32 12Z" fill="#ffffff" fill-opacity="0.18" stroke="#ffffff" stroke-width="3.6" stroke-linejoin="round"/>
+  <path d="m24.5 31.5 5.5 5.5 10-11" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 7c.6 4 2 5.4 6 6-4 .6-5.4 2-6 6-.6-4-2-5.4-6-6 4-.6 5.4-2 6-6Z" fill="#ffffff"/>
+</svg>

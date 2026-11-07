@@ -1,0 +1,50 @@
+# syntax=docker/dockerfile:1
+# isms-web: the Next.js web app and BFF. Build from the repository root:
+#   docker build -f infrastructure/docker/Dockerfile.web -t isms-web .
+# Configuration comes from the environment at run time (see .env.example); the image holds
+# no secrets and the build reads none. The runtime is Next's standalone server, which carries
+# only the traced production files.
+# Literal FROM lines (not an ARG) so Dependabot can update the base image in every stage.
+
+FROM node:26.13-alpine3.24 AS base
+ENV PNPM_HOME=/pnpm \
+    PATH=/pnpm:$PATH \
+    COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
+    NEXT_TELEMETRY_DISABLED=1 \
+    CI=true
+# Node 25+ no longer bundles corepack: install a pinned copy and let it provide pnpm.
+RUN npm install --global corepack@0.36.0 \
+    && corepack enable pnpm \
+    && corepack prepare pnpm@10.28.2 --activate
+WORKDIR /repo
+
+FROM base AS builder
+COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+# The pnpm store ($PNPM_HOME/store) lives in the image layers, not in a BuildKit cache mount:
+# with CI layer caching, a cached `pnpm fetch` layer would meet an empty mount on a new runner.
+RUN pnpm fetch
+COPY . .
+RUN pnpm install --offline --frozen-lockfile
+RUN pnpm --filter @isms/web build
+
+FROM node:26.13-alpine3.24 AS runtime
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000
+# npm is not needed at run time; removing it keeps its bundled dependencies out of the image.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx \
+    && addgroup -S -g 10001 isms \
+    && adduser -S -D -H -u 10001 -G isms isms
+WORKDIR /app
+# Owned by root, so the service user cannot modify the code it runs. Only the Next cache
+# directory is writable.
+COPY --from=builder /repo/apps/web/.next/standalone ./
+COPY --from=builder /repo/apps/web/.next/static ./apps/web/.next/static
+RUN mkdir -p apps/web/.next/cache && chown 10001:10001 apps/web/.next/cache
+USER 10001:10001
+EXPOSE 3000
+# "/" redirects to sign-in without a session, so any 2xx or 3xx answer means healthy.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD ["node", "-e", "fetch('http://127.0.0.1:' + (process.env.PORT || 3000) + '/', { redirect: 'manual' }).then((r) => process.exit(r.status < 400 ? 0 : 1), () => process.exit(1))"]
+CMD ["node", "apps/web/server.js"]

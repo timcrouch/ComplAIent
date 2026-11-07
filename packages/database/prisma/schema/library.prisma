@@ -1,0 +1,144 @@
+// Control library: frameworks, requirements, controls and their mappings.
+
+// Keep in step with CONTROL_CATEGORIES in @isms/domain (asserted in the control-library sync test).
+enum ControlCategory {
+  governance
+  privacy
+  suppliers
+  assets
+  access
+  people
+  physical
+  operations
+  resilience
+  incidents
+  development
+}
+
+model Framework {
+  id        String @id @default(uuid(7)) @db.Uuid
+  key       String @unique
+  name      String
+  publisher String
+  summary   String
+
+  versions FrameworkVersion[]
+}
+
+model FrameworkVersion {
+  id          String @id @default(uuid(7)) @db.Uuid
+  frameworkId String @db.Uuid
+  key         String @unique
+  label       String
+
+  framework    Framework              @relation(fields: [frameworkId], references: [id], onDelete: Restrict)
+  requirements Requirement[]
+  groups       RequirementGroup[]
+  organisation OrganisationFramework?
+}
+
+/// A heading requirements sit under, such as a NIST CSF Function or Category or an ISO Annex A
+/// theme. At most two levels (checked by the library validation, not the database).
+model RequirementGroup {
+  id                 String  @id @default(uuid(7)) @db.Uuid
+  frameworkVersionId String  @db.Uuid
+  key                String
+  title              String
+  parentId           String? @db.Uuid
+  sortOrder          Int
+
+  frameworkVersion FrameworkVersion   @relation(fields: [frameworkVersionId], references: [id], onDelete: Restrict)
+  parent           RequirementGroup?  @relation("RequirementGroupParent", fields: [parentId], references: [id], onDelete: Restrict)
+  children         RequirementGroup[] @relation("RequirementGroupParent")
+  requirements     Requirement[]
+
+  @@unique([frameworkVersionId, key])
+}
+
+model Requirement {
+  id                 String  @id @default(uuid(7)) @db.Uuid
+  frameworkVersionId String  @db.Uuid
+  ref                String
+  title              String
+  /// Licensed text an installation may import later; never shipped and never touched by sync.
+  fullText           String?
+  sortOrder          Int
+  /// A leaf group of the same framework version; NULL for flat frameworks.
+  groupId            String? @db.Uuid
+
+  frameworkVersion FrameworkVersion            @relation(fields: [frameworkVersionId], references: [id], onDelete: Restrict)
+  group            RequirementGroup?           @relation(fields: [groupId], references: [id], onDelete: Restrict)
+  mappings         ControlRequirementMapping[]
+  applicability    RequirementApplicability?
+
+  @@unique([frameworkVersionId, ref])
+}
+
+model Control {
+  id             String          @id @default(uuid(7)) @db.Uuid
+  code           String          @unique
+  title          String
+  description    String
+  guidance       String[]
+  category       ControlCategory
+  libraryVersion String
+
+  mappings         ControlRequirementMapping[]
+  riskControls     RiskControl[]
+  evidenceControls EvidenceControl[]
+  tasks            Task[]
+  tests            ControlTest[]
+  embedding        ControlEmbedding?
+}
+
+model ControlRequirementMapping {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  controlId     String    @db.Uuid
+  requirementId String    @db.Uuid
+  /// Both NULL or both set (check constraint in the migration).
+  reviewedById  String?   @db.Uuid
+  reviewedAt    DateTime? @db.Timestamptz(3)
+  createdAt     DateTime  @default(now()) @db.Timestamptz(3)
+
+  control     Control     @relation(fields: [controlId], references: [id], onDelete: Restrict)
+  requirement Requirement @relation(fields: [requirementId], references: [id], onDelete: Restrict)
+  reviewedBy  User?       @relation("MappingReviewedBy", fields: [reviewedById], references: [id], onDelete: Restrict)
+
+  @@unique([controlId, requirementId])
+}
+
+enum ControlTestResult {
+  effective
+  partially_effective
+  ineffective
+}
+
+/// Append-only: the app role may INSERT and SELECT but not UPDATE, DELETE or TRUNCATE. method is 1-4000 characters (check constraint in the migration, Plan 6).
+model ControlTest {
+  id         String            @id @default(uuid(7)) @db.Uuid
+  controlId  String            @db.Uuid
+  testedOn   DateTime          @db.Date
+  result     ControlTestResult
+  method     String
+  notes      String            @default("")
+  testedById String            @db.Uuid
+  createdAt  DateTime          @default(now()) @db.Timestamptz(3)
+
+  control  Control               @relation(fields: [controlId], references: [id], onDelete: Restrict)
+  testedBy User                  @relation("ControlTestTestedBy", fields: [testedById], references: [id], onDelete: Restrict)
+  evidence ControlTestEvidence[]
+
+  @@index([controlId, testedOn])
+}
+
+/// Insert-only: the app role may not UPDATE, DELETE or TRUNCATE.
+model ControlTestEvidence {
+  controlTestId String @db.Uuid
+  evidenceId    String @db.Uuid
+
+  controlTest ControlTest @relation(fields: [controlTestId], references: [id], onDelete: Restrict)
+  evidence    Evidence    @relation(fields: [evidenceId], references: [id], onDelete: Restrict)
+
+  @@id([controlTestId, evidenceId])
+  @@index([evidenceId])
+}

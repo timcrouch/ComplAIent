@@ -1,0 +1,55 @@
+# syntax=docker/dockerfile:1
+# isms-worker: the BullMQ worker. Build from the repository root:
+#   docker build -f infrastructure/docker/Dockerfile.worker -t isms-worker .
+# Configuration comes from the environment at run time (see .env.example); the image holds
+# no secrets. Workspace packages ship TypeScript source, so the builder compiles them and the
+# app to JavaScript (dist) with SWC (`isms-build-js`), and the runtime selects dist through the
+# "isms-dist" export condition. See docs/security/architecture.md.
+# Literal FROM lines (not an ARG) so Dependabot can update the base image in every stage.
+
+FROM node:26.13-alpine3.24 AS base
+ENV PNPM_HOME=/pnpm \
+    PATH=/pnpm:$PATH \
+    COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
+    CI=true
+# Node 25+ no longer bundles corepack: install a pinned copy and let it provide pnpm.
+RUN npm install --global corepack@0.36.0 \
+    && corepack enable pnpm \
+    && corepack prepare pnpm@10.28.2 --activate
+WORKDIR /repo
+
+FROM base AS builder
+COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+# The pnpm store ($PNPM_HOME/store) lives in the image layers, not in a BuildKit cache mount:
+# with CI layer caching, a cached `pnpm fetch` layer would meet an empty mount on a new runner.
+RUN pnpm fetch
+COPY . .
+# Installs the whole workspace; the worker build below compiles only what it imports.
+RUN pnpm install --offline --frozen-lockfile
+RUN pnpm --filter "@isms/worker..." build
+# Production dependencies only, resolved from the lockfile. pnpm 10 deploys only injected
+# workspace packages, so injection is switched on for this command alone (development keeps
+# symlinks). Lifecycle scripts are not needed in the output and are skipped.
+RUN pnpm deploy --config.inject-workspace-packages=true --prod --offline --ignore-scripts \
+      --filter @isms/worker /out
+# The embedding model is fetched here, at build time, pinned to a commit and checked against
+# each file's sha256 (public weights only, no user data). The production worker never fetches it.
+# It runs on the WebAssembly ONNX runtime, so no native binding is needed (ADR-0011).
+RUN cd /out && EMBEDDINGS_CACHE_DIR=/out/.cache/models node --conditions=isms-dist dist/fetch-model.js
+
+FROM node:26.13-alpine3.24 AS runtime
+ENV NODE_ENV=production \
+    WORKER_HEALTH_PORT=9465 \
+    EMBEDDINGS_CACHE_DIR=/app/.cache/models
+# npm is not needed at run time; removing it keeps its bundled dependencies out of the image.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx \
+    && addgroup -S -g 10001 isms \
+    && adduser -S -D -H -u 10001 -G isms isms
+WORKDIR /app
+# Owned by root, so the service user cannot modify the code it runs.
+COPY --from=builder /out ./
+USER 10001:10001
+EXPOSE 9465
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD ["node", "-e", "fetch('http://127.0.0.1:' + (process.env.WORKER_HEALTH_PORT || 9465) + '/healthz').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+CMD ["node", "--conditions=isms-dist", "dist/main.js"]

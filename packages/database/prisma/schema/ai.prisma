@@ -1,0 +1,86 @@
+// AI gateway: settings, interactions and local embeddings.
+
+/// Installation-wide AI settings (spec §11.1). Exactly one row (unique singleton plus a check).
+/// The provider key is sealed with AES-256-GCM under AI_SECRETS_KEY (@isms/ai secret-box); the four key
+/// columns are all NULL or all set (check constraint in the migration).
+model AiSettings {
+  id            String    @id @default(uuid(7)) @db.Uuid
+  singleton     Boolean   @unique @default(true)
+  enabled       Boolean   @default(false)
+  euOnly        Boolean   @default(true)
+  zeroRetention Boolean   @default(true)
+  sealedKey     Bytes?
+  keyLast4      String?
+  keySetById    String?   @db.Uuid
+  keySetAt      DateTime? @db.Timestamptz(3)
+  /// { conversation?: string; controls?: string; frameworks?: string }
+  models        Json      @default("{}")
+  updatedById   String?   @db.Uuid
+  updatedAt     DateTime  @updatedAt @db.Timestamptz(3)
+
+  keySetBy  User? @relation("AiKeySetBy", fields: [keySetById], references: [id], onDelete: Restrict)
+  updatedBy User? @relation("AiSettingsUpdatedBy", fields: [updatedById], references: [id], onDelete: Restrict)
+}
+
+enum AiPurpose {
+  concern_turn
+  control_suggestion
+  framework_suggestion
+  connection_test
+  posture_summary
+  control_test_steps
+}
+
+enum AiCallStatus {
+  ok
+  invalid_output
+  provider_error
+  refused
+}
+
+enum AiOutcome {
+  none
+  pending
+  accepted
+  rejected
+  partial
+}
+
+/// One row per AI call. The app role may INSERT and SELECT, and UPDATE only outcome and discardedCount.
+model AiInteraction {
+  id             String       @id @default(uuid(7)) @db.Uuid
+  purpose        AiPurpose
+  provider       String
+  model          String
+  /// { baseUrl, zdr, dataCollection, upstream }
+  routing        Json
+  /// { system, messages }
+  request        Json
+  response       String?
+  status         AiCallStatus
+  attempts       Int
+  durationMs     Int
+  actorUserId    String?      @db.Uuid
+  objectType     String?
+  objectId       String?
+  outcome        AiOutcome    @default(none)
+  discardedCount Int          @default(0)
+  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
+
+  actor           User?            @relation("AiInteractionActor", fields: [actorUserId], references: [id], onDelete: Restrict)
+  riskControls    RiskControl[]
+  boardNarratives BoardNarrative[]
+
+  @@index([objectType, objectId, createdAt])
+}
+
+/// Local embedding of a library control (computed in the worker; never sent to a provider).
+model ControlEmbedding {
+  controlId   String                     @id @db.Uuid
+  model       String
+  contentHash String
+  embedding   Unsupported("vector(384)")
+  createdAt   DateTime                   @default(now()) @db.Timestamptz(3)
+
+  control Control @relation(fields: [controlId], references: [id], onDelete: Restrict)
+}
