@@ -72,10 +72,16 @@ test("sign-out ends session", async ({ page }) => {
 
 test("each user keeps their own theme on a shared browser (#2)", async ({ page }) => {
   const htmlTheme = () => page.locator("html").getAttribute("data-theme");
+  // Picks a theme in the account menu and waits for the server action that saves it.
   const chooseTheme = async (name: "Light" | "Dark" | "System") => {
     await page.getByRole("button", { name: "Account menu" }).click();
-    const menu = page.getByRole("dialog", { name: "Account" });
-    await menu.getByRole("radiogroup", { name: "Theme" }).getByRole("radio", { name }).click();
+    const group = page.getByRole("radiogroup", { name: "Theme" });
+    const saved = page.waitForResponse(
+      (res) => res.request().method() === "POST" && "next-action" in res.request().headers(),
+    );
+    await group.getByText(name, { exact: true }).click();
+    expect((await saved).ok()).toBe(true);
+    await expect(group.getByRole("radio", { name })).toBeChecked();
     await page.keyboard.press("Escape");
   };
   const signOut = async () => {

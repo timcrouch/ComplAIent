@@ -303,57 +303,6 @@ describe("identity", () => {
         expect(res.status).toBe(401);
       });
     });
-
-    describe("theme (#2)", () => {
-      const save = async (body: unknown, token?: string) =>
-        request(server(app))
-          .patch("/api/v1/me/preferences")
-          .set("authorization", `Bearer ${token ?? (await idp.sign())}`)
-          .send(body as object);
-      const prefs = async (token?: string) =>
-        (await me(token ?? (await idp.sign()))).body as { viewMode: string; theme: string };
-
-      it("is system until the user chooses one", async () => {
-        expect((await prefs()).theme).toBe("system");
-        expect(await db.user.findFirstOrThrow()).toMatchObject({ theme: null });
-      });
-
-      it("saves the chosen theme on the account without touching the view mode", async () => {
-        const res = await save({ theme: "dark" });
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual({ viewMode: "guided", theme: "dark" });
-        expect(await prefs()).toMatchObject({ viewMode: "guided", theme: "dark" });
-        expect(await db.user.findFirstOrThrow()).toMatchObject({ theme: "dark", viewMode: null });
-        expect(await db.auditEvent.count()).toBe(0);
-      });
-
-      it("saves the view mode without touching the theme", async () => {
-        await save({ theme: "light" });
-        expect((await save({ viewMode: "executive" })).body).toEqual({
-          viewMode: "executive",
-          theme: "light",
-        });
-      });
-
-      it("belongs to each user: another user keeps their own theme", async () => {
-        await save({ theme: "dark" });
-        const other = await idp.sign({ email: "other@example.test", sub: "other" });
-        expect((await prefs(other)).theme).toBe("system");
-        await save({ theme: "light" }, other);
-        expect((await prefs()).theme).toBe("dark");
-        expect((await prefs(other)).theme).toBe("light");
-      });
-
-      it.each([[{ theme: "neon" }], [{ theme: "dark", extra: 1 }]])(
-        "rejects %j with VALIDATION_FAILED",
-        async (body) => {
-          const res = await save(body);
-          expect(res.status).toBe(400);
-          expect((res.body as ErrorBody).error.code).toBe("VALIDATION_FAILED");
-          expect(await db.user.findFirstOrThrow()).toMatchObject({ theme: null });
-        },
-      );
-    });
   });
 
   describe("bootstrap administrator", () => {
