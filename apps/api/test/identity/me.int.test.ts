@@ -177,6 +177,7 @@ describe("identity", () => {
         roles: [],
         permissions: ["me.read", "me.update", "organisation.read"],
         viewMode: "guided",
+        theme: "system",
       });
       expect(user.idpIssuer).toBe(idp.issuer);
       expect(user.idpSubject).toBe("subject-1");
