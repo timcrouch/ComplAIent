@@ -14,6 +14,7 @@ import { CommandPaletteHost } from "./command-palette-host";
 import { navItemsFor } from "./nav-items";
 import { PrimaryNav } from "./primary-nav";
 import { focusRingClass } from "./styles";
+import { saveTheme } from "../../lib/actions/theme";
 import { applyTheme, oppositeTheme } from "./theme-toggle";
 import { SIGN_OUT_FORM_ID, UserMenu, type ShellUser } from "./user-menu";
 
@@ -87,6 +88,9 @@ export function AppShell({
   const changeTheme = useCallback((next: Theme) => {
     applyTheme(next);
     setTheme(next);
+    // Saved on the account so it follows the user, not the browser (#2). The screen already
+    // shows the choice; if saving fails it still applies on this browser until sign-out.
+    void saveTheme(next).catch(() => undefined);
   }, []);
   const switchTheme = useCallback(() => {
     changeTheme(oppositeTheme());

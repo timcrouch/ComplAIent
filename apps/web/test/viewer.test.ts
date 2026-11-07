@@ -22,6 +22,7 @@ const me = {
   roles: [],
   permissions: ["me.read" as const],
   viewMode: "guided" as const,
+  theme: "system" as const,
 };
 
 beforeEach(() => {

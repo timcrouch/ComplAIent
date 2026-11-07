@@ -17,6 +17,10 @@ export type RoleAssignmentDto = z.infer<typeof RoleAssignmentDto>;
 export const ViewModeSchema = z.enum(["guided", "professional", "executive"]).openapi("ViewMode");
 export type ViewMode = z.infer<typeof ViewModeSchema>;
 
+/** The colour theme chosen in the account menu; "system" follows the device (#2). */
+export const ThemeSchema = z.enum(["light", "dark", "system"]).openapi("Theme");
+export type Theme = z.infer<typeof ThemeSchema>;
+
 export const MeResponse = z
   .object({
     id: z.string(),
@@ -25,18 +29,23 @@ export const MeResponse = z
     roles: z.array(RoleAssignmentDto),
     permissions: z.array(PermissionSchema),
     viewMode: ViewModeSchema,
+    theme: ThemeSchema,
   })
   .openapi("MeResponse");
 export type MeResponse = z.infer<typeof MeResponse>;
 
+/** Either preference, or both; an empty body is refused. */
 export const UpdatePreferencesRequest = z
-  .object({ viewMode: ViewModeSchema })
+  .object({ viewMode: ViewModeSchema.optional(), theme: ThemeSchema.optional() })
   .strict()
+  .refine((body) => body.viewMode !== undefined || body.theme !== undefined, {
+    message: "Give a view mode or a theme",
+  })
   .openapi("UpdatePreferencesRequest");
 export type UpdatePreferencesRequest = z.infer<typeof UpdatePreferencesRequest>;
 
 export const PreferencesResponse = z
-  .object({ viewMode: ViewModeSchema })
+  .object({ viewMode: ViewModeSchema, theme: ThemeSchema })
   .openapi("PreferencesResponse");
 export type PreferencesResponse = z.infer<typeof PreferencesResponse>;
 
@@ -51,7 +60,7 @@ export const identityRoutes = {
   updatePreferences: defineRoute({
     method: "patch",
     path: "/api/v1/me/preferences",
-    summary: "Save the current user's view mode",
+    summary: "Save the current user's view mode and/or colour theme",
     permission: "me.update",
     request: { body: UpdatePreferencesRequest },
     responses: { 200: PreferencesResponse },

@@ -19,6 +19,11 @@ vi.mock("../lib/actions/view-mode", () => ({
   saveViewMode: (...args: unknown[]) => saveViewMode(...args) as unknown,
 }));
 
+const saveTheme = vi.fn();
+vi.mock("../lib/actions/theme", () => ({
+  saveTheme: (...args: unknown[]) => saveTheme(...args) as unknown,
+}));
+
 const user = { displayName: "Rita Reporter", email: "reporter@example.test" };
 
 function shell(messages?: unknown, permissions: Permission[] = ["me.read"]) {
@@ -36,6 +41,9 @@ beforeEach(() => {
   push.mockReset();
   refresh.mockReset();
   saveViewMode.mockReset().mockResolvedValue({ ok: true, data: { viewMode: "executive" } });
+  saveTheme
+    .mockReset()
+    .mockResolvedValue({ ok: true, data: { viewMode: "guided", theme: "dark" } });
 });
 
 afterEach(() => {
@@ -143,6 +151,7 @@ describe("AppShell", () => {
     await userEvent.click(await screen.findByRole("option", { name: "Switch theme" }));
     expect(document.documentElement.dataset.theme).toBe("dark");
     expect(document.cookie).toContain("isms_theme=dark");
+    expect(saveTheme).toHaveBeenCalledWith("dark");
   });
 
   it("'Sign out' submits the logout form", async () => {
@@ -173,6 +182,8 @@ describe("AppShell", () => {
     await userEvent.click(within(theme).getByRole("radio", { name: "System" }));
     expect(document.documentElement.dataset.theme).toBeUndefined();
     expect(document.cookie).toContain("isms_theme=system");
+    // Saved on the account, so it follows the user and not the browser (#2).
+    expect(saveTheme).toHaveBeenCalledWith("system");
 
     const mode = within(menu).getByRole("radiogroup", { name: "View mode" });
     const radio = (name: string) => within(mode).getByRole<HTMLInputElement>("radio", { name });

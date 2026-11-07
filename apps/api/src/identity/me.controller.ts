@@ -22,11 +22,12 @@ export class MeController {
   async me(@CurrentActor() actor: Actor): Promise<MeResponse> {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { id: actor.userId },
-      select: { id: true, email: true, displayName: true, viewMode: true },
+      select: { id: true, email: true, displayName: true, viewMode: true, theme: true },
     });
     return {
       ...user,
       viewMode: user.viewMode ?? defaultViewMode(actor.roles.map((r) => r.role)),
+      theme: user.theme ?? "system",
       roles: actor.roles,
       permissions: this.permissions.permissionsFor(actor),
     };
@@ -38,11 +39,18 @@ export class MeController {
     @CurrentActor() actor: Actor,
     @Body() body: UpdatePreferencesRequest,
   ): Promise<PreferencesResponse> {
-    await this.prisma.user.update({
+    // Only the fields given change; the other preference keeps its stored value (#2).
+    const user = await this.prisma.user.update({
       where: { id: actor.userId },
-      data: { viewMode: body.viewMode },
-      select: { id: true },
+      data: {
+        ...(body.viewMode !== undefined ? { viewMode: body.viewMode } : {}),
+        ...(body.theme !== undefined ? { theme: body.theme } : {}),
+      },
+      select: { viewMode: true, theme: true },
     });
-    return { viewMode: body.viewMode };
+    return {
+      viewMode: user.viewMode ?? defaultViewMode(actor.roles.map((r) => r.role)),
+      theme: user.theme ?? "system",
+    };
   }
 }

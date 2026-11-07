@@ -177,6 +177,7 @@ describe("identity", () => {
         roles: [],
         permissions: ["me.read", "me.update", "organisation.read"],
         viewMode: "guided",
+        theme: "system",
       });
       expect(user.idpIssuer).toBe(idp.issuer);
       expect(user.idpSubject).toBe("subject-1");
@@ -271,7 +272,7 @@ describe("identity", () => {
       it("saves the chosen view mode and returns it from /me", async () => {
         const res = await save({ viewMode: "executive" });
         expect(res.status).toBe(200);
-        expect(res.body).toEqual({ viewMode: "executive" });
+        expect(res.body).toEqual({ viewMode: "executive", theme: "system" });
         expect(await viewMode()).toBe("executive");
         expect(await db.auditEvent.count()).toBe(0);
       });

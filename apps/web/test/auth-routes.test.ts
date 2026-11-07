@@ -11,6 +11,12 @@ vi.mock("../lib/oidc", () => ({
   refresh: vi.fn(),
 }));
 
+const apiCall = vi.fn();
+vi.mock("../lib/api-client", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../lib/api-client")>()),
+  apiCall: (...args: unknown[]) => apiCall(...args) as unknown,
+}));
+
 const oidc = await import("../lib/oidc");
 const login = await import("../app/auth/login/route");
 const callback = await import("../app/auth/callback/route");
@@ -61,6 +67,7 @@ beforeEach(() => {
   vi.mocked(oidc.handleCallback).mockReset();
   vi.mocked(oidc.endSessionUrl).mockReset();
   vi.restoreAllMocks();
+  apiCall.mockReset().mockRejectedValue(new Error("API not arranged in this test"));
 });
 
 describe("GET /auth/login", () => {
@@ -155,6 +162,39 @@ describe("GET /auth/callback", () => {
     expect(line).not.toMatch(/Secure/i);
     expect(await getSession(sid)).toMatchObject({ userSub: "user-1" });
     expect(cookieValue(res, "isms_login")).toBe("");
+  });
+
+  it("sets the theme cookie from the signed-in user's saved theme (#2)", async () => {
+    const { loginCookie } = await startLogin("/");
+    vi.mocked(oidc.handleCallback).mockResolvedValue(sessionTokens());
+    apiCall.mockResolvedValue({ theme: "dark" });
+    const res = await callback.GET(
+      req(`/auth/callback?code=c1&state=${STATE}`, {
+        headers: { cookie: `isms_login=${loginCookie}; isms_theme=light` },
+      }),
+    );
+    expect(res.status).toBe(303);
+    const [route, , token] = (apiCall.mock.calls[0] ?? []) as [unknown, unknown, unknown];
+    expect(route).toMatchObject({ method: "get", path: "/api/v1/me" });
+    expect(token).toBe("access-1");
+    expect(cookieValue(res, "isms_theme")).toBe("dark");
+    const line = setCookie(res, "isms_theme") ?? "";
+    expect(line).toMatch(/Path=\//);
+    expect(line).toMatch(/SameSite=Lax/i);
+    expect(line).toMatch(/Max-Age=31536000/i);
+  });
+
+  it("clears a previous user's theme cookie when the saved theme cannot be read (#2)", async () => {
+    const { loginCookie } = await startLogin("/");
+    vi.mocked(oidc.handleCallback).mockResolvedValue(sessionTokens());
+    const res = await callback.GET(
+      req(`/auth/callback?code=c1&state=${STATE}`, {
+        headers: { cookie: `isms_login=${loginCookie}; isms_theme=dark` },
+      }),
+    );
+    expect(res.status).toBe(303);
+    expect(cookieValue(res, "isms_session")).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(setCookie(res, "isms_theme")).toMatch(/isms_theme=;.*(Max-Age=0|Expires=)/i);
   });
 
   it("is single-use: replaying the same state fails", async () => {
@@ -303,6 +343,8 @@ describe("POST /auth/logout", () => {
     expect(oidc.endSessionUrl).toHaveBeenCalledWith("id-token-1");
     expect(await getSession(sid)).toBeNull();
     expect(setCookie(res, "isms_session")).toMatch(/isms_session=;.*(Max-Age=0|Expires=)/i);
+    // The next person to sign in on this browser starts from System, not this user's theme (#2).
+    expect(setCookie(res, "isms_theme")).toMatch(/isms_theme=;.*(Max-Age=0|Expires=)/i);
   });
 
   it("accepts Sec-Fetch-Site same-origin without an Origin header", async () => {

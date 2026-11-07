@@ -4,6 +4,7 @@ import { sessionCookie, webBaseUrl } from "../../../lib/cookie";
 import { requestLog } from "../../../lib/log";
 import { endSessionUrl } from "../../../lib/oidc";
 import { endSession } from "../../../lib/session";
+import { THEME_COOKIE } from "../../../lib/theme";
 
 export const dynamic = "force-dynamic";
 
@@ -49,5 +50,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     res = redirectTo("/");
   }
   res.cookies.delete({ name: cookie.name, ...cookie.options });
+  // The next person to sign in on this browser starts from their own theme (#2).
+  res.cookies.delete({ name: THEME_COOKIE, path: "/" });
   return res;
 }

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { AUTHORIZE_URL, NO_EMAIL_USERNAME, REPORTER_EMAIL, WEB_URL } from "./env";
+import { AUTHORIZE_URL, NO_EMAIL_USERNAME, OWNER_EMAIL, REPORTER_EMAIL, WEB_URL } from "./env";
 import {
   countAuthorizeNavigations,
   deleteAllSessions,
@@ -68,6 +68,49 @@ test("sign-out ends session", async ({ page }) => {
   await page.goto("/");
   expect(page.url().startsWith(AUTHORIZE_URL)).toBe(true);
   await expect(page.locator("#kc-form-login")).toBeVisible();
+});
+
+test("each user keeps their own theme on a shared browser (#2)", async ({ page }) => {
+  const htmlTheme = () => page.locator("html").getAttribute("data-theme");
+  // Picks a theme in the account menu and waits for the server action that saves it.
+  const chooseTheme = async (name: "Light" | "Dark" | "System") => {
+    await page.getByRole("button", { name: "Account menu" }).click();
+    const group = page.getByRole("radiogroup", { name: "Theme" });
+    const saved = page.waitForResponse(
+      (res) => res.request().method() === "POST" && "next-action" in res.request().headers(),
+    );
+    await group.getByText(name, { exact: true }).click();
+    expect((await saved).ok()).toBe(true);
+    await expect(group.getByRole("radio", { name })).toBeChecked();
+    await page.keyboard.press("Escape");
+  };
+  const signOut = async () => {
+    await page.getByRole("button", { name: "Account menu" }).click();
+    await page.getByRole("button", { name: "Sign out" }).click();
+    await expect(page.locator("#kc-form-login")).toBeVisible();
+  };
+  const signInAs = async (email: string) => {
+    await page.goto("/");
+    await submitKeycloakForm(page, email);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(greeting);
+    await waitForShell(page);
+  };
+
+  await signInAs(REPORTER_EMAIL);
+  await chooseTheme("Dark");
+  expect(await htmlTheme()).toBe("dark");
+  await signOut();
+
+  // The next person on this browser gets their own choice (never chosen: System).
+  await signInAs(OWNER_EMAIL);
+  expect(await htmlTheme()).toBeNull();
+  await signOut();
+
+  // Rita's choice was saved on her account and comes back when she signs in again.
+  await signInAs(REPORTER_EMAIL);
+  expect(await htmlTheme()).toBe("dark");
+  await chooseTheme("System");
+  expect(await htmlTheme()).toBeNull();
 });
 
 test("'Sign out' in the command palette submits the logout form", async ({ page }) => {

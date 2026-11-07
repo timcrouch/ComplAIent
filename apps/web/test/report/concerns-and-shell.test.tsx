@@ -16,6 +16,7 @@ vi.mock("next/navigation", () => ({
   usePathname: () => pathname,
 }));
 vi.mock("../../lib/actions/view-mode", () => ({ saveViewMode: vi.fn() }));
+vi.mock("../../lib/actions/theme", () => ({ saveTheme: vi.fn() }));
 
 const REPORTER: Permission[] = ["me.read", "risks.report"];
 
