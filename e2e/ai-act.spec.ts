@@ -32,7 +32,7 @@ async function classifyCreditScoringByHand(page: Page): Promise<void> {
   await next.click();
   await expect(page.getByRole("heading", { level: 2, name: "Prohibited" })).toBeVisible();
   await next.click();
-  await page.getByRole("radio", { name: /^No\. Software used in offices/ }).check();
+  await page.getByRole("radio", { name: /^No Software used in offices/ }).check();
   await next.click();
   await page.getByRole("checkbox", { name: /^Creditworthiness and credit scoring/ }).check();
   await page

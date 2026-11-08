@@ -244,8 +244,8 @@
       "annexI": {
         "question": "Is it a safety component of a regulated product?",
         "help": "Art. 6(1): the system is a safety part of, or is itself, a product under the EU product laws in Annex I, such as machinery, medical devices, toys, lifts or vehicles, and that product needs a third-party conformity check.",
-        "yes": "Yes, it is part of such a product, or is one.",
-        "no": "No. Software used in offices, banks or insurers is usually not."
+        "yes": "It is part of such a product, or is one.",
+        "no": "Software used in offices, banks or insurers usually isn't."
       },
       "annexIII": {
         "question": "Is it used for any of these?",
@@ -254,8 +254,8 @@
       "profilesPeople": {
         "question": "Does it profile people?",
         "help": "Profiling means evaluating people automatically from their personal data, for example to predict their behaviour, reliability or finances (GDPR Art. 4(4)). A system that profiles is always high-risk.",
-        "yes": "Yes, it evaluates or predicts things about individual people.",
-        "no": "No, it doesn't evaluate individual people."
+        "yes": "It evaluates or predicts things about individual people.",
+        "no": "It doesn't evaluate individual people."
       },
       "derogation": {
         "question": "Does one of these describe its job?",
