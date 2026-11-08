@@ -13,6 +13,7 @@ enum ControlCategory {
   resilience
   incidents
   development
+  ai_governance
 }
 
 model Framework {

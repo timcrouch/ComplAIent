@@ -15,12 +15,14 @@ describe("control codes", () => {
   it("accepts well-formed codes only", () => {
     expect(CONTROL_CODE_PATTERN.test("GOV-01")).toBe(true);
     expect(CONTROL_CODE_PATTERN.test("DEV-12")).toBe(true);
+    expect(CONTROL_CODE_PATTERN.test("AIG-01")).toBe(true);
     for (const bad of ["XXX-01", "GOV-1", "GOV-001", "gov-01", " GOV-01", "GOV-01 "]) {
       expect(CONTROL_CODE_PATTERN.test(bad)).toBe(false);
     }
   });
   it("maps a code to its category", () => {
     expect(controlCategoryForCode("RES-01")).toBe("resilience");
+    expect(controlCategoryForCode("AIG-01")).toBe("ai_governance");
     expect(controlCategoryForCode("nope")).toBeUndefined();
   });
 });

@@ -96,7 +96,7 @@ describe("ControlFilters, without JavaScript", () => {
       "unreviewed",
       "reviewed",
     ]);
-    expect(select(t.category).options).toHaveLength(12);
+    expect(select(t.category).options).toHaveLength(13);
     expect([...select(t.inUse).options].map((o) => [o.value, o.textContent])).toEqual([
       ["", t.inUseAny],
       ["true", t.inUseYes],

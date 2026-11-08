@@ -55,7 +55,8 @@
       "operations": "Operations",
       "resilience": "Resilience",
       "incidents": "Incidents",
-      "development": "Development"
+      "development": "Development",
+      "ai_governance": "AI governance"
     },
     "export": {
       "columns": {
