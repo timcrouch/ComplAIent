@@ -144,6 +144,7 @@ const GROUP_LEVEL_NAMES: Record<string, string[]> = {
   "nist-csf-2.0": ["Function", "Category"],
   "iso27001-2022": ["Theme"],
   "nist-sp800-53-r5": ["Family"],
+  "eu-ai-act-2024-1689": ["Chapter"],
 };
 
 /** The names of the SoA's group levels, top first: none for a flat framework. */

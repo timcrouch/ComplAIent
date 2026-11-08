@@ -263,6 +263,26 @@ describe("soaXlsx", () => {
     expect(strings).toContain("SC System and communications protection");
   });
 
+  it("adds a Chapter column for the EU AI Act", async () => {
+    const framework = {
+      key: "eu-ai-act-2024-1689",
+      name: "EU AI Act",
+      versionLabel: "Regulation (EU) 2024/1689",
+    };
+    const fixture = {
+      ...soaThemedFixture(),
+      framework,
+      frameworks: [framework],
+      groups: [
+        { key: "III", title: "High-risk AI systems", parentKey: null, decided: 1, total: 1 },
+      ],
+      rows: [soaRow({ ref: "Art. 26(1)", groupKey: "III" })],
+    };
+    const strings = readXlsx(await soaXlsx(fixture)).strings(1);
+    expect(strings.slice(0, 2)).toEqual(["Chapter", "Reference"]);
+    expect(strings).toContain("III High-risk AI systems");
+  });
+
   it("quotes a group cell that could read as a formula", async () => {
     const fixture = soaThemedFixture();
     fixture.groups = fixture.groups.map((g) => ({ ...g, key: `=${g.key}` }));
