@@ -12,6 +12,12 @@ export {
   SAMPLE_SITES,
 } from "./company.js";
 export { SAMPLE_RISK_COUNT, planSampleYear } from "./year.js";
+export {
+  AI_ACT_ENABLED_DAYS_AGO,
+  SAMPLE_AI_ACT_FRAMEWORK,
+  SAMPLE_AI_SYSTEMS,
+} from "./ai-act-systems.js";
+export type { SampleAiSystem, SampleObligationWork } from "./ai-act-systems.js";
 export { rowsFor } from "./rows.js";
 export { PENDING_ISSUER } from "./setup.js";
 export { versionSnapshot } from "./snapshot.js";

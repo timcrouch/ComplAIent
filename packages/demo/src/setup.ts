@@ -82,6 +82,27 @@ const departmentIdOf = (b: Builder, key: string) => {
 export const siteId = siteIdOf;
 export const departmentId = departmentIdOf;
 
+/** One framework version confirmed by hand, as organisation-frameworks.service writes it. */
+export function confirmFramework(b: Builder, at: Date, key: string, by: string): void {
+  const id = b.id(at);
+  b.rows.organisationFrameworks.push({
+    id,
+    frameworkVersionId: b.frameworkVersion(key),
+    status: "confirmed",
+    source: "manual",
+    reasoning: null,
+    confirmedById: by,
+    confirmedAt: at,
+    createdAt: at,
+    updatedAt: at,
+  });
+  b.audit(at, by, "organisation.framework_confirmed", "OrganisationFramework", id, {
+    frameworkVersionKey: key,
+    status: "confirmed",
+    source: "manual",
+  });
+}
+
 /**
  * Setup as Anna Admin does it on the first day, in the API's order and with its audit rows:
  * bootstrap administrator, profile, sites, departments, frameworks, risk scale, completion,
@@ -149,25 +170,7 @@ export function writeSetup(b: Builder, people: readonly SamplePerson[], start: n
     b.audit(at, anna, "organisation.department_added", "Department", id, { name: d.name });
   }
   at = tick();
-  for (const key of SAMPLE_FRAMEWORKS) {
-    const id = b.id(at);
-    b.rows.organisationFrameworks.push({
-      id,
-      frameworkVersionId: b.frameworkVersion(key),
-      status: "confirmed",
-      source: "manual",
-      reasoning: null,
-      confirmedById: anna,
-      confirmedAt: at,
-      createdAt: at,
-      updatedAt: at,
-    });
-    b.audit(at, anna, "organisation.framework_confirmed", "OrganisationFramework", id, {
-      frameworkVersionKey: key,
-      status: "confirmed",
-      source: "manual",
-    });
-  }
+  for (const key of SAMPLE_FRAMEWORKS) confirmFramework(b, at, key, anna);
   at = tick();
   const scaleId = b.id(at);
   b.rows.riskScales.push({

@@ -28,6 +28,10 @@ export const emptyRows = (): SampleRows => ({
   controlTestEvidence: [],
   requirementApplicability: [],
   boardNarratives: [],
+  organisationModules: [],
+  aiSystems: [],
+  aiSystemObligations: [],
+  aiSystemRisks: [],
   auditEvents: [],
   evidenceObjects: [],
 });

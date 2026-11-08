@@ -182,6 +182,21 @@ export type SampleRows = {
   controlTestEvidence: Prisma.ControlTestEvidenceCreateManyInput[];
   requirementApplicability: Prisma.RequirementApplicabilityCreateManyInput[];
   boardNarratives: Rows<Prisma.BoardNarrativeCreateManyInput>;
+  /** The EU AI Act module (#16): switched on, its register, obligations and risk links. */
+  organisationModules: (Prisma.OrganisationModuleCreateManyInput & { enabledAt: Date })[];
+  aiSystems: Rows<
+    Prisma.AiSystemCreateManyInput & {
+      classification: Prisma.InputJsonObject;
+      classifiedAt: Date | null;
+      createdAt: Date;
+      updatedAt: Date;
+    }
+  >;
+  aiSystemObligations: (Prisma.AiSystemObligationCreateManyInput & {
+    createdAt: Date;
+    updatedAt: Date;
+  })[];
+  aiSystemRisks: (Prisma.AiSystemRiskCreateManyInput & { linkedAt: Date })[];
   auditEvents: Rows<Prisma.AuditEventCreateManyInput & { occurredAt: Date }>;
   /** The evidence files to put in object storage after the rows commit. */
   evidenceObjects: { key: string; body: Uint8Array; contentType: string }[];

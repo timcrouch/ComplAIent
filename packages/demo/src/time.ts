@@ -15,7 +15,7 @@ export const isHoliday = (ms: number): boolean => {
   return d.getUTCMonth() === 11 && d.getUTCDate() >= 18;
 };
 
-const isWeekend = (ms: number): boolean => {
+export const isWeekend = (ms: number): boolean => {
   const day = new Date(ms).getUTCDay();
   return day === 0 || day === 6;
 };
