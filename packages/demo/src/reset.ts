@@ -1,6 +1,5 @@
 import { loadLibrary, syncControlLibrary } from "@isms/control-library";
-import type { Prisma, PrismaClient } from "@isms/database";
-import { truncateAll } from "@isms/database/testing";
+import { type Prisma, type PrismaClient, truncateAll } from "@isms/database";
 import type { DemoActor, DemoPorts } from "./ports.js";
 
 /**
