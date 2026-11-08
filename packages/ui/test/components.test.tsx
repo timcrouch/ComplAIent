@@ -87,7 +87,7 @@ describe("AiBadge", () => {
 });
 
 describe("Button", () => {
-  it.each(["primary", "secondary", "ghost"] as const)(
+  it.each(["primary", "secondary", "ghost", "destructive"] as const)(
     "%s is a clickable button",
     async (variant) => {
       const onClick = vi.fn();
@@ -100,6 +100,14 @@ describe("Button", () => {
       expect(onClick).toHaveBeenCalledOnce();
     },
   );
+
+  it("destructive uses the critical tokens, which both themes define (contrast.test.ts)", () => {
+    render(<Button variant="destructive">Delete everything</Button>);
+    const classes = screen.getByRole("button", { name: "Delete everything" }).className;
+    expect(classes).toContain("bg-critical-soft");
+    expect(classes).toContain("text-critical");
+    expect(classes).not.toContain("bg-accent");
+  });
 });
 
 describe("Chip", () => {
@@ -293,6 +301,7 @@ function Gallery() {
       <Button variant="primary">Primary</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="ghost">Ghost</Button>
+      <Button variant="destructive">Destructive</Button>
       <Card>
         <CardHeader>
           <CardTitle>Controls</CardTitle>

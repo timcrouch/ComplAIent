@@ -4,6 +4,7 @@ import { assertTestDatabaseUrl, resetTestDatabase } from "@isms/database/testing
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import {
   DEMO_LOCK,
+  DemoPortsError,
   loadLibraryIds,
   loadSample,
   planSampleYear,
@@ -32,14 +33,20 @@ const LIBRARY_TABLES = new Set([
   "ControlRequirementMapping",
 ]);
 
-function fakePorts(opts: { failEvidence?: number } = {}) {
+/** `fail` names steps that reject (after being recorded); `failEvidence` fails the first puts. */
+function fakePorts(opts: { failEvidence?: number; fail?: readonly (keyof DemoPorts)[] } = {}) {
   const calls: string[] = [];
   let puts = 0;
+  const step =
+    <T>(name: keyof DemoPorts, value: T) =>
+    () => {
+      calls.push(name);
+      return opts.fail?.includes(name)
+        ? Promise.reject(new Error(`${name} down`))
+        : Promise.resolve(value);
+    };
   const ports: DemoPorts = {
-    wipeEvidence: () => {
-      calls.push("wipeEvidence");
-      return Promise.resolve(0);
-    },
+    wipeEvidence: step("wipeEvidence", 0),
     putEvidence: () => {
       puts += 1;
       if (opts.failEvidence !== undefined && puts <= opts.failEvidence)
@@ -47,18 +54,9 @@ function fakePorts(opts: { failEvidence?: number } = {}) {
       calls.push("putEvidence");
       return Promise.resolve();
     },
-    wipeSessions: () => {
-      calls.push("wipeSessions");
-      return Promise.resolve(0);
-    },
-    drainQueues: () => {
-      calls.push("drainQueues");
-      return Promise.resolve();
-    },
-    enqueueLibraryEmbed: () => {
-      calls.push("enqueueLibraryEmbed");
-      return Promise.resolve();
-    },
+    wipeSessions: step("wipeSessions", 0),
+    drainQueues: step("drainQueues", undefined),
+    enqueueLibraryEmbed: step("enqueueLibraryEmbed", undefined),
   };
   return { ports, calls };
 }
@@ -110,7 +108,8 @@ describe("resetInstance", () => {
       { n: bigint }[]
     >`SELECT count(*) AS n FROM "_prisma_migrations"`;
     expect(Number(migrations[0]?.n)).toBeGreaterThan(0);
-    expect(calls).toEqual(["wipeEvidence", "wipeSessions", "drainQueues", "enqueueLibraryEmbed"]);
+    // Stale jobs are drained first (#7), before anything else touches the fresh state.
+    expect(calls).toEqual(["drainQueues", "wipeEvidence", "wipeSessions", "enqueueLibraryEmbed"]);
   });
 
   it("restarts the Risk reference sequence", async () => {
@@ -157,14 +156,15 @@ describe("loadSample", () => {
       bootstrapEmail: null,
     });
     expect(result.evidenceFailed).toBe(0);
-    // After the commit: evidence wiped, then put; sessions end only once the sample is in.
+    // After the commit: stale jobs drained before the sample's evidence goes in (#7), evidence
+    // wiped, then put; sessions end only once the sample is in.
     const puts = calls.filter((c) => c === "putEvidence").length;
     expect(puts).toBeGreaterThan(0);
     expect(calls).toEqual([
+      "drainQueues",
       "wipeEvidence",
       ...Array<string>(puts).fill("putEvidence"),
       "wipeSessions",
-      "drainQueues",
       "enqueueLibraryEmbed",
     ]);
 
@@ -278,6 +278,45 @@ describe("loadSample", () => {
   });
 });
 
+describe("steps outside the database (#7)", () => {
+  it("a load tries every step after a failed one and reports all the failures together", async () => {
+    const { ports, calls } = fakePorts({ fail: ["drainQueues", "wipeSessions"] });
+    const error = await loadSample(db, ports, CLI, { now: NOW, bootstrapEmail: null }).then(
+      () => null,
+      (err: unknown) => err,
+    );
+    expect(error).toBeInstanceOf(DemoPortsError);
+    const failure = error as DemoPortsError;
+    expect(failure.failures).toEqual([
+      { step: "drainQueues", message: "drainQueues down" },
+      { step: "wipeSessions", message: "wipeSessions down" },
+    ]);
+    expect(failure.message).toMatch(/^The sample data was loaded, but 2 follow-up steps failed/);
+    expect(failure.message).toContain("drainQueues: drainQueues down");
+    // Every step still ran, and the sample is in.
+    expect(calls[0]).toBe("drainQueues");
+    expect(calls).toContain("putEvidence");
+    expect(calls.slice(-2)).toEqual(["wipeSessions", "enqueueLibraryEmbed"]);
+    expect(await db.risk.count()).toBeGreaterThan(0);
+  });
+
+  it("a reset tries every step after a failed one and reports all the failures together", async () => {
+    const { ports, calls } = fakePorts({ fail: ["wipeEvidence", "enqueueLibraryEmbed"] });
+    const error = await resetInstance(db, ports, CLI).then(
+      () => null,
+      (err: unknown) => err,
+    );
+    expect(error).toBeInstanceOf(DemoPortsError);
+    expect((error as DemoPortsError).failures.map((f) => f.step)).toEqual([
+      "wipeEvidence",
+      "enqueueLibraryEmbed",
+    ]);
+    expect((error as DemoPortsError).message).toMatch(/^The reset was done, but 2 follow-up/);
+    expect(calls).toEqual(["drainQueues", "wipeEvidence", "wipeSessions", "enqueueLibraryEmbed"]);
+    expect(await db.auditEvent.count({ where: { action: "demo.reset" } })).toBe(1);
+  });
+});
+
 describe("one locked transaction (Ruling R12)", () => {
   it("a load that fails after the truncate rolls back: the previous data stays", async () => {
     await loadSample(db, fakePorts().ports, LOADER, { now: NOW, bootstrapEmail: null });
@@ -362,5 +401,44 @@ describe("one locked transaction (Ruling R12)", () => {
     expect(await db.risk.count()).toBe(a.risks);
     expect(await db.auditEvent.count({ where: { action: "demo.reset" } })).toBe(1);
     expect(await db.auditEvent.count({ where: { action: "demo.sample_loaded" } })).toBe(1);
+  });
+});
+
+/** Polls `ready` every 25 ms for up to about 10 s. */
+async function waitFor(ready: () => Promise<boolean>): Promise<boolean> {
+  for (let i = 0; i < 400; i += 1) {
+    if (await ready()) return true;
+    await new Promise((r) => setTimeout(r, 25));
+  }
+  return false;
+}
+
+describe("truncate lock order (#7)", () => {
+  it("does not deadlock with an app transaction that locks the tables in another order", async () => {
+    await loadSample(db, fakePorts().ports, CLI, { now: NOW, bootstrapEmail: null });
+    // The app transaction holds "User" (which sorts late), waits until the load is stuck on it
+    // while holding the tables before it, then reads "Approval" (which sorts early). Without
+    // a bounded lock wait this is a deadlock, and Postgres cancels one of the two.
+    let locked!: () => void;
+    const isLocked = new Promise<void>((r) => (locked = r));
+    const app = db.$transaction(
+      async (tx) => {
+        await tx.$executeRaw`UPDATE "User" SET "displayName" = "displayName"`;
+        locked();
+        const waiting = await waitFor(async () => {
+          const rows = await db.$queryRaw<{ n: bigint }[]>`SELECT count(*) AS n FROM pg_locks
+            WHERE locktype = 'relation' AND mode = 'AccessExclusiveLock' AND NOT granted`;
+          return Number(rows[0]?.n ?? 0) > 0;
+        });
+        expect(waiting).toBe(true);
+        return tx.approval.count();
+      },
+      { timeout: 30_000 },
+    );
+    await isLocked;
+    const load = loadSample(db, fakePorts().ports, CLI, { now: NOW, bootstrapEmail: null });
+    const [approvals, loaded] = await Promise.all([app, load]);
+    expect(approvals).toBeGreaterThan(0);
+    expect(await db.risk.count()).toBe(loaded.risks);
   });
 });

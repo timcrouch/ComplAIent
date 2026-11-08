@@ -194,6 +194,7 @@
       "narrative": {
         "title": "Summary",
         "none": "No summary has been approved for this period yet.",
+        "justEnded": "{period} ended yesterday, so no summary has been approved for it yet.",
         "scoped": "A summary is shared for the whole organisation only.",
         "approvedBy": "Approved by {name} on {date}",
         "aiAssisted": "Drafted with AI assistance",

@@ -105,7 +105,10 @@ describe("KeyForm", () => {
     expect(removeAiKey).not.toHaveBeenCalled();
     await userEvent.click(screen.getByRole("button", { name: t.remove }));
     const again = await screen.findByRole("dialog", { name: t.confirmTitle });
-    await userEvent.click(within(again).getByRole("button", { name: t.confirmRemove }));
+    const confirm = within(again).getByRole("button", { name: t.confirmRemove });
+    // The saved key is gone for good: the confirmation is a destructive button.
+    expect(confirm.className).toContain("bg-critical-soft");
+    await userEvent.click(confirm);
     await waitFor(() => {
       expect(onSaved).toHaveBeenCalledWith(aiSettings({ key: { set: false } }));
     });

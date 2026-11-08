@@ -1,5 +1,5 @@
 import type { Prisma, PrismaClient } from "@isms/database";
-import type { DemoActor, DemoPorts } from "./ports.js";
+import { type DemoActor, type DemoPorts, DemoPortsError, tryEach } from "./ports.js";
 import { DEMO_TRANSACTION_OPTIONS, resetRows } from "./reset.js";
 import { rowsFor } from "./rows.js";
 import type { LibraryIds, LoaderIdentity, SampleRows } from "./types.js";
@@ -83,9 +83,12 @@ async function writeRows(tx: Prisma.TransactionClient, r: SampleRows): Promise<v
  * then claims its placeholder. The trail reads: backdated history, `demo.reset` at the real
  * time, `demo.sample_loaded` newest.
  *
- * After the commit: wipe the evidence files, put the sample's (a failure is counted in
- * `evidenceFailed`; the row stays and the download 404s like any missing object), then end
- * every session, drain the queues and enqueue the library embedding.
+ * After the commit: drain the queues first, so no job queued before the load acts on the
+ * fresh sample (#7; sample ids are the same on every load); then wipe the evidence files,
+ * put the sample's (a failure is counted in `evidenceFailed`; the row stays and the download
+ * 404s like any missing object), end every session and enqueue the library embedding. A job
+ * already running when the queues drain is left to finish. A failed step does not stop the
+ * others: once all were tried, a DemoPortsError lists every failure.
  */
 export async function loadSample(
   ownerDb: PrismaClient,
@@ -133,18 +136,26 @@ export async function loadSample(
     return rows;
   }, DEMO_TRANSACTION_OPTIONS);
 
-  await ports.wipeEvidence();
   let evidenceFailed = 0;
-  for (const object of rows.evidenceObjects) {
-    try {
-      await ports.putEvidence(object.key, object.body, object.contentType);
-    } catch {
-      evidenceFailed += 1;
-    }
-  }
-  await ports.wipeSessions();
-  await ports.drainQueues();
-  await ports.enqueueLibraryEmbed();
+  const failures = await tryEach([
+    ["drainQueues", () => ports.drainQueues()],
+    ["wipeEvidence", () => ports.wipeEvidence()],
+    [
+      "putEvidence",
+      async () => {
+        for (const object of rows.evidenceObjects) {
+          try {
+            await ports.putEvidence(object.key, object.body, object.contentType);
+          } catch {
+            evidenceFailed += 1;
+          }
+        }
+      },
+    ],
+    ["wipeSessions", () => ports.wipeSessions()],
+    ["enqueueLibraryEmbed", () => ports.enqueueLibraryEmbed()],
+  ]);
+  if (failures.length > 0) throw new DemoPortsError("The sample data was loaded", failures);
   return {
     risks: rows.risks.length,
     people: rows.users.length,

@@ -106,6 +106,27 @@ describe("Board pack", () => {
     expect(screen.queryByRole("textbox")).toBeNull();
   });
 
+  it("on the 1st, says last month only just ended rather than that nothing was approved (#8)", () => {
+    const october = { key: "2026-10", start: "2026-10-01", end: "2026-10-31" };
+    render({ period: october, generatedAt: "2026-11-01T07:30:00.000Z" });
+    expect(t.narrative.justEnded).toBe(
+      "{period} ended yesterday, so no summary has been approved for it yet.",
+    );
+    expect(
+      screen.getByText("October 2026 ended yesterday, so no summary has been approved for it yet."),
+    ).toBeTruthy();
+    expect(screen.queryByText(t.narrative.none)).toBeNull();
+  });
+
+  it("from the 2nd, or for the rolling 30 days, a missing summary is just not approved yet", () => {
+    const october = { key: "2026-10", start: "2026-10-01", end: "2026-10-31" };
+    render({ period: october, generatedAt: "2026-11-02T00:00:00.000Z" });
+    expect(screen.getByText(t.narrative.none)).toBeTruthy();
+    const rolling = { key: "last-30-days", start: "2026-10-03", end: "2026-10-31" };
+    render({ period: rolling, generatedAt: "2026-11-01T07:30:00.000Z" });
+    expect(screen.getAllByText(t.narrative.none)).toHaveLength(2);
+  });
+
   it("scoped readers are told the summary is for the whole organisation only", () => {
     render({ scope: { kind: "units", names: ["Riga"] } });
     expect(screen.getByText(t.narrative.scoped)).toBeTruthy();

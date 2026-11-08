@@ -1,3 +1,4 @@
+import { createInterface } from "node:readline/promises";
 import {
   bootstrapConfig,
   databaseOwnerConfig,
@@ -7,6 +8,7 @@ import {
 } from "@isms/config";
 import { createPrismaClient } from "@isms/database";
 import { createDefaultPorts, type DemoActor, type DemoPorts } from "../ports.js";
+import type { GuardInput } from "./guard.js";
 
 export type CliContext = {
   db: ReturnType<typeof createPrismaClient>;
@@ -31,6 +33,23 @@ export function cliContext(): CliContext {
     actor: { email: BOOTSTRAP_ADMIN_EMAIL ?? "cli", cli: true },
     bootstrapEmail: BOOTSTRAP_ADMIN_EMAIL ?? null,
     databaseName: decodeURIComponent(new URL(DATABASE_OWNER_URL).pathname.replace(/^\//, "")),
+  };
+}
+
+/** The guard's view of this process: its arguments, NODE_ENV and the terminal. */
+export function guardInput(): GuardInput {
+  return {
+    argv: process.argv.slice(2),
+    nodeEnv: process.env.NODE_ENV,
+    isTTY: process.stdin.isTTY && process.stdout.isTTY,
+    ask: async (question) => {
+      const rl = createInterface({ input: process.stdin, output: process.stdout });
+      try {
+        return await rl.question(question);
+      } finally {
+        rl.close();
+      }
+    },
   };
 }
 

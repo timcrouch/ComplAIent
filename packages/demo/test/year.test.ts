@@ -4,6 +4,7 @@ import {
   SAMPLE_ORG_NAME,
   SAMPLE_PEOPLE,
   SAMPLE_SITES,
+  type SampleEvent,
   planSampleYear,
 } from "../src/index.js";
 import { NOWS } from "./helpers.js";
@@ -127,6 +128,10 @@ describe.each(NOWS)("planSampleYear at %s", (iso) => {
   });
 });
 
+/** Distinct risks with an event of `kind` among `events`. */
+const risksWith = (events: readonly SampleEvent[], kind: SampleEvent["kind"]) =>
+  new Set(events.flatMap((e) => (e.kind === kind && "risk" in e ? [e.risk] : []))).size;
+
 describe("sample narratives are true for any date (M3)", () => {
   const MONTH_NAMES = [
     "January",
@@ -189,11 +194,26 @@ describe("sample narratives are true for any date (M3)", () => {
       expect(n.text.includes("marked as treated"), "treated").toBe(
         inMonth.some((e) => e.kind === "close"),
       );
-      expect(n.text.includes("reviews of older risks"), "reviews").toBe(
-        inMonth.some((e) => e.kind === "review"),
+      // Singular or plural as the plan's counts say (#8).
+      const reviews = inMonth.filter((e) => e.kind === "review").length;
+      expect(n.text.includes("A periodic review of an older risk"), "one review").toBe(
+        reviews === 1,
       );
-      if (n.text.includes("accepted risks"))
-        expect(plan.events.some((e) => e.kind === "accept" && e.at.getTime() < ended)).toBe(true);
+      expect(n.text.includes("reviews of older risks"), "reviews").toBe(reviews > 1);
+      const approved = risksWith(inMonth, "approve");
+      expect(n.text.includes("a risk was assessed and approved"), "one approval").toBe(
+        approved === 1,
+      );
+      expect(n.text.includes("risks were assessed and approved"), "approvals").toBe(approved > 1);
+      const treated = risksWith(inMonth, "close");
+      if (n.text.includes("was marked as treated")) expect(treated, "one treated").toBe(1);
+      if (n.text.includes("were marked as treated")) expect(treated, "treated").toBeGreaterThan(1);
+      const accepted = risksWith(
+        plan.events.filter((e) => e.at.getTime() < ended),
+        "accept",
+      );
+      if (n.text.includes("accepted risk ")) expect(accepted, "one accepted").toBe(1);
+      if (n.text.includes("accepted risks")) expect(accepted, "accepted").toBeGreaterThan(1);
     }
     // Deterministic.
     expect(planSampleYear(now).events.filter((e) => e.kind === "narrative")).toEqual(narratives);

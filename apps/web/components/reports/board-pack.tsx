@@ -9,7 +9,7 @@ import { BoardNarrative } from "./board-narrative";
 import { BoardOwners } from "./board-owners";
 import { BoardTiles } from "./board-tiles";
 import { BoardTopRisks } from "./board-top-risks";
-import { periodName } from "./period-name";
+import { endedYesterday, periodName } from "./period-name";
 import { downloadLinkClass } from "./styles";
 
 type Props = { pack: BoardPackResponse; scale: RiskScaleDto; timeZone: string };
@@ -120,6 +120,8 @@ export function BoardPack({ pack, scale, timeZone }: Props) {
           key={period.key}
           period={period.key}
           narrative={pack.narrative}
+          endedYesterday={endedYesterday(period, pack.generatedAt)}
+          periodLabel={periodName(period, t("last30Days"))}
           canDraft={pack.canDraftNarrative}
           canApprove={pack.canApproveNarrative}
           scoped={pack.scope.kind === "units"}

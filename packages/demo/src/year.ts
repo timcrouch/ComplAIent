@@ -362,16 +362,21 @@ function narrativeFacts(
   to: number,
 ): T.NarrativeFacts {
   const inMonth = events.filter((e) => e.at.getTime() >= from && e.at.getTime() < to);
-  const has = (kind: SampleEvent["kind"]) => inMonth.some((e) => e.kind === kind);
+  /** Distinct risks with an event of this kind among `of`. */
+  const risks = (of: readonly SampleEvent[], kind: SampleEvent["kind"]) =>
+    new Set(of.flatMap((e) => (e.kind === kind && "risk" in e ? [e.risk] : []))).size;
   const tests = inMonth.flatMap((e) => (e.kind === "control_test" ? [e.result] : []));
-  const gaps = tests.filter((r) => r !== "effective").length;
   return {
     month: new Date(from).getUTCMonth(),
-    approved: has("approve"),
-    treated: has("close"),
-    reviewed: has("review"),
-    gaps: tests.length === 0 ? null : gaps === 0 ? "none" : gaps === 1 ? "one" : "several",
-    accepted: events.some((e) => e.kind === "accept" && e.at.getTime() < to),
+    approved: risks(inMonth, "approve"),
+    treated: risks(inMonth, "close"),
+    reviewed: inMonth.filter((e) => e.kind === "review").length,
+    tested: tests.length,
+    gaps: tests.filter((r) => r !== "effective").length,
+    accepted: risks(
+      events.filter((e) => e.at.getTime() < to),
+      "accept",
+    ),
   };
 }
 

@@ -1,5 +1,6 @@
 import { databaseTestConfig, loadConfig } from "@isms/config";
 import pg from "pg";
+import { truncateAll } from "./truncate.js";
 
 /**
  * Guard for destructive test helpers: only databases named `*_test` are allowed.
@@ -21,25 +22,6 @@ function assertTestDatabaseName(name: string): void {
   }
 }
 
-/** Anything that can run a SQL string and return rows (a `pg` client, or an adapter over Prisma). */
-export type SqlRunner = {
-  query(text: string): Promise<{ rows: Record<string, unknown>[] }>;
-};
-
-/**
- * Truncates every table in the public schema except `_prisma_migrations`, restarting identity
- * columns and sequences and cascading. The caller owns the guard: the test helper below allows
- * only `*_test` databases, the demo reset runs it on the owner connection of a demo instance.
- */
-export async function truncateAll(sql: SqlRunner): Promise<void> {
-  const { rows } = await sql.query(
-    `SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename <> '_prisma_migrations'`,
-  );
-  if (rows.length === 0) return;
-  const list = rows.map((r) => `"${String(r.tablename).replaceAll('"', '""')}"`).join(", ");
-  await sql.query(`TRUNCATE TABLE ${list} RESTART IDENTITY CASCADE`);
-}
-
 /**
  * Integration tests only. Truncates every table except `_prisma_migrations`,
  * connecting as the owner role to the test database.
@@ -53,7 +35,15 @@ export async function resetTestDatabase(
   try {
     const current = await client.query<{ db: string }>("SELECT current_database() AS db");
     assertTestDatabaseName(current.rows[0]?.db ?? "");
-    await truncateAll(client);
+    // truncateAll needs a transaction (it locks under a savepoint).
+    await client.query("BEGIN");
+    try {
+      await truncateAll(client);
+      await client.query("COMMIT");
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    }
   } finally {
     await client.end();
   }

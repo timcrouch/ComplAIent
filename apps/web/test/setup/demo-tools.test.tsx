@@ -51,6 +51,21 @@ describe("DemoTools", () => {
     expect(screen.getByText(t.reset.description)).toBeTruthy();
   });
 
+  it("shows the irreversible buttons as destructive: Reset everything and both confirmations", async () => {
+    const user = userEvent.setup();
+    const destructive = (el: HTMLElement) => el.className.includes("bg-critical-soft");
+    withMessages(<DemoTools status={{ enabled: true, organisationName: NAME }} />);
+    expect(destructive(screen.getByRole("button", { name: t.reset.button }))).toBe(true);
+    // Opening the load dialog is not itself irreversible; its confirmation is.
+    expect(destructive(screen.getByRole("button", { name: t.load.button }))).toBe(false);
+    const load = await openLoad(user);
+    expect(destructive(within(load).getByRole("button", { name: t.load.confirm }))).toBe(true);
+    await user.keyboard("{Escape}");
+    await user.click(screen.getByRole("button", { name: t.reset.button }));
+    const reset = screen.getByRole("dialog");
+    expect(destructive(within(reset).getByRole("button", { name: t.reset.confirm }))).toBe(true);
+  });
+
   it("lists the five deletions in the dialog", async () => {
     const user = userEvent.setup();
     withMessages(<DemoTools status={{ enabled: true, organisationName: NAME }} />);

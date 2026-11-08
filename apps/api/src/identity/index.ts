@@ -9,4 +9,8 @@ export { PERMISSIONS_PROVIDER } from "./permissions.js";
 export type { PermissionsProvider } from "./permissions.js";
 export { RoleAssignmentService } from "./role-assignment.service.js";
 export { toRoleAssignmentDto } from "./role-scope.js";
-export { BOOTSTRAP_ADMIN_LOCK, UserProvisioningService } from "./user-provisioning.service.js";
+export {
+  BOOTSTRAP_ADMIN_LOCK,
+  DEMO_LOCK,
+  UserProvisioningService,
+} from "./user-provisioning.service.js";

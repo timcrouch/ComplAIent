@@ -1,9 +1,11 @@
 import { loadSample } from "../load.js";
-import { cliContext, run } from "./shared.js";
+import { confirmRun } from "./guard.js";
+import { cliContext, guardInput, run } from "./shared.js";
 
 run(async () => {
   const { db, ports, actor, bootstrapEmail, databaseName } = cliContext();
   try {
+    await confirmRun("load", databaseName, guardInput());
     console.log(`Loading sample data into "${databaseName}" (everything there is replaced)...`);
     const result = await loadSample(db, ports, actor, {
       now: new Date(),

@@ -200,6 +200,7 @@ function Panel({ theme }: { theme: ThemeName }) {
               </Button>
               <Button variant="secondary">Export</Button>
               <Button variant="ghost">Cancel</Button>
+              <Button variant="destructive">Delete everything</Button>
             </Row>
             <Row>
               <Button size="sm">Approve</Button>

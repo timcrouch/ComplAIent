@@ -168,47 +168,68 @@ const MONTHS = [
   "December",
 ] as const;
 
-/** What happened in a narrative's month, read from the plan, so the text is true for any date. */
+/**
+ * What happened in a narrative's month, read from the plan, so the text is true for any date.
+ * Counts, so every sentence agrees in number with them (#8).
+ */
 export type NarrativeFacts = {
   /** 0-11, UTC. */
   month: number;
-  approved: boolean;
-  treated: boolean;
-  reviewed: boolean;
-  /** Control tests in the month that were not effective; null when none were tested. */
-  gaps: "none" | "one" | "several" | null;
-  /** A risk was accepted at some point before the month ended. */
-  accepted: boolean;
+  /** Risks approved in the month. */
+  approved: number;
+  /** Risks marked as treated (closed) in the month. */
+  treated: number;
+  /** Periodic reviews done in the month. */
+  reviewed: number;
+  /** Control tests in the month, and how many of them were not effective. */
+  tested: number;
+  gaps: number;
+  /** Risks accepted at some point before the month ended. */
+  accepted: number;
 };
+
+const one = (n: number, single: string, plural: string) => (n === 1 ? single : plural);
 
 /**
  * A sample board narrative. No digits: the app's number guard (P7-R5) allows only the period's
- * figures, so the text is qualitative. Every clause follows from the facts; `variant` picks a
- * closing sentence.
+ * figures, so the text is qualitative, but singular or plural as the counts say. Every clause
+ * follows from the facts; `variant` picks a closing sentence.
  */
 export function narrativeText(f: NarrativeFacts, variant: number): string {
   const month = MONTHS[f.month] ?? "This month";
+  const approved = one(f.approved, "a risk was", "risks were");
   const opening =
-    f.approved && f.treated
-      ? `Risk management stayed on course in ${month}: risks were assessed and approved, and others were marked as treated.`
-      : f.approved
-        ? `Risk management stayed on course in ${month}: risks were assessed and approved.`
-        : f.treated
-          ? `${month} brought no new approvals, but some risks were marked as treated.`
+    f.approved > 0 && f.treated > 0
+      ? `Risk management stayed on course in ${month}: ${approved} assessed and approved, and ${one(f.treated, "another was", "others were")} marked as treated.`
+      : f.approved > 0
+        ? `Risk management stayed on course in ${month}: ${approved} assessed and approved.`
+        : f.treated > 0
+          ? `${month} brought no new approvals, but ${one(f.treated, "a risk was", "some risks were")} marked as treated.`
           : `${month} was a quiet month for risk decisions.`;
-  const reviews = f.reviewed ? "Periodic reviews of older risks were carried out." : null;
+  const reviews =
+    f.reviewed > 0
+      ? one(
+          f.reviewed,
+          "A periodic review of an older risk was carried out.",
+          "Periodic reviews of older risks were carried out.",
+        )
+      : null;
   const tests =
-    f.gaps === "several"
-      ? "Control tests found gaps, which now have actions."
-      : f.gaps === "one"
-        ? "A control test found a gap, which now has an action."
-        : f.gaps === "none"
-          ? "The controls tested this month worked as designed."
-          : null;
+    f.tested === 0
+      ? null
+      : f.gaps > 1
+        ? "Control tests found gaps, which now have actions."
+        : f.gaps === 1
+          ? "A control test found a gap, which now has an action."
+          : one(
+              f.tested,
+              "The control tested this month worked as designed.",
+              "The controls tested this month worked as designed.",
+            );
   const closings = [
     "Attention remains on the open treatment actions.",
-    f.accepted
-      ? "The board is asked to note the accepted risks and the plan for the remaining open actions."
+    f.accepted > 0
+      ? `The board is asked to note the ${one(f.accepted, "accepted risk", "accepted risks")} and the plan for the remaining open actions.`
       : "The board is asked to note the plan for the remaining open actions.",
     "The next step is to keep reviews and treatment actions on schedule.",
   ];

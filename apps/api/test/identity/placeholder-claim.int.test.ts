@@ -8,17 +8,13 @@ import { z } from "zod";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthorizationModule } from "../../src/authorization/index.js";
 import {
+  DEMO_LOCK as SIGN_IN_DEMO_LOCK,
   IdentityModule,
   type IdentityOptions,
   UserProvisioningService,
   type VerifiedToken,
 } from "../../src/identity/index.js";
-import {
-  InfrastructureModule,
-  PRISMA,
-  type PrismaService,
-  PlatformModule,
-} from "../../src/platform/index.js";
+import { InfrastructureModule, PlatformModule } from "../../src/platform/index.js";
 
 const env = loadConfig(z.object({ ...databaseTestConfig.shape, ...redisConfig.shape }));
 const db = createPrismaClient(env.DATABASE_OWNER_TEST_URL);
@@ -169,24 +165,16 @@ describe("placeholder claim on sign-in (P9-R3)", () => {
     expect(await claims()).toHaveLength(0);
   });
 
-  it("if (issuer, subject) appears between the check and the claim, the claim yields to it", async () => {
-    const existing = await db.user.create({
-      data: { idpIssuer: ISSUER, idpSubject: "kc-olga", email: "o@example.test", displayName: "O" },
-    });
-    const id = await placeholder("olga@example.test");
-    const prisma = app.get<PrismaService>(PRISMA);
-    // The first lookup (the claim's check) misses, as if the other sign-in had not committed.
-    const spy = vi.spyOn(prisma.user, "findUnique").mockResolvedValueOnce(null);
-    try {
-      const actor = await service.resolve(token("kc-olga", "olga@example.test"), {
-        requestId: "claim-0006",
-      });
-      expect(actor.userId).toBe(existing.id);
-    } finally {
-      spy.mockRestore();
+  it("two concurrent first sign-ins of one identity give one user: the sign-in lock orders them", async () => {
+    for (let round = 0; round < 5; round++) {
+      await resetTestDatabase(env.DATABASE_OWNER_TEST_URL);
+      const actors = await Promise.all([
+        service.resolve(token("kc-new", "new@bank.example"), { requestId: "first-a-0001" }),
+        service.resolve(token("kc-new", "new@bank.example"), { requestId: "first-b-0001" }),
+      ]);
+      expect(actors[0].userId).toBe(actors[1].userId);
+      expect(await db.user.count()).toBe(1);
     }
-    expect((await db.user.findUniqueOrThrow({ where: { id } })).idpIssuer).toBe(PENDING_ISSUER);
-    expect(await claims()).toHaveLength(0);
   });
 
   it("two concurrent claims of one placeholder give one user and one claim (Review Focus 2)", async () => {
@@ -241,6 +229,10 @@ describe("a sign-in during a sample load (Ruling R12)", () => {
     await app.close();
   });
 
+  it("fences sign-ins with the demo package's lock (the identity module keeps its own copy)", () => {
+    expect(SIGN_IN_DEMO_LOCK).toBe(DEMO_LOCK);
+  });
+
   it("waits for the load, then claims its placeholder: one user per email, roles kept", async () => {
     const signIns = SAMPLE_PEOPLE.filter((p) => p.signsIn);
     const opts = { now: new Date(), bootstrapEmail: BOOTSTRAP_EMAIL };
@@ -251,8 +243,8 @@ describe("a sign-in during a sample load (Ruling R12)", () => {
     expect(await db.user.count({ where: { idpIssuer: ISSUER } })).toBe(signIns.length);
 
     // Hold the demo lock so the reload queues behind it, then release it and sign everyone in
-    // once the reload has truncated. (Not covered: a sign-in whose first lookup ran just
-    // before the truncate and whose next lookup runs after the commit.)
+    // once the reload has truncated. (A sign-in already resolving when the reload starts: the
+    // next test.)
     let release!: () => void;
     const held = new Promise<void>((r) => (release = r));
     let locked!: () => void;
@@ -282,9 +274,10 @@ describe("a sign-in during a sample load (Ruling R12)", () => {
     const resolving = signIns.map((p) =>
       service.resolve(token(`kc-${p.key}`, p.email), { requestId: `during-${p.key}` }),
     );
-    // The sign-ins block on the truncate's table locks while the reload runs.
+    // The sign-ins wait while the reload runs: on the demo lock, which a sign-in in demo mode
+    // takes shared (#7), or on the truncate's table locks.
     const blocked = await waitForLocks((rows) =>
-      rows.some((r) => r.locktype === "relation" && !r.granted),
+      rows.some((r) => (r.locktype === "relation" || r.locktype === "advisory") && !r.granted),
     );
     expect(reloaded).toBe(false);
     expect(blocked).toBe(true);
@@ -319,6 +312,62 @@ describe("a sign-in during a sample load (Ruling R12)", () => {
       "demo.sample_loaded",
       ...signIns.map(() => "identity.placeholder_claimed"),
     ]);
+  });
+
+  it("a sign-in already resolving when a reload starts never leaves a user without roles (#7)", async () => {
+    const olga = SAMPLE_PEOPLE.find((p) => p.key === "olga");
+    if (!olga) throw new Error("no sample person olga");
+    const olgaToken = token("kc-olga", olga.email);
+    const opts = { now: new Date(), bootstrapEmail: BOOTSTRAP_EMAIL };
+    await loadSample(db, noPorts, { email: "cli@example.test", cli: true }, opts);
+    await service.resolve(olgaToken, { requestId: "pre" });
+
+    // Pause the next sign-in after its claim check found her user and before the upsert looks
+    // it up again: the window in which a reload used to replace the row (#7).
+    let paused!: () => void;
+    const isPaused = new Promise<void>((r) => (paused = r));
+    let resume!: () => void;
+    const gate = new Promise<void>((r) => (resume = r));
+    const target = service as unknown as { upsertUser: (...args: unknown[]) => Promise<string> };
+    const upsert = target.upsertUser.bind(service);
+    const spy = vi.spyOn(target, "upsertUser").mockImplementationOnce(async (...args) => {
+      paused();
+      await gate;
+      return upsert(...args);
+    });
+    try {
+      const signIn = service.resolve(olgaToken, { requestId: "during" });
+      await isPaused;
+      const reload = loadSample(db, noPorts, { email: "cli@example.test", cli: true }, opts);
+      let reloaded = false;
+      void reload.then(() => (reloaded = true));
+      // The reload waits for the sign-in on the demo lock. (Before #7 it ran to the end.)
+      const waits = await waitForLocks(
+        (rows) => reloaded || rows.some((r) => r.locktype === "advisory" && !r.granted),
+      );
+      expect(waits).toBe(true);
+      expect(reloaded).toBe(false);
+      resume();
+      await Promise.all([signIn, reload]);
+    } finally {
+      resume();
+      spy.mockRestore();
+    }
+
+    // Her row is the reload's placeholder, holding her roles; no sign-in row without roles.
+    const users = await db.user.findMany({
+      where: { email: { equals: olga.email, mode: "insensitive" } },
+      include: { roleAssignments: true },
+    });
+    expect(users).toHaveLength(1);
+    expect(users[0]?.roleAssignments.map((r) => r.role)).toEqual(olga.roles.map((r) => r.role));
+    expect(
+      await db.user.count({ where: { idpIssuer: ISSUER, roleAssignments: { none: {} } } }),
+    ).toBe(0);
+    // Her next sign-in claims it as usual.
+    const again = await service.resolve(olgaToken, { requestId: "after" });
+    expect(again.userId).toBe(users[0]?.id);
+    expect(again.roles.map((r) => r.role)).toEqual(olga.roles.map((r) => r.role));
   });
 });
 
