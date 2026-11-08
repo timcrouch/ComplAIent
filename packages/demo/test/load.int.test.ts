@@ -228,6 +228,30 @@ describe("loadSample", () => {
     expect(wall).toBeLessThan(30_000);
   });
 
+  it("loads the EU AI Act module on, its four systems, obligations and risk link", async () => {
+    await loadSample(db, fakePorts().ports, CLI, { now: NOW, bootstrapEmail: null });
+    expect(await db.organisationModule.findMany({ select: { key: true } })).toEqual([
+      { key: "eu_ai_act" },
+    ]);
+    const systems = await db.aiSystem.findMany({
+      orderBy: { createdAt: "asc" },
+      select: { name: true, riskClass: true, _count: { select: { obligations: true } } },
+    });
+    expect(systems.map((s) => [s.name, s.riskClass])).toEqual([
+      ["Credit scoring engine", "high_risk"],
+      ["Customer service chatbot", "limited_risk"],
+      ["Transaction fraud detector", "minimal_risk"],
+      ["CV screening tool", "high_risk"],
+    ]);
+    expect(systems.every((s) => s._count.obligations > 0)).toBe(true);
+    expect(await db.aiSystemRisk.count()).toBe(1);
+    expect(
+      await db.organisationFramework.count({
+        where: { frameworkVersion: { key: "eu-ai-act-2024-1689" } },
+      }),
+    ).toBe(1);
+  });
+
   it("sets the Risk reference sequence so the next risk is n + 1", async () => {
     const { risks } = await loadSample(db, fakePorts().ports, CLI, {
       now: NOW,

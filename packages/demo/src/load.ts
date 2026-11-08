@@ -72,6 +72,10 @@ async function writeRows(tx: Prisma.TransactionClient, r: SampleRows): Promise<v
     tx.requirementApplicability.createMany({ data }),
   );
   await insert(r.boardNarratives, (data) => tx.boardNarrative.createMany({ data }));
+  await insert(r.organisationModules, (data) => tx.organisationModule.createMany({ data }));
+  await insert(r.aiSystems, (data) => tx.aiSystem.createMany({ data }));
+  await insert(r.aiSystemObligations, (data) => tx.aiSystemObligation.createMany({ data }));
+  await insert(r.aiSystemRisks, (data) => tx.aiSystemRisk.createMany({ data }));
   await insert(r.auditEvents, (data) => tx.auditEvent.createMany({ data }));
 }
 

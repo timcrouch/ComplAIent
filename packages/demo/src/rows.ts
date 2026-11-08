@@ -1,3 +1,4 @@
+import { writeAiAct } from "./ai-act.js";
 import { Builder, emptyRows, idMaker, lengthOf } from "./builder.js";
 import { SAMPLE_ORGANISATION, SAMPLE_SEED } from "./company.js";
 import { type RiskBook, applyRiskEvent, openReviewTasks } from "./risk-events.js";
@@ -8,6 +9,8 @@ import type { RowsContext, SampleEvent, SamplePlan, SampleRows } from "./types.j
 
 /** Separate id streams: the loader-dependent rows must not shift anyone else's ids. */
 const EXTRAS_SEED_OFFSET = 7919;
+/** The EU AI Act module's own id stream, so adding it shifted no other row's id. */
+const AI_ACT_SEED_OFFSET = 104_729;
 
 /**
  * The worker's `risk.review_due` (apps/worker/src/jobs/review-due.ts), run each day up to
@@ -168,5 +171,7 @@ export function rowsFor(plan: SamplePlan, ctx: RowsContext): SampleRows {
   });
   runReviewDue(b, book, ctx.now.getTime());
   rows.risks.push(...[...book.values()].map((r) => r.row));
+  const aiAct = new Builder(rows, idMaker(SAMPLE_SEED + AI_ACT_SEED_OFFSET), ctx.library, users);
+  writeAiAct(aiAct, startOfDay(ctx.now.getTime()));
   return rows;
 }
