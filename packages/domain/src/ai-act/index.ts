@@ -8,6 +8,7 @@ export {
   DEROGATIONS,
   PROHIBITED_PRACTICES,
   TRANSPARENCY_DUTIES,
+  answerProblems,
 } from "./answers.js";
 export type {
   AiActRole,

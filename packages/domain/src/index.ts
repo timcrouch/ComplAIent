@@ -73,6 +73,7 @@ export {
   PROHIBITED_PRACTICES,
   TRANSPARENCY_DUTIES,
   aiObligation,
+  answerProblems,
   applicableObligations,
   classifyAiSystem,
 } from "./ai-act/index.js";

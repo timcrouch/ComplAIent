@@ -5,6 +5,7 @@ import {
   DEROGATIONS,
   PROHIBITED_PRACTICES,
   TRANSPARENCY_DUTIES,
+  answerProblems,
   classifyAiSystem,
 } from "../src/index.js";
 
@@ -292,5 +293,35 @@ describe("classifyAiSystem: limited and minimal risk", () => {
     );
     expect(result.transparencyDuties).toEqual(["interacts_with_people"]);
     expect(result.reasons).toHaveLength(1);
+  });
+});
+
+describe("answerProblems", () => {
+  it("accepts consistent answers", () => {
+    expect(answerProblems(base)).toEqual([]);
+    expect(
+      answerProblems(
+        answers({ annexIIIAreas: ["education"], profilesPeople: false, derogation: "none" }),
+      ),
+    ).toEqual([]);
+  });
+
+  it("requires the follow-up questions when an Annex III area is chosen", () => {
+    expect(answerProblems(answers({ annexIIIAreas: ["education"] })).map((p) => p.path)).toEqual([
+      "profilesPeople",
+      "derogation",
+    ]);
+  });
+
+  it("refuses the follow-up answers when no area is chosen", () => {
+    expect(
+      answerProblems(answers({ profilesPeople: false, derogation: "none" })).map((p) => p.path),
+    ).toEqual(["profilesPeople", "derogation"]);
+  });
+
+  it("reports repeated values by index", () => {
+    expect(
+      answerProblems(answers({ transparency: ["deep_fake", "deep_fake"] })).map((p) => p.path),
+    ).toEqual(["transparency.1"]);
   });
 });

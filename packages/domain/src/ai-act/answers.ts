@@ -93,6 +93,32 @@ export type ClassificationAnswers = {
   transparency: readonly TransparencyDuty[];
 };
 
+/**
+ * What is inconsistent in a set of answers, by field: a repeated value in a list, or the
+ * Annex III follow-up questions answered when no area is chosen, or unanswered when one is.
+ * Empty when the answers are consistent. The contract and the AI output schema both use it.
+ */
+export function answerProblems(
+  answers: ClassificationAnswers,
+): { path: string; message: string }[] {
+  const problems: { path: string; message: string }[] = [];
+  for (const field of ["prohibitedPractices", "annexIIIAreas", "transparency"] as const) {
+    const values: readonly string[] = answers[field];
+    values.forEach((value, i) => {
+      if (values.indexOf(value) !== i)
+        problems.push({ path: `${field}.${String(i)}`, message: "Duplicate" });
+    });
+  }
+  const asked = answers.annexIIIAreas.length > 0;
+  for (const field of ["profilesPeople", "derogation"] as const) {
+    if (asked && answers[field] === null)
+      problems.push({ path: field, message: "Required when an Annex III area is chosen" });
+    if (!asked && answers[field] !== null)
+      problems.push({ path: field, message: "Asked only when an Annex III area is chosen" });
+  }
+  return problems;
+}
+
 /** Why a system has its class: a code the web turns into a sentence, and the article. */
 export type ClassificationReason = { code: string; article: string };
 
