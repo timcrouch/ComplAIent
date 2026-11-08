@@ -364,3 +364,42 @@ describe("one locked transaction (Ruling R12)", () => {
     expect(await db.auditEvent.count({ where: { action: "demo.sample_loaded" } })).toBe(1);
   });
 });
+
+/** Polls `ready` every 25 ms for up to about 10 s. */
+async function waitFor(ready: () => Promise<boolean>): Promise<boolean> {
+  for (let i = 0; i < 400; i += 1) {
+    if (await ready()) return true;
+    await new Promise((r) => setTimeout(r, 25));
+  }
+  return false;
+}
+
+describe("truncate lock order (#7)", () => {
+  it("does not deadlock with an app transaction that locks the tables in another order", async () => {
+    await loadSample(db, fakePorts().ports, CLI, { now: NOW, bootstrapEmail: null });
+    // The app transaction holds "User" (which sorts late), waits until the load is stuck on it
+    // while holding the tables before it, then reads "Approval" (which sorts early). Without
+    // a bounded lock wait this is a deadlock, and Postgres cancels one of the two.
+    let locked!: () => void;
+    const isLocked = new Promise<void>((r) => (locked = r));
+    const app = db.$transaction(
+      async (tx) => {
+        await tx.$executeRaw`UPDATE "User" SET "displayName" = "displayName"`;
+        locked();
+        const waiting = await waitFor(async () => {
+          const rows = await db.$queryRaw<{ n: bigint }[]>`SELECT count(*) AS n FROM pg_locks
+            WHERE locktype = 'relation' AND mode = 'AccessExclusiveLock' AND NOT granted`;
+          return Number(rows[0]?.n ?? 0) > 0;
+        });
+        expect(waiting).toBe(true);
+        return tx.approval.count();
+      },
+      { timeout: 30_000 },
+    );
+    await isLocked;
+    const load = loadSample(db, fakePorts().ports, CLI, { now: NOW, bootstrapEmail: null });
+    const [approvals, loaded] = await Promise.all([app, load]);
+    expect(approvals).toBeGreaterThan(0);
+    expect(await db.risk.count()).toBe(loaded.risks);
+  });
+});

@@ -35,7 +35,15 @@ export async function resetTestDatabase(
   try {
     const current = await client.query<{ db: string }>("SELECT current_database() AS db");
     assertTestDatabaseName(current.rows[0]?.db ?? "");
-    await truncateAll(client);
+    // truncateAll needs a transaction (it locks under a savepoint).
+    await client.query("BEGIN");
+    try {
+      await truncateAll(client);
+      await client.query("COMMIT");
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    }
   } finally {
     await client.end();
   }
