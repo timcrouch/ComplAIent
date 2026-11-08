@@ -61,6 +61,14 @@ describe("ReportFlow conversation", () => {
     expect(within(log()).getByText("What are you worried might happen?")).toBeTruthy();
   });
 
+  it("says plainly that the reporter is talking to an AI and that a person reviews everything", () => {
+    flow();
+    const notice = screen.getByTestId("ai-notice");
+    expect(notice.textContent).toBe(en.report.chat.aiNotice);
+    expect(en.report.chat.aiNotice).toMatch(/AI assistant, not a person/);
+    expect(en.report.chat.aiNotice).toMatch(/A person reviews everything/);
+  });
+
   it("shows an announced typing indicator while the turn runs", async () => {
     const turn = deferred<unknown>();
     startConcern.mockReturnValue(turn.promise);

@@ -54,6 +54,7 @@ describe("board narrative", () => {
   it("drafts through the mock within the facts, stores nothing, and approves it", async () => {
     await enableAi();
     const top = await seed();
+    await db.risk.update({ where: { id: top.id }, data: { ownerId: h.userIds.oscar } });
     const res = await draft();
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     const body = res.body as NarrativeDraftResponse;
@@ -61,6 +62,10 @@ describe("board narrative", () => {
     expect(body.text).toContain(formatRiskReference(top.reference));
     expect(await db.aiInteraction.count({ where: { purpose: "posture_summary" } })).toBe(1);
     expect(await db.boardNarrative.count()).toBe(0);
+    // Data minimisation: the top risk's owner is in the board pack, never in what was sent.
+    const sent = await db.aiInteraction.findFirstOrThrow({ where: { purpose: "posture_summary" } });
+    expect(JSON.stringify(sent.request)).toContain("Payroll export");
+    expect(JSON.stringify(sent.request)).not.toContain("Oscar");
 
     const approved = await approve(body.text, body.interactionId);
     expect(approved.status, JSON.stringify(approved.body)).toBe(200);

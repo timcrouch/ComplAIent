@@ -1,3 +1,5 @@
+import aiAct from "./en/ai-act.json" with { type: "json" };
+import aiActRules from "./en/ai-act-rules.json" with { type: "json" };
 import common from "./en/common.json" with { type: "json" };
 import evidence from "./en/evidence.json" with { type: "json" };
 import home from "./en/home.json" with { type: "json" };
@@ -23,6 +25,8 @@ const messages = {
   ...evidence,
   ...insights,
   ...reports,
+  ...aiAct,
+  ...aiActRules,
 };
 
 export default messages;

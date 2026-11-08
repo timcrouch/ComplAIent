@@ -1,7 +1,7 @@
 "use client";
 
 import { Tooltip } from "@base-ui/react/tooltip";
-import type { MeResponse, Permission } from "@isms/contracts";
+import type { MeResponse, ModuleKey, Permission } from "@isms/contracts";
 import { buttonVariants, cn } from "@isms/ui";
 import { MessageSquareWarningIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
@@ -24,6 +24,8 @@ type AppShellProps = {
   theme: Theme;
   /** The viewer's permissions, only to choose which navigation items to show. */
   permissions: readonly Permission[];
+  /** The optional modules switched on, only to choose which navigation items to show. */
+  modules?: readonly ModuleKey[];
   children: ReactNode;
 };
 
@@ -70,15 +72,18 @@ function useReportShortcut(enabled: boolean): void {
   }, [enabled, onReport, router]);
 }
 
+const NO_MODULES: readonly ModuleKey[] = [];
+
 export function AppShell({
   user,
   viewMode,
   theme: initialTheme,
   permissions,
+  modules = NO_MODULES,
   children,
 }: AppShellProps) {
   const t = useTranslations();
-  const navItems = useMemo(() => navItemsFor(permissions), [permissions]);
+  const navItems = useMemo(() => navItemsFor(permissions, modules), [permissions, modules]);
   const [theme, setTheme] = useState<Theme>(initialTheme);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const hydrated = useHydrated();

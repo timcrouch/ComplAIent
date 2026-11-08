@@ -109,6 +109,39 @@ describe("AppShell", () => {
     );
   });
 
+  it("shows EU AI Act only while the module is on, to people who may read it", () => {
+    const aiAct = (permissions: Permission[], modules: "eu_ai_act"[]) =>
+      navItemsFor(permissions, modules).find((i) => i.key === "aiAct");
+    expect(aiAct(["aiact.read"], [])).toBeUndefined();
+    expect(aiAct(["me.read"], ["eu_ai_act"])).toBeUndefined();
+    expect(aiAct(["aiact.read"], ["eu_ai_act"])).toMatchObject({
+      href: "/ai-act",
+      section: true,
+    });
+    expect(aiAct(["aiact.read"], ["eu_ai_act"])?.icon.displayName).toBe("Scale");
+    // After the library and before Organisation, like the other work areas.
+    expect(
+      navItemsFor(["library.read", "aiact.read", "organisation.manage"], ["eu_ai_act"]).map(
+        (i) => i.key,
+      ),
+    ).toEqual(["home", "library", "aiAct", "organisation"]);
+    withMessages(
+      <AppShell
+        user={user}
+        viewMode="guided"
+        theme="light"
+        permissions={["me.read", "aiact.read"]}
+        modules={["eu_ai_act"]}
+      >
+        <p>page</p>
+      </AppShell>,
+    );
+    const nav = screen.getByRole("navigation", { name: "Primary" });
+    expect(within(nav).getByRole("link", { name: en.nav.aiAct }).getAttribute("href")).toBe(
+      "/ai-act",
+    );
+  });
+
   it("offers 'Go to Controls' to people who can read the library", async () => {
     shell(undefined, ["me.read", "library.read"]);
     fireEvent.keyDown(document, { key: "k", ctrlKey: true });

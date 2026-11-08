@@ -229,9 +229,18 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
     {
+      // After ai-disabled, which switches the AI back on. Anna Admin turns the EU AI Act module
+      // on; Carl Ciso classifies one system by hand and one with the mock AI draft; Anna turns
+      // the module off again, so later projects see it off, as they always have.
+      name: "ai-act",
+      testMatch: /ai-act\.spec\.ts$/,
+      dependencies: ["ai-disabled"],
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
       name: "chromium-login",
       testMatch: /login\.spec\.ts$/,
-      dependencies: ["ai-disabled"],
+      dependencies: ["ai-act"],
       use: { ...devices["Desktop Chrome"] },
     },
     {

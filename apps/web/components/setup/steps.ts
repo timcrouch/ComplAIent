@@ -7,6 +7,17 @@ export type SetupStepKey =
 /** Steps whose page exists, so `setup.<key>.title` and `.why` are in the message file. */
 export type FrameStepKey = Extract<SetupStepKey, keyof (typeof messages)["setup"]>;
 
+/** Optional pages listed after the steps: never in `setup.missing`, never numbered. */
+export type SetupSectionKey = "modules";
+export type SetupSectionDef = { key: SetupSectionKey; path: string };
+
+export const SETUP_SECTIONS: readonly SetupSectionDef[] = [
+  { key: "modules", path: "/setup/modules" },
+];
+
+/** Every page the setup frame shows: a step, or an optional section. */
+export type FramePageKey = FrameStepKey | SetupSectionKey;
+
 /** One step of guided setup. `apiStep` is the API's matching step, or null when it has none. */
 export type SetupStepDef = { key: SetupStepKey; path: string; apiStep: SetupStep | null };
 

@@ -26,7 +26,7 @@ import { formatDate } from "../../lib/dates";
 import { requestStepHeadingFocus } from "../../lib/step-focus";
 import { focusRingClass } from "../shell/styles";
 import { useSaveFlow } from "./save-flow";
-import { SETUP_STEPS, type FrameStepKey } from "./steps";
+import { SETUP_SECTIONS, SETUP_STEPS, type FramePageKey } from "./steps";
 
 type ReviewSummaryProps = {
   organisation: OrganisationResponse;
@@ -47,6 +47,7 @@ const pageFor = (step: SetupStep) => SETUP_STEPS.find((s) => s.apiStep === step)
  */
 export function ReviewSummary({ organisation, countries, timeZone }: ReviewSummaryProps) {
   const t = useTranslations("setup");
+  const tm = useTranslations("aiAct.module");
   const router = useRouter();
   const save = useSaveFlow();
   const [missing, setMissing] = useState<readonly SetupStep[]>(organisation.setup.missing);
@@ -179,6 +180,19 @@ export function ReviewSummary({ organisation, countries, timeZone }: ReviewSumma
             notAnswered
           )}
         </Section>
+        {/* A module that is off does not exist, so it has no line here (spec §1). */}
+        {organisation.modules.length > 0 ? (
+          <Section step="modules">
+            <Value strong>{t("modules.summary")}</Value>
+            <ul className="flex flex-col gap-0.5">
+              {organisation.modules.map((key) => (
+                <li key={key} className="text-sm text-fg">
+                  {{ eu_ai_act: tm("name") }[key]}
+                </li>
+              ))}
+            </ul>
+          </Section>
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-3 border-t border-[color-mix(in_oklab,var(--isms-text)_8%,transparent)] pt-6">
@@ -236,9 +250,9 @@ export function ReviewSummary({ organisation, countries, timeZone }: ReviewSumma
   );
 }
 
-function Section({ step, children }: { step: FrameStepKey; children: ReactNode }) {
+function Section({ step, children }: { step: FramePageKey; children: ReactNode }) {
   const t = useTranslations("setup");
-  const page = SETUP_STEPS.find((s) => s.key === step);
+  const page = [...SETUP_STEPS, ...SETUP_SECTIONS].find((s) => s.key === step);
   const title = t(`${step}.title`);
   const headingId = `review-${step}`;
   return (

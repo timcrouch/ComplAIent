@@ -71,6 +71,27 @@ describe("ReviewSummary", () => {
     expect(edit.getAttribute("href")).toBe("/setup/frameworks");
   });
 
+  it("lists the modules that are on, and has no modules line while none is", () => {
+    const { unmount } = withMessages(
+      <ReviewSummary organisation={done} countries={countries} timeZone="Europe/Riga" />,
+    );
+    expect(screen.queryByRole("region", { name: en.setup.modules.title })).toBeNull();
+    unmount();
+    withMessages(
+      <ReviewSummary
+        organisation={{ ...done, modules: ["eu_ai_act"] }}
+        countries={countries}
+        timeZone="Europe/Riga"
+      />,
+    );
+    const section = screen.getByRole("region", { name: en.setup.modules.title });
+    expect(section.textContent).toContain(en.aiAct.module.name);
+    const edit = screen.getByRole("link", {
+      name: t.editStep.replace("{step}", en.setup.modules.title),
+    });
+    expect(edit.getAttribute("href")).toBe("/setup/modules");
+  });
+
   it("links each missing step and enables Finish only when nothing is missing", async () => {
     const missing: OrganisationResponse = {
       ...done,

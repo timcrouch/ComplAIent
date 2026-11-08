@@ -19,8 +19,9 @@ describe("SetupFrame", () => {
       </SetupFrame>,
     );
     const nav = screen.getByRole("navigation", { name: en.setup.stepsLabel });
-    const items = within(nav).getAllByRole("listitem");
-    expect(nav.querySelector("ol")).not.toBeNull();
+    const steps = nav.querySelector("ol");
+    expect(steps).not.toBeNull();
+    const items = within(steps as HTMLElement).getAllByRole("listitem");
     expect(items.map((li) => li.textContent)).toEqual([
       `${en.setup.steps.organisation} ${en.setup.done}`,
       `2${en.setup.steps.sites}`,
@@ -46,6 +47,35 @@ describe("SetupFrame", () => {
     expect(screen.getByText(en.setup.sites.why)).toBeTruthy();
     expect(screen.getByText(en.setup.whyLabel)).toBeTruthy();
     expect(screen.getByText("form")).toBeTruthy();
+  });
+
+  it("lists Modules after the steps, unnumbered and always reachable", () => {
+    withMessages(
+      <SetupFrame current="sites" missing={["sites", "frameworks", "riskScale"]}>
+        <p>form</p>
+      </SetupFrame>,
+    );
+    const nav = screen.getByRole("navigation", { name: en.setup.stepsLabel });
+    const sections = within(nav).getByRole("list", { name: en.setup.sectionsLabel });
+    const link = within(sections).getByRole("link", { name: en.setup.sections.modules });
+    expect(link.getAttribute("href")).toBe("/setup/modules");
+    expect(link.textContent).not.toMatch(/\d/);
+  });
+
+  it("on the Modules page says it is optional instead of a step number", () => {
+    withMessages(
+      <SetupFrame current="modules" missing={[]}>
+        <p>modules</p>
+      </SetupFrame>,
+    );
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(en.setup.modules.title);
+    expect(screen.getByText(en.setup.optional)).toBeTruthy();
+    expect(screen.queryByText(/^Step \d of/)).toBeNull();
+    const nav = screen.getByRole("navigation", { name: en.setup.stepsLabel });
+    expect(nav.querySelector('[aria-current="page"]')?.textContent).toBe(en.setup.sections.modules);
+    expect(stepMetadata("modules").title).toBe(
+      `${en.setup.modules.title} · ${en.setup.title} · ${en.app.name}`,
+    );
   });
 });
 

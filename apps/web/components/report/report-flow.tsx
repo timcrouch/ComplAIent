@@ -1,7 +1,7 @@
 "use client";
 
 import type { ConversationDto } from "@isms/contracts";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -180,6 +180,14 @@ export function ReportFlow({ aiAvailable, startInForm, sites }: ReportFlowProps)
 
   return (
     <div ref={chatRef} className="flex flex-col gap-6">
+      {/* Art. 50(1): the reporter is told plainly that this is an AI, and that people decide. */}
+      <p
+        data-testid="ai-notice"
+        className="flex items-start gap-2.5 rounded-md bg-accent-soft/60 px-3.5 py-3 text-sm leading-relaxed text-fg"
+      >
+        <SparklesIcon aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
+        <span>{t("chat.aiNotice")}</span>
+      </p>
       <ChatThread
         messages={messages}
         answers={asking && !pending ? last.chips : null}

@@ -1,0 +1,295 @@
+{
+  "aiAct": {
+    "pageTitle": "{page} · EU AI Act · {app}",
+    "eyebrow": "EU AI Act",
+    "moduleBadge": "Module",
+    "back": "All AI systems",
+    "backToSystem": "Back to {name}",
+    "module": {
+      "name": "EU AI Act",
+      "purpose": "Keep a register of your AI systems, classify each one under Regulation (EU) 2024/1689, and track the duties that follow from its class and your role.",
+      "whoNeedsTitle": "Who needs it",
+      "whoNeeds": "Organisations that build, sell or use AI systems in the EU, such as credit scoring, insurance pricing, CV screening or a customer chatbot.",
+      "whoDoesntTitle": "Who doesn't",
+      "whoDoesnt": "Organisations with no AI systems on the EU market and no AI in use in the EU.",
+      "switchLabel": "EU AI Act module on/off",
+      "switchHint": "On adds “EU AI Act” to the navigation for everyone who may read it.",
+      "turnedOn": "The EU AI Act module is on. You'll find it in the navigation.",
+      "turnedOff": "The EU AI Act module is off. Its data is kept.",
+      "open": "Open the EU AI Act module",
+      "confirm": {
+        "title": "Turn off the EU AI Act module?",
+        "body": "The module disappears for everyone, and its pages can't be opened.",
+        "kept": "Nothing is deleted. The AI systems, their classifications, obligations and notes are kept, and come back unchanged when you turn the module on again.",
+        "cancel": "Keep it on",
+        "confirm": "Turn off",
+        "working": "Turning off…"
+      },
+      "errors": {
+        "forbidden": "You can't change modules. Ask an administrator.",
+        "unavailable": "The module couldn't be changed. Please try again in a moment."
+      }
+    },
+    "overview": {
+      "pageTitle": "AI systems",
+      "title": "AI systems",
+      "intro": "Every AI system your organisation builds, sells or uses, its class under the EU AI Act, and what is still to do.",
+      "add": "Add AI system",
+      "countsLabel": "At a glance",
+      "unclassified": "Not classified yet",
+      "openHighRisk": "Open obligations on high-risk systems",
+      "byClass": "Systems by class",
+      "frameworkHint": "The EU AI Act isn't one of your frameworks yet. Add it in Setup → Frameworks to see its requirements in your Statement of Applicability.",
+      "frameworkHintLink": "Go to Setup → Frameworks",
+      "frameworkHintAsk": "The EU AI Act isn't one of your frameworks yet. Ask an administrator to add it in Setup → Frameworks, so its requirements show in your Statement of Applicability.",
+      "tableCaption": "The AI system register",
+      "columns": {
+        "name": "Name",
+        "role": "Your role",
+        "status": "Status",
+        "class": "Class",
+        "owner": "Owner",
+        "open": "Open obligations"
+      },
+      "empty": {
+        "title": "No AI systems yet",
+        "body": "Start with the AI you already use: a scoring engine, a chatbot, a tool that screens CVs. Add each one, answer a few questions, and you'll see which duties apply.",
+        "add": "Add your first AI system",
+        "ask": "Someone who manages AI systems (the security lead or a risk owner) can add them."
+      }
+    },
+    "form": {
+      "newTitle": "Add an AI system",
+      "newIntro": "Describe the system in plain words. You'll classify it next.",
+      "editTitle": "Edit {name}",
+      "editPageTitle": "Edit AI system",
+      "editIntro": "Changing your role updates which obligations apply.",
+      "name": "Name",
+      "nameHint": "What people call the system, such as “Credit scoring engine”.",
+      "description": "Description",
+      "descriptionHint": "Optional. What it does and who uses it.",
+      "intendedPurpose": "Intended purpose",
+      "intendedPurposeHint": "What the system is meant to be used for (Art. 3(12)), as the supplier or your own team describes it.",
+      "role": "Your role",
+      "roleHint": "Provider if you build it or put your name on it; deployer if you use it under your authority.",
+      "status": "Status",
+      "supplier": "Supplier",
+      "supplierHint": "Optional. Who makes it, if not you.",
+      "model": "Model or product",
+      "modelHint": "Optional. For example “vendor scoring engine v4”.",
+      "usesGpai": "It is built on a general-purpose AI model",
+      "usesGpaiHint": "For example a large language model. Recorded for context only.",
+      "owner": "Owner",
+      "ownerHint": "The person accountable for this system.",
+      "ownerChoose": "Choose an owner",
+      "department": "Department",
+      "noDepartment": "No department",
+      "save": "Save",
+      "create": "Add system",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "summary": "Some answers need another look. Check the fields marked below.",
+        "name": "Give the system a name of up to 200 characters.",
+        "description": "Keep the description to 2,000 characters.",
+        "intendedPurpose": "Describe the intended purpose in up to 2,000 characters.",
+        "role": "Choose your role.",
+        "status": "Choose a status.",
+        "supplier": "Keep the supplier to 200 characters.",
+        "model": "Keep the model to 200 characters.",
+        "ownerId": "Choose an owner who has signed in.",
+        "departmentId": "Choose a department from the list.",
+        "duplicateName": "Another AI system already has this name.",
+        "forbidden": "You can't change AI systems. Ask the security lead.",
+        "unavailable": "This couldn't be saved. Please try again in a moment."
+      }
+    },
+    "detail": {
+      "pageTitle": "AI system",
+      "profile": "Profile",
+      "edit": "Edit profile",
+      "fields": {
+        "description": "Description",
+        "intendedPurpose": "Intended purpose",
+        "role": "Your role",
+        "status": "Status",
+        "supplier": "Supplier",
+        "model": "Model or product",
+        "usesGpai": "General-purpose AI model",
+        "owner": "Owner",
+        "department": "Department"
+      },
+      "notGiven": "Not given",
+      "yes": "Yes",
+      "no": "No"
+    },
+    "classification": {
+      "title": "Classification",
+      "intro": "The class follows from your answers to the questionnaire, by the rules of the Regulation.",
+      "none": "This system isn't classified yet. Answer the questionnaire to see its class and the obligations that follow.",
+      "classify": "Classify",
+      "reclassify": "Reclassify",
+      "why": "Why",
+      "source": {
+        "manual": "Manual",
+        "ai_assisted": "AI-assisted"
+      },
+      "by": "Classified by {name} on {date}"
+    },
+    "obligations": {
+      "title": "Obligations",
+      "intro": "What the Regulation asks of you for this system, given its class and your role. Set a status and keep notes as you go.",
+      "none": "Classify the system to see its obligations.",
+      "noneApply": "No obligations apply to this system.",
+      "notApplicable": "{count, plural, one {# no longer applies} other {# no longer apply}}",
+      "notApplicableHint": "The class or your role changed. The work recorded on these is kept.",
+      "statusLabel": "Status",
+      "noteLabel": "Note",
+      "forTitle": "for {title}",
+      "article": "Article",
+      "noteHint": "What you have done or still need to do. Up to 2,000 characters.",
+      "noNote": "No note",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "updatedBy": "Last changed by {name} on {date}",
+      "suggest": "Suggest steps (AI)",
+      "suggesting": "Suggesting…",
+      "suggestBadge": "AI suggestion",
+      "suggestNote": "A starting point only. Check each step before you use it.",
+      "stepsLabel": "Suggested steps for {title}",
+      "evidenceHint": "Evidence: {hint}",
+      "addToNote": "Add to note",
+      "dismiss": "Dismiss",
+      "announceWorking": "Asking the AI assistant for steps…",
+      "announceDone": "Suggested steps are ready below the note.",
+      "errors": {
+        "note": "Keep the note to 2,000 characters.",
+        "aiUnavailable": "The AI assistant isn't available right now. The description above says what to do.",
+        "failed": "Steps couldn't be suggested. Try again, or work from the description above.",
+        "forbidden": "You can't change obligations. Ask the security lead.",
+        "unavailable": "This couldn't be saved. Please try again in a moment."
+      }
+    },
+    "risks": {
+      "title": "Linked risks",
+      "intro": "Risks in your register that this system causes or affects.",
+      "none": "No risks are linked yet.",
+      "linkedBy": "Linked by {name} on {date}",
+      "unlink": "Unlink",
+      "pickerTitle": "Link a risk",
+      "pickerLabel": "Find a risk",
+      "pickerHint": "Type part of the reference or title.",
+      "found": "{count, plural, =0 {No risks match.} one {# risk matches.} other {# risks match.}}",
+      "resultsLabel": "Matching risks",
+      "link": "Link",
+      "linked": "{reference} is linked.",
+      "unlinked": "{reference} is unlinked.",
+      "errors": {
+        "duplicate": "That risk is already linked.",
+        "notFound": "That risk can't be found any more.",
+        "forbidden": "You can't link risks. Ask the security lead.",
+        "unavailable": "This couldn't be saved. Please try again in a moment."
+      }
+    },
+    "wizard": {
+      "pageTitle": "Classify",
+      "title": "Classify {name}",
+      "intro": "Six short steps. Each answer has help in plain words; nothing is saved until you save on the last step.",
+      "stepsLabel": "Questionnaire steps",
+      "stepOf": "Step {current} of {total}",
+      "steps": {
+        "aiSystem": "AI system",
+        "prohibited": "Prohibited",
+        "annexI": "Products",
+        "annexIII": "High-risk uses",
+        "transparency": "Transparency",
+        "review": "Review"
+      },
+      "next": "Next",
+      "back": "Back",
+      "change": "Change",
+      "yes": "Yes",
+      "no": "No",
+      "noneChosen": "None",
+      "notAsked": "Not asked",
+      "chooseOne": "Choose an answer to go on.",
+      "draft": "Draft answers with AI",
+      "drafting": "Drafting…",
+      "draftNote": "The AI assistant filled in every answer from the profile. Check each one; you decide.",
+      "draftBadge": "AI draft",
+      "rationaleBadge": "AI suggestion",
+      "announceDrafting": "Asking the AI assistant to draft the answers…",
+      "announceDrafted": "The answers are drafted. Check each step.",
+      "draftUnavailable": "The AI assistant isn't available right now. Answer the questions yourself.",
+      "draftFailed": "A draft couldn't be made. Answer the questions yourself, or try again.",
+      "save": "Save classification",
+      "saving": "Saving…",
+      "saveFailed": "The classification couldn't be saved. Please try again in a moment.",
+      "forbidden": "You can't classify AI systems. Ask the security lead.",
+      "resultTitle": "Result",
+      "resultIntro": "Saved. This is the class the rules give, and why.",
+      "resultObligations": "{count, plural, =0 {No obligations apply.} one {# obligation applies.} other {# obligations apply.}}",
+      "done": "Go to the system",
+      "isAiSystem": {
+        "question": "Is it an AI system?",
+        "help": "Under Art. 3(1), an AI system is machine-based and infers from its input how to produce outputs such as predictions, recommendations, content or decisions. Fixed rules written by people, like a spreadsheet formula, are not AI systems.",
+        "yes": "It learns from data or infers its outputs, for example a trained model or a language model.",
+        "no": "It only follows fixed rules people wrote. The Regulation doesn't apply."
+      },
+      "prohibited": {
+        "question": "Does it do any of these?",
+        "help": "Art. 5 bans these practices outright. Leave everything unticked if none applies, which is the usual case."
+      },
+      "annexI": {
+        "question": "Is it a safety component of a regulated product?",
+        "help": "Art. 6(1): the system is a safety part of, or is itself, a product under the EU product laws in Annex I, such as machinery, medical devices, toys, lifts or vehicles, and that product needs a third-party conformity check.",
+        "yes": "It is part of such a product, or is one.",
+        "no": "Software used in offices, banks or insurers usually isn't."
+      },
+      "annexIII": {
+        "question": "Is it used for any of these?",
+        "help": "Annex III lists the uses that make a system high-risk. Tick each that applies; leave all unticked if none does."
+      },
+      "profilesPeople": {
+        "question": "Does it profile people?",
+        "help": "Profiling means evaluating people automatically from their personal data, for example to predict their behaviour, reliability or finances (GDPR Art. 4(4)). A system that profiles is always high-risk.",
+        "yes": "It evaluates or predicts things about individual people.",
+        "no": "It doesn't evaluate individual people."
+      },
+      "derogation": {
+        "question": "Does one of these describe its job?",
+        "help": "Art. 6(3): a system listed in Annex III is not high-risk when it doesn't materially influence decisions and one of these is true. If none fits, choose “None of these”."
+      },
+      "transparency": {
+        "question": "Which of these apply?",
+        "help": "Art. 50 asks for openness where people could be misled. Tick each that applies, or none."
+      }
+    },
+    "classes": {
+      "unclassified": "Not classified",
+      "out_of_scope": "Out of scope",
+      "prohibited": "Prohibited",
+      "high_risk": "High-risk",
+      "limited_risk": "Limited risk",
+      "minimal_risk": "Minimal risk"
+    },
+    "roles": {
+      "provider": "Provider",
+      "deployer": "Deployer",
+      "importer": "Importer",
+      "distributor": "Distributor"
+    },
+    "statuses": {
+      "planned": "Planned",
+      "in_use": "In use",
+      "retired": "Retired"
+    },
+    "obligationStatuses": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "met": "Met",
+      "not_applicable": "Not applicable"
+    }
+  }
+}

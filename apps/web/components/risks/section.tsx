@@ -6,7 +6,7 @@ import { useId, type ReactNode, type Ref } from "react";
 
 type SectionProps = {
   title: string;
-  intro?: string;
+  intro?: string | undefined;
   /** For moving focus to the section when what had focus in it went away. */
   headingRef?: Ref<HTMLHeadingElement>;
   children: ReactNode;

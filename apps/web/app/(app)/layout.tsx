@@ -18,12 +18,13 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     return <main className="flex min-h-dvh items-center justify-center p-6">{viewer.screen}</main>;
   }
 
-  const { displayName, email, viewMode, permissions } = viewer.me;
+  const { displayName, email, viewMode, permissions, modules } = viewer.me;
   return (
     <AppShell
       user={{ displayName, email }}
       viewMode={viewMode}
       permissions={permissions}
+      modules={modules}
       theme={parseTheme(cookieStore.get(THEME_COOKIE)?.value)}
     >
       {children}
