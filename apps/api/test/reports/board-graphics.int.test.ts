@@ -338,15 +338,20 @@ describe("board graphics", () => {
     const service = h.service(NarrativeService) as unknown as {
       input(actor: Actor, period: BoardPeriod): Promise<unknown>;
     };
-    const top = (r: { reference: number }, title: string, owner: string | null) => ({
+    // A and C have owners (Oscar, Olga); the narrative input never carries them (#6).
+    const top = (r: { reference: number }, title: string) => ({
       reference: formatRiskReference(r.reference),
       title,
-      owner,
       treatment: null,
     });
-    expect(
-      await service.input(cora, { key: "2026-10", start: "2026-10-01", end: "2026-10-31" }),
-    ).toEqual({
+    const input = (await service.input(cora, {
+      key: "2026-10",
+      start: "2026-10-01",
+      end: "2026-10-31",
+    })) as { topRisks: Record<string, unknown>[] };
+    for (const r of input.topRisks) expect(r).not.toHaveProperty("owner");
+    expect(JSON.stringify(input)).not.toMatch(/Oscar|Olga/);
+    expect(input).toEqual({
       period: { key: "2026-10", start: "2026-10-01", end: "2026-10-31" },
       facts: {
         openRisks: 5,
@@ -357,12 +362,7 @@ describe("board graphics", () => {
         overdueActions: 2,
         reviewsDue: 0,
       },
-      topRisks: [
-        top(A, "A", "Oscar Owner"),
-        top(E, "E", null),
-        top(C, "C", "Olga Owner"),
-        top(D, "D", null),
-      ],
+      topRisks: [top(A, "A"), top(E, "E"), top(C, "C"), top(D, "D")],
     });
   });
 });
