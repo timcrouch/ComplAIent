@@ -6,22 +6,27 @@ import en from "../../messages/index";
 vi.mock("../../lib/server-api", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../../lib/server-api")>()),
   accessTokenFor: vi.fn(),
+  failureOf: vi.fn(),
 }));
 vi.mock("../../lib/api-client", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../../lib/api-client")>()),
   apiDownload: vi.fn(),
 }));
 
-const { accessTokenFor } = await import("../../lib/server-api");
+const { accessTokenFor, failureOf } = await import("../../lib/server-api");
+const actual = await vi.importActual<typeof import("../../lib/server-api")>("../../lib/server-api");
 const { ApiError, apiDownload } = await import("../../lib/api-client");
 const { GET } = await import("../../app/(app)/reports/files/[file]/route");
 
 const t = en.reports.files;
 const PDF = "application/pdf";
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+const uuid: unknown = expect.stringMatching(UUID);
+const anyOptions: unknown = expect.objectContaining({ requestId: uuid });
 const XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-const call = (file: string, search = "") =>
-  GET(new NextRequest(new URL(`/reports/files/${file}${search}`, "http://localhost:3000")), {
+const call = (file: string, search = "", init?: { headers?: Record<string, string> }) =>
+  GET(new NextRequest(new URL(`/reports/files/${file}${search}`, "http://localhost:3000"), init), {
     params: Promise.resolve({ file }),
   });
 
@@ -40,6 +45,7 @@ const upstream = (type: string, body = "%PDF-1.7") =>
 beforeEach(() => {
   vi.mocked(accessTokenFor).mockReset().mockResolvedValue({ ok: true, token: "token-1" });
   vi.mocked(apiDownload).mockReset();
+  vi.mocked(failureOf).mockReset().mockImplementation(actual.failureOf);
 });
 
 describe("GET /reports/files/[file]", () => {
@@ -52,7 +58,7 @@ describe("GET /reports/files/[file]", () => {
   ] as const)("streams %s from its API route", async (file, route, type) => {
     vi.mocked(apiDownload).mockResolvedValue(upstream(type));
     const res = await call(file);
-    expect(apiDownload).toHaveBeenCalledWith(route, {}, "token-1", {});
+    expect(apiDownload).toHaveBeenCalledWith(route, {}, "token-1", {}, anyOptions);
     expect(res.status).toBe(200);
     expect(res.headers.get("content-type")).toBe(type);
     expect(res.headers.get("content-disposition")).toBe(
@@ -68,26 +74,59 @@ describe("GET /reports/files/[file]", () => {
   it("forwards the query string", async () => {
     vi.mocked(apiDownload).mockResolvedValue(upstream(PDF));
     await call("risk-register.pdf", "?filter=aboveAppetite&includeClosed=true");
-    expect(apiDownload).toHaveBeenCalledWith(reportRoutes.registerPdf, {}, "token-1", {
-      filter: "aboveAppetite",
-      includeClosed: "true",
-    });
+    expect(apiDownload).toHaveBeenCalledWith(
+      reportRoutes.registerPdf,
+      {},
+      "token-1",
+      { filter: "aboveAppetite", includeClosed: "true" },
+      anyOptions,
+    );
     expect(accessTokenFor).toHaveBeenCalledWith(
       "/reports/files/risk-register.pdf?filter=aboveAppetite&includeClosed=true",
+      anyOptions,
     );
   });
 
   it("forwards only the file's own query keys", async () => {
     vi.mocked(apiDownload).mockResolvedValue(upstream(PDF));
     await call("board.pdf", "?period=2026-10&filter=aboveAppetite&extra=1");
-    expect(apiDownload).toHaveBeenCalledWith(reportRoutes.boardPdf, {}, "token-1", {
-      period: "2026-10",
-    });
-    expect(accessTokenFor).toHaveBeenCalledWith("/reports/files/board.pdf?period=2026-10");
+    expect(apiDownload).toHaveBeenCalledWith(
+      reportRoutes.boardPdf,
+      {},
+      "token-1",
+      { period: "2026-10" },
+      anyOptions,
+    );
+    expect(accessTokenFor).toHaveBeenCalledWith(
+      "/reports/files/board.pdf?period=2026-10",
+      anyOptions,
+    );
     await call("risk-register.xlsx", "?filter=aboveAppetite&unknown=x");
-    expect(apiDownload).toHaveBeenLastCalledWith(reportRoutes.registerXlsx, {}, "token-1", {
-      filter: "aboveAppetite",
-    });
+    expect(apiDownload).toHaveBeenLastCalledWith(
+      reportRoutes.registerXlsx,
+      {},
+      "token-1",
+      { filter: "aboveAppetite" },
+      anyOptions,
+    );
+  });
+
+  // The proxy skips paths with a file extension, so an inbound x-request-id is the client's.
+  it("uses one fresh server-minted request id end to end, never the client's", async () => {
+    const client = "3b241101-e2bb-4255-8caf-4136c566a962";
+    vi.mocked(apiDownload).mockRejectedValue(
+      new ApiError({ status: 403, code: "FORBIDDEN", message: "x" }),
+    );
+    await call("soa.pdf", "", { headers: { "x-request-id": client } });
+    const tokenOptions = vi.mocked(accessTokenFor).mock.calls[0]?.[1];
+    expect(tokenOptions?.requestId).toMatch(UUID);
+    expect(tokenOptions?.requestId).not.toBe(client);
+    expect(vi.mocked(apiDownload).mock.calls[0]?.[4]).toEqual(tokenOptions);
+    expect(vi.mocked(failureOf).mock.calls[0]?.[3]).toEqual(tokenOptions);
+    await call("soa.pdf");
+    expect(vi.mocked(accessTokenFor).mock.calls[1]?.[1]?.requestId).not.toBe(
+      tokenOptions?.requestId,
+    );
   });
 
   it.each(["register.xlsx", "board.xlsx", "..", "soa.pdf.exe", "risk-register.csv"])(

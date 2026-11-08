@@ -59,11 +59,14 @@ export async function GET(
   }
   const search = new URLSearchParams(query).toString();
   const returnTo = `/reports/files/${file}${search === "" ? "" : `?${search}`}`;
-  const token = await accessTokenFor(returnTo);
+  // The proxy skips paths with an extension, so the inbound x-request-id is the client's own:
+  // this route makes its own id for the log, the API call and so the audit row.
+  const options = { requestId: crypto.randomUUID() };
+  const token = await accessTokenFor(returnTo, options);
   let failure = token.ok ? null : token;
   if (token.ok) {
     try {
-      const upstream = await apiDownload(route, {}, token.token, query);
+      const upstream = await apiDownload(route, {}, token.token, query, options);
       if (!upstream.body) return plain(503, t.unavailable);
       const headers = new Headers();
       for (const name of PASSED) {
@@ -72,7 +75,7 @@ export async function GET(
       }
       return new Response(upstream.body, { status: 200, headers });
     } catch (err) {
-      failure = await failureOf(err, route, returnTo);
+      failure = await failureOf(err, route, returnTo, options);
     }
   }
   switch (failure?.kind) {

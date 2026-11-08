@@ -272,6 +272,13 @@ describe("apiDownload with a query", () => {
     );
   });
 
+  it("sends the given request id instead of the current request's", async () => {
+    fetchMock.mockResolvedValue(new Response("%PDF-", { status: 200 }));
+    const id = "3b241101-e2bb-4255-8caf-4136c566a962";
+    await apiDownload(reportRoutes.soaPdf, {}, "t", {}, { requestId: id });
+    expect(new Headers(lastCall().init.headers).get("x-request-id")).toBe(id);
+  });
+
   it("refuses a query the contract rejects without calling the API", async () => {
     fetchMock.mockClear();
     await expect(
