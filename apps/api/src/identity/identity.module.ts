@@ -21,6 +21,8 @@ export const CLOCK = Symbol("CLOCK");
 export type IdentityOptions = {
   issuer: string;
   audience: string;
+  /** OIDC_ACCESS_TOKEN_TYP: the access token header `typ` to require; unset accepts any but ID. */
+  accessTokenTyp?: string | undefined;
   bootstrapAdminEmail?: string | undefined;
   /** Demo mode (DEMO_TOOLS_ENABLED); off unless set. */
   demoTools?: boolean;
@@ -50,7 +52,12 @@ export class IdentityModule {
         {
           provide: JwtVerifier,
           useFactory: () =>
-            new JwtVerifier({ issuer: options.issuer, audience: options.audience, clock }),
+            new JwtVerifier({
+              issuer: options.issuer,
+              audience: options.audience,
+              accessTokenTyp: options.accessTokenTyp,
+              clock,
+            }),
         },
         { provide: CLOCK, useValue: clock },
         { provide: PROVISIONING_OPTIONS, useValue: provisioning },

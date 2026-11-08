@@ -48,6 +48,7 @@ export class AppModule {
         IdentityModule.forRoot({
           issuer: config.OIDC_ISSUER_URL,
           audience: config.OIDC_AUDIENCE,
+          accessTokenTyp: config.OIDC_ACCESS_TOKEN_TYP,
           bootstrapAdminEmail: config.BOOTSTRAP_ADMIN_EMAIL,
           demoTools: config.demo !== null,
         }),

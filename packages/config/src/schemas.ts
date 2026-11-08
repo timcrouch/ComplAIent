@@ -22,6 +22,8 @@ export const redisConfig = z.object({
 export const oidcConfig = z.object({
   OIDC_ISSUER_URL: z.url(),
   OIDC_AUDIENCE: z.string().min(1),
+  /** Optional: the access token header `typ` the API requires (case-insensitive), e.g. `at+jwt`. */
+  OIDC_ACCESS_TOKEN_TYP: z.string().min(1).optional(),
   OIDC_CLIENT_ID: z.string().min(1),
   OIDC_CLIENT_SECRET: z.string().min(1),
 });

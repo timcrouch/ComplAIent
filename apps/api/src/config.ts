@@ -20,7 +20,8 @@ const appConfig = z.object({
   ...telemetryConfig.shape,
   ...apiConfig.shape,
   // Resource server only: the API never needs the OIDC client id or secret.
-  ...oidcConfig.pick({ OIDC_ISSUER_URL: true, OIDC_AUDIENCE: true }).shape,
+  ...oidcConfig.pick({ OIDC_ISSUER_URL: true, OIDC_AUDIENCE: true, OIDC_ACCESS_TOKEN_TYP: true })
+    .shape,
   ...bootstrapConfig.shape,
   ...aiConfig.shape,
   // P3-R15: evidence storage is required.

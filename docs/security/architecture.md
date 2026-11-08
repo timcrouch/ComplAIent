@@ -51,6 +51,7 @@ The container images run as the non-root uid 10001. Their code is owned by root,
   - `exp`, `sub`, `email`, `email_verified` and `name` required (`name` falls back to `preferred_username`);
   - 30 s clock tolerance;
   - an `auth_time` in the future is rejected;
+  - ID tokens are rejected: a header `typ` of `ID` (case-insensitive, Keycloak ID tokens) or any `nonce` claim fails. With `OIDC_ACCESS_TOKEN_TYP` set (for example `at+jwt`), the header `typ` must equal it, case-insensitively; unset, Keycloak's `Bearer` and the `JWT` of Entra ID and Okta pass;
   - an unknown `kid` causes at most one JWKS refetch per 30 s.
 - If keys cannot be obtained the API answers `503 AUTH_UNAVAILABLE`. Every other failure answers `401 UNAUTHENTICATED` with a fixed message.
 

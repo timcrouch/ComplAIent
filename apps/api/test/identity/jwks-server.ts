@@ -83,10 +83,14 @@ export class JwksServer {
     });
   }
 
-  /** Signs a valid token by default; `claims` override it, and an `undefined` claim is omitted. */
+  /**
+   * Signs a valid token by default; `claims` override it, and an `undefined` claim is omitted.
+   * `typ` sets the protected header's `typ` (none by default).
+   */
   async sign(
     claims: Record<string, unknown> = {},
     key: TestKey | undefined = this.keys[0],
+    typ?: string,
   ): Promise<string> {
     if (!key) throw new Error("no signing key");
     const now = Math.floor(Date.now() / 1000);
@@ -106,7 +110,7 @@ export class JwksServer {
       Object.entries(defaults).filter(([, v]) => v !== undefined),
     );
     return new SignJWT(payload)
-      .setProtectedHeader({ alg: key.alg, kid: key.kid })
+      .setProtectedHeader({ alg: key.alg, kid: key.kid, ...(typ === undefined ? {} : { typ }) })
       .sign(key.privateKey);
   }
 }
