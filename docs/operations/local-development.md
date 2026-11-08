@@ -141,6 +141,8 @@ DEMO_TOOLS_ENABLED=true pnpm demo:load    # reset, then load the sample year
 DEMO_TOOLS_ENABLED=true pnpm demo:reset   # reset everything
 ```
 
+Both ask `[y/N]` before they change anything. `--yes` (`-y`) skips the question, and a run that is not in a terminal (a script, CI) refuses without it. With `NODE_ENV=production` both refuse unless `--allow-production` is given (they still ask). Any other option is refused.
+
 They read the root `.env`. They act on the database in `DATABASE_OWNER_URL` (the dev database `isms` with the `.env.example` values), the bucket in `S3_BUCKET` and the Redis in `REDIS_URL`, and print the database name first. Queued jobs are drained, so jobs waiting in a running `pnpm dev` worker's queues are dropped. After a load, sign in as any of the six accounts with `DEV_USER_PASSWORD`. To get the buttons in the app instead, set `DEMO_TOOLS_ENABLED=true` in `.env` and restart `pnpm dev`.
 
 ## Background jobs (`@isms/jobs`)
