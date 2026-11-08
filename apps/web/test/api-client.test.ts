@@ -11,6 +11,7 @@ const me = {
   permissions: ["me.read"],
   viewMode: "guided",
   theme: "system",
+  modules: [],
 };
 
 const itemRoute = defineRoute({

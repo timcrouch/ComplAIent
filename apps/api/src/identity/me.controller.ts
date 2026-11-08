@@ -5,7 +5,7 @@ import {
   type UpdatePreferencesRequest,
   identityRoutes,
 } from "@isms/contracts";
-import { ContractRoute, PRISMA, type PrismaService } from "../platform/index.js";
+import { ContractRoute, PRISMA, type PrismaService, enabledModules } from "../platform/index.js";
 import { type Actor, CurrentActor } from "./actor.js";
 import { PERMISSIONS_PROVIDER, type PermissionsProvider } from "./permissions.js";
 import { defaultViewMode } from "./view-mode.js";
@@ -30,6 +30,8 @@ export class MeController {
       theme: user.theme ?? "system",
       roles: actor.roles,
       permissions: this.permissions.permissionsFor(actor),
+      // For the navigation (#16 §1); whether the viewer may use a module is in permissions.
+      modules: await enabledModules(this.prisma),
     };
   }
 

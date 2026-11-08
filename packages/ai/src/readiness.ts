@@ -26,6 +26,8 @@ export const MODEL_KEY_BY_PURPOSE: Readonly<Record<AiPurpose, AiModelKey>> = {
   connection_test: "conversation",
   posture_summary: "conversation",
   control_test_steps: "controls",
+  ai_act_classification: "controls",
+  ai_act_obligation_guidance: "controls",
 };
 
 /** Deployment-level options, passed in by the caller; this package never reads the environment. */

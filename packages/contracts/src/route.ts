@@ -1,4 +1,5 @@
 import type { ZodObject, ZodType } from "zod";
+import type { ModuleKey } from "./modules.js";
 import type { Permission } from "./permissions.js";
 
 export type RouteDef = {
@@ -14,6 +15,12 @@ export type RouteDef = {
    * `x-conditional` and they are 404 where the setting is off.
    */
   conditional?: "demo";
+  /**
+   * The route belongs to an optional module: while the module is off it answers 404
+   * (NOT_FOUND), checked after authentication and before the permission. The document marks it
+   * `x-module`.
+   */
+  module?: ModuleKey;
   request?: { params?: ZodObject; query?: ZodObject; body?: ZodType };
   /**
    * The body is the raw file (`application/octet-stream`), buffered up to the named config

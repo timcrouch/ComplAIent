@@ -20,6 +20,7 @@ import { Reflector } from "@nestjs/core";
 import {
   AccessGuard,
   AuthorizationModule,
+  type ModuleGate,
   PermissionGuard,
   PolicyService,
 } from "../../src/authorization/index.js";
@@ -373,9 +374,15 @@ describe("PermissionGuard", () => {
       expect((invalid.body as ErrorBody).error.code).toBe("UNAUTHENTICATED");
     });
 
-    it("AccessGuard calls AuthGuard before PermissionGuard and stops when authentication fails", async () => {
+    it("AccessGuard calls AuthGuard, then the module gate, then PermissionGuard, and stops when authentication fails", async () => {
       const calls: string[] = [];
       const ctx = {} as ExecutionContext;
+      const modules = {
+        check: () => {
+          calls.push("module");
+          return Promise.resolve();
+        },
+      } as unknown as ModuleGate;
       const permission = {
         canActivate: () => {
           calls.push("permission");
@@ -388,8 +395,23 @@ describe("PermissionGuard", () => {
           return Promise.resolve(true);
         },
       } as unknown as AuthGuard;
-      await expect(new AccessGuard(passing, permission).canActivate(ctx)).resolves.toBe(true);
-      expect(calls).toEqual(["auth", "permission"]);
+      await expect(new AccessGuard(passing, modules, permission).canActivate(ctx)).resolves.toBe(
+        true,
+      );
+      expect(calls).toEqual(["auth", "module", "permission"]);
+
+      // A module that is off ends the request before the permission check (404, not 403).
+      calls.length = 0;
+      const off = {
+        check: () => {
+          calls.push("module");
+          return Promise.reject(new DomainError("NOT_FOUND", "Not found"));
+        },
+      } as unknown as ModuleGate;
+      await expect(new AccessGuard(passing, off, permission).canActivate(ctx)).rejects.toThrow(
+        expect.objectContaining({ code: "NOT_FOUND" }),
+      );
+      expect(calls).toEqual(["auth", "module"]);
 
       calls.length = 0;
       const throwing = {
@@ -398,7 +420,7 @@ describe("PermissionGuard", () => {
           return Promise.reject(new DomainError("UNAUTHENTICATED", "Sign-in required"));
         },
       } as unknown as AuthGuard;
-      await expect(new AccessGuard(throwing, permission).canActivate(ctx)).rejects.toThrow(
+      await expect(new AccessGuard(throwing, modules, permission).canActivate(ctx)).rejects.toThrow(
         DomainError,
       );
       expect(calls).toEqual(["auth"]);
@@ -410,7 +432,9 @@ describe("PermissionGuard", () => {
           return Promise.resolve(false);
         },
       } as unknown as AuthGuard;
-      await expect(new AccessGuard(denying, permission).canActivate(ctx)).resolves.toBe(false);
+      await expect(new AccessGuard(denying, modules, permission).canActivate(ctx)).resolves.toBe(
+        false,
+      );
       expect(calls).toEqual(["auth"]);
     });
 

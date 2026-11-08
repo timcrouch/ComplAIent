@@ -29,6 +29,8 @@ enum AiPurpose {
   connection_test
   posture_summary
   control_test_steps
+  ai_act_classification
+  ai_act_obligation_guidance
 }
 
 enum AiCallStatus {

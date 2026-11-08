@@ -6,6 +6,7 @@ export { CONTRACT_ROUTE, ContractRoute, toNestPath } from "./contract-route.js";
 export { GlobalErrorFilter, toErrorResponse } from "./error-filter.js";
 export { InfrastructureModule, JOBS, PRISMA, REDIS } from "./infrastructure.module.js";
 export type { InfrastructureOptions, PrismaService } from "./infrastructure.module.js";
+export { enabledModules, isModuleEnabled } from "./modules.js";
 export { PlatformModule } from "./platform.module.js";
 export type { PlatformOptions } from "./platform.module.js";
 export { getRequestId, requestIdMiddleware, resolveRequestId } from "./request-id.js";

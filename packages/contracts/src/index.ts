@@ -45,6 +45,7 @@ export {
   DepartmentInput,
   FrameworksInput,
   FrameworksResponse,
+  ModulesResponse,
   OrganisationFrameworkDto,
   OrganisationProfileDto,
   OrganisationResponse,
@@ -53,6 +54,7 @@ export {
   RiskScaleDto,
   RiskScaleInput,
   ReviewIntervalInput,
+  SetModuleInput,
   SetupStepSchema,
   SiteDto,
   SiteInput,
@@ -200,6 +202,42 @@ export {
   SoaRowDto,
   reportRoutes,
 } from "./routes/reports.js";
+export { ModuleKeySchema } from "./modules.js";
+export type { ModuleKey } from "./modules.js";
+export {
+  AiActRoleSchema,
+  AiClassificationAnswers,
+  AiClassificationDto,
+  AiClassificationReasonDto,
+  AiClassificationRecord,
+  AiClassificationResultDto,
+  AiObligationDto,
+  AiObligationKeySchema,
+  AiObligationStatusSchema,
+  AiRiskClassSchema,
+  AiSystemDetailDto,
+  AiSystemListResponse,
+  AiSystemRiskClassSchema,
+  AiSystemRiskDto,
+  AiSystemStatusSchema,
+  AiSystemSummaryDto,
+  AnnexIIIAreaSchema,
+  ClassificationSourceSchema,
+  DerogationSchema,
+  ProhibitedPracticeSchema,
+  TransparencyDutySchema,
+} from "./routes/ai-act-dtos.js";
+export {
+  AiClassificationDraftResponse,
+  AiClassificationRationales,
+  AiObligationGuidanceResponse,
+  AiSystemInput,
+  AiSystemUpdateInput,
+  ClassifyAiSystemInput,
+  LinkAiSystemRiskInput,
+  UpdateAiObligationInput,
+  aiActRoutes,
+} from "./routes/ai-act.js";
 export {
   DemoConfirmInput,
   DemoLoadResponse,

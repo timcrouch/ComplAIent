@@ -1,4 +1,5 @@
 import type { CompletionRequest } from "../provider.js";
+import { aiActClassificationReply, aiActGuidanceReply } from "./ai-act.js";
 import { concernTurnReply } from "./concern-turn.js";
 import { connectionTestReply } from "./connection-test.js";
 import { controlSuggestionReply } from "./control-suggestion.js";
@@ -12,6 +13,8 @@ import { postureSummaryReply } from "./posture-summary.js";
  * framework_suggestion: Task 12).
  */
 export const MOCK_REPLIES: Readonly<Record<string, (request: CompletionRequest) => string>> = {
+  ai_act_classification: aiActClassificationReply,
+  ai_act_obligation_guidance: aiActGuidanceReply,
   concern_turn: concernTurnReply,
   connection_test: connectionTestReply,
   control_suggestion: controlSuggestionReply,

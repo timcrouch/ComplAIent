@@ -36,6 +36,8 @@ describe("conflict reasons (P2-R8)", () => {
       "reportTooLarge",
       "narrativeUnverifiable",
       "confirmationMismatch",
+      "duplicateAiSystemName",
+      "duplicateAiSystemRisk",
     ]);
   });
 

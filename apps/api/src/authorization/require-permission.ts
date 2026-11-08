@@ -11,6 +11,7 @@ import {
   unauthenticated,
 } from "../identity/index.js";
 import { CONTRACT_ROUTE } from "../platform/index.js";
+import { ModuleGate } from "./module-gate.js";
 import { PolicyService } from "./policy.service.js";
 import { isRecentAuth, recentAuthRequired } from "./recent-auth.js";
 
@@ -63,19 +64,21 @@ export class PermissionGuard implements CanActivate {
 }
 
 /**
- * The single global guard: authentication, then authorization, in that fixed order. One
- * composite guard makes the order explicit instead of relying on APP_GUARD registration
- * order across modules.
+ * The single global guard: authentication, then the module gate (an optional module that is
+ * off answers 404), then authorization, in that fixed order. One composite guard makes the
+ * order explicit instead of relying on APP_GUARD registration order across modules.
  */
 @Injectable()
 export class AccessGuard implements CanActivate {
   constructor(
     private readonly auth: AuthGuard,
+    private readonly modules: ModuleGate,
     private readonly permission: PermissionGuard,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     if (!(await this.auth.canActivate(context))) return false;
+    await this.modules.check(context);
     return this.permission.canActivate(context);
   }
 }

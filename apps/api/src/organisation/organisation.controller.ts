@@ -1,13 +1,16 @@
-import { Body, Controller, HttpCode, Req } from "@nestjs/common";
+import { Body, Controller, HttpCode, Param, Req } from "@nestjs/common";
 import {
   type CompleteSetupResponse,
   type FrameworksInput,
   type FrameworksResponse,
+  type ModuleKey,
+  type ModulesResponse,
   type OrganisationResponse,
   type ProfileInput,
   type ReviewIntervalInput,
   type RiskScaleDto,
   type RiskScaleInput,
+  type SetModuleInput,
   type UnitsInput,
   type UnitsResponse,
   organisationRoutes,
@@ -16,6 +19,7 @@ import type { Request } from "express";
 import { auditContextFrom } from "../audit/index.js";
 import { ContractRoute } from "../platform/index.js";
 import { OrganisationFrameworksService } from "./organisation-frameworks.service.js";
+import { OrganisationModulesService } from "./organisation-modules.service.js";
 import { OrganisationUnitsService } from "./organisation-units.service.js";
 import { OrganisationService } from "./organisation.service.js";
 import { RiskScaleService } from "./risk-scale.service.js";
@@ -28,6 +32,7 @@ export class OrganisationController {
     private readonly units: OrganisationUnitsService,
     private readonly frameworks: OrganisationFrameworksService,
     private readonly riskScale: RiskScaleService,
+    private readonly modules: OrganisationModulesService,
   ) {}
 
   @ContractRoute(organisationRoutes.get)
@@ -72,6 +77,15 @@ export class OrganisationController {
     @Req() req: Request,
   ): Promise<OrganisationResponse> {
     return this.organisation.setReviewInterval(body, auditContextFrom(req));
+  }
+
+  @ContractRoute(organisationRoutes.setModule)
+  setModule(
+    @Param("key") key: ModuleKey,
+    @Body() body: SetModuleInput,
+    @Req() req: Request,
+  ): Promise<ModulesResponse> {
+    return this.modules.set(key, body.enabled, auditContextFrom(req));
   }
 
   @ContractRoute(organisationRoutes.completeSetup)

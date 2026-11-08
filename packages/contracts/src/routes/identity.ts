@@ -1,5 +1,6 @@
 import { z } from "zod";
 import "../zod.js";
+import { ModuleKeySchema } from "../modules.js";
 import { PermissionSchema, RoleSchema } from "../permissions.js";
 import { defineRoute } from "../route.js";
 
@@ -30,6 +31,8 @@ export const MeResponse = z
     permissions: z.array(PermissionSchema),
     viewMode: ViewModeSchema,
     theme: ThemeSchema,
+    /** The optional modules switched on, in key order (as on `GET /organisation`). */
+    modules: z.array(ModuleKeySchema),
   })
   .openapi("MeResponse");
 export type MeResponse = z.infer<typeof MeResponse>;

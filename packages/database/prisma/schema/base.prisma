@@ -39,7 +39,7 @@ enum ScopeType {
 }
 
 model User {
-  id          String    @id @default(uuid(7)) @db.Uuid
+  id          String       @id @default(uuid(7)) @db.Uuid
   idpIssuer   String
   idpSubject  String
   email       String
@@ -47,7 +47,7 @@ model User {
   viewMode    ViewMode?
   /// Presentation only, per user (#2): the theme cookie is just a cache of this for rendering.
   theme       ColourTheme?
-  lastSeenAt  DateTime? @db.Timestamptz(3)
+  lastSeenAt  DateTime?    @db.Timestamptz(3)
 
   roleAssignments        RoleAssignment[]            @relation("AssignedTo")
   grantedRoleAssignments RoleAssignment[]            @relation("GrantedBy")
@@ -77,6 +77,12 @@ model User {
   aiKeysSet               AiSettings[]               @relation("AiKeySetBy")
   aiSettingsUpdated       AiSettings[]               @relation("AiSettingsUpdatedBy")
   aiInteractions          AiInteraction[]            @relation("AiInteractionActor")
+  modulesEnabled          OrganisationModule[]       @relation("ModuleEnabledBy")
+  aiSystemsOwned          AiSystem[]                 @relation("AiSystemOwner")
+  aiSystemsClassified     AiSystem[]                 @relation("AiSystemClassifiedBy")
+  aiSystemsCreated        AiSystem[]                 @relation("AiSystemCreatedBy")
+  aiObligationsUpdated    AiSystemObligation[]       @relation("AiObligationUpdatedBy")
+  aiSystemRisksLinked     AiSystemRisk[]             @relation("AiSystemRiskLinkedBy")
 
   @@unique([idpIssuer, idpSubject])
 }

@@ -120,6 +120,7 @@ describe("buildOpenApiDocument", () => {
       doc.paths?.["/api/v1/organisation/frameworks/suggestions"]?.post,
       doc.paths?.["/api/v1/organisation/risk-scale"]?.put,
       doc.paths?.["/api/v1/organisation/setup/complete"]?.post,
+      doc.paths?.["/api/v1/organisation/modules/{key}"]?.put,
     ];
     for (const op of writes) expect(op?.["x-permission"]).toBe("organisation.manage");
     const units = doc.paths?.["/api/v1/organisation/units"]?.put;
@@ -136,6 +137,14 @@ describe("buildOpenApiDocument", () => {
 
   it("contains exactly the foundation, people, library, organisation, risk, AI settings and concern routes", () => {
     expect(Object.keys(doc.paths ?? {}).sort()).toEqual([
+      "/api/v1/ai-act/systems",
+      "/api/v1/ai-act/systems/{id}",
+      "/api/v1/ai-act/systems/{id}/classification",
+      "/api/v1/ai-act/systems/{id}/classification/draft",
+      "/api/v1/ai-act/systems/{id}/obligations/{key}",
+      "/api/v1/ai-act/systems/{id}/obligations/{key}/guidance",
+      "/api/v1/ai-act/systems/{id}/risks",
+      "/api/v1/ai-act/systems/{id}/risks/{riskId}",
       "/api/v1/concerns",
       "/api/v1/concerns/ai-status",
       "/api/v1/concerns/{id}",
@@ -162,6 +171,7 @@ describe("buildOpenApiDocument", () => {
       "/api/v1/organisation",
       "/api/v1/organisation/frameworks",
       "/api/v1/organisation/frameworks/suggestions",
+      "/api/v1/organisation/modules/{key}",
       "/api/v1/organisation/profile",
       "/api/v1/organisation/review-interval",
       "/api/v1/organisation/risk-scale",
@@ -269,6 +279,31 @@ describe("buildOpenApiDocument", () => {
         "CONFLICT: details[].path is a ConflictReason, or `<reason>.<item>`",
       );
     }
+  });
+
+  it("documents the AI Act module: every route is x-module, 404 while off, aiact.* permissions", () => {
+    const ops = Object.entries(doc.paths ?? {})
+      .filter(([path]) => path.startsWith("/api/v1/ai-act/"))
+      .flatMap(([, item]) =>
+        (["get", "post", "put", "patch", "delete"] as const)
+          .map((method) => item[method])
+          .filter((op) => op !== undefined),
+      );
+    expect(ops).toHaveLength(10);
+    for (const op of ops) {
+      expect(op["x-module"]).toBe("eu_ai_act");
+      expect(op.responses?.["404"]).toBeDefined();
+      expect(["aiact.read", "aiact.manage"]).toContain(op["x-permission"]);
+    }
+    const list = doc.paths?.["/api/v1/ai-act/systems"]?.get;
+    expect(list?.["x-permission"]).toBe("aiact.read");
+    expect(JSON.stringify(list?.responses?.["404"])).toContain("eu_ai_act module is on");
+    const classify = doc.paths?.["/api/v1/ai-act/systems/{id}/classification"]?.put;
+    expect(classify?.["x-permission"]).toBe("aiact.manage");
+    expect(JSON.stringify(classify?.requestBody)).toContain("ClassifyAiSystemInput");
+    expect(doc.paths?.["/api/v1/ai-act/systems/{id}"]?.delete).toBeUndefined();
+    // Not a module route: the switch itself is always there.
+    expect(doc.paths?.["/api/v1/organisation/modules/{key}"]?.put?.["x-module"]).toBeUndefined();
   });
 
   it("matches the contract snapshot", () => {

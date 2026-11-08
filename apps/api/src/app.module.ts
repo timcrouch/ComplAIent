@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { AiModule } from "./ai/index.js";
+import { AiActModule } from "./ai-act/index.js";
 import { AuthorizationModule } from "./authorization/index.js";
 import { ConcernsModule } from "./concerns/index.js";
 import type { AppConfig } from "./config.js";
@@ -65,6 +66,7 @@ export class AppModule {
         EvidenceModule.forRoot({ storage: config }),
         WorkspaceModule,
         ReportsModule,
+        AiActModule,
         // Demo mode off: an empty module (no routes, no owner connection).
         DemoModule.register(demoOptions(config)),
       ],

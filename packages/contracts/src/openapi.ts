@@ -7,6 +7,7 @@ import type { ZodType } from "zod";
 import { ConflictReasonSchema } from "./conflicts.js";
 import { ErrorResponse } from "./errors.js";
 import type { RouteDef } from "./route.js";
+import { aiActRoutes } from "./routes/ai-act.js";
 import { aiSettingsRoutes } from "./routes/ai-settings.js";
 import { concernRoutes } from "./routes/concerns.js";
 import { controlOperationRoutes } from "./routes/control-operation.js";
@@ -47,6 +48,7 @@ export const allRoutes: RouteDef[] = [
   organisationRoutes.suggestFrameworks,
   organisationRoutes.setRiskScale,
   organisationRoutes.setReviewInterval,
+  organisationRoutes.setModule,
   organisationRoutes.completeSetup,
   riskRoutes.report,
   riskRoutes.list,
@@ -97,6 +99,16 @@ export const allRoutes: RouteDef[] = [
   reportRoutes.soaXlsx,
   reportRoutes.soaPdf,
   reportRoutes.boardPdf,
+  aiActRoutes.listSystems,
+  aiActRoutes.createSystem,
+  aiActRoutes.getSystem,
+  aiActRoutes.updateSystem,
+  aiActRoutes.classify,
+  aiActRoutes.draftClassification,
+  aiActRoutes.updateObligation,
+  aiActRoutes.obligationGuidance,
+  aiActRoutes.linkRisk,
+  aiActRoutes.unlinkRisk,
 ];
 
 /**
@@ -158,6 +170,8 @@ export function buildOpenApiDocument(routes: RouteDef[]) {
     if (route.conditional)
       auto["404"] =
         `NOT_FOUND: the route exists only when ${CONDITION_SETTING[route.conditional]}=true`;
+    if (route.module)
+      auto["404"] = `NOT_FOUND: the route exists only while the ${route.module} module is on`;
     if (route.upload)
       auto["413"] = `PAYLOAD_TOO_LARGE: the file exceeds ${route.upload.maxBytesConfig}`;
     for (const [status, description] of Object.entries(auto)) {
@@ -188,6 +202,7 @@ export function buildOpenApiDocument(routes: RouteDef[]) {
       ...(route.permission ? { "x-permission": route.permission } : {}),
       ...(route.recentAuth ? { "x-recent-auth": true } : {}),
       ...(route.conditional ? { "x-conditional": route.conditional } : {}),
+      ...(route.module ? { "x-module": route.module } : {}),
       request,
       responses,
     });

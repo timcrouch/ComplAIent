@@ -12,7 +12,7 @@ import type { Prisma } from "@isms/database";
 import { type Clock, DEFAULT_REVIEW_INTERVAL_MONTHS, DomainError } from "@isms/domain";
 import { type AuditContext, AuditService } from "../audit/index.js";
 import { CLOCK } from "../identity/index.js";
-import { PRISMA, type PrismaService } from "../platform/index.js";
+import { PRISMA, type PrismaService, enabledModules } from "../platform/index.js";
 import { defaultRiskScaleDto } from "./default-risk-scale.js";
 import { OrganisationFrameworksService } from "./organisation-frameworks.service.js";
 import { OrganisationUnitsService } from "./organisation-units.service.js";
@@ -87,6 +87,7 @@ export class OrganisationService {
             completedAt: organisation?.setupCompletedAt?.toISOString() ?? null,
             missing: await missingSteps(tx),
           },
+          modules: await enabledModules(tx),
         };
       },
       { isolationLevel: "RepeatableRead" },

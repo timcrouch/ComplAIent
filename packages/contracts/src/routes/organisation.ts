@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 import "../zod.js";
 import { ErrorResponse } from "../errors.js";
+import { ModuleKeySchema } from "../modules.js";
 import { defineRoute } from "../route.js";
 import { text } from "../text.js";
 
@@ -88,6 +89,8 @@ export const OrganisationResponse = z
       /** Steps still to do, in setup order. */
       missing: z.array(SetupStepSchema),
     }),
+    /** The optional modules switched on, in key order. Never a setup step. */
+    modules: z.array(ModuleKeySchema),
   })
   .openapi("OrganisationResponse");
 export type OrganisationResponse = z.infer<typeof OrganisationResponse>;
@@ -194,6 +197,14 @@ export const ReviewIntervalInput = z
   .openapi("ReviewIntervalInput");
 export type ReviewIntervalInput = z.infer<typeof ReviewIntervalInput>;
 
+export const SetModuleInput = z.object({ enabled: z.boolean() }).strict().openapi("SetModuleInput");
+export type SetModuleInput = z.infer<typeof SetModuleInput>;
+
+export const ModulesResponse = z
+  .object({ modules: z.array(ModuleKeySchema) })
+  .openapi("ModulesResponse");
+export type ModulesResponse = z.infer<typeof ModulesResponse>;
+
 export const CompleteSetupResponse = z
   .object({ completedAt: z.iso.datetime() })
   .openapi("CompleteSetupResponse");
@@ -258,6 +269,15 @@ export const organisationRoutes = {
     permission: "organisation.manage",
     request: { body: ReviewIntervalInput },
     responses: { 200: OrganisationResponse, 409: ErrorResponse },
+  }),
+  setModule: defineRoute({
+    method: "put",
+    path: "/api/v1/organisation/modules/{key}",
+    summary:
+      "Turn an optional module on or off; off hides it (its routes answer 404) and keeps its data",
+    permission: "organisation.manage",
+    request: { params: z.object({ key: ModuleKeySchema }), body: SetModuleInput },
+    responses: { 200: ModulesResponse },
   }),
   completeSetup: defineRoute({
     method: "post",

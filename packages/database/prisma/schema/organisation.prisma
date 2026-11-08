@@ -17,6 +17,21 @@ model Organisation {
   setupCompletedBy User? @relation("SetupCompletedBy", fields: [setupCompletedById], references: [id], onDelete: Restrict)
 }
 
+/// The optional modules (spec #16 §1). A later module (for example DORA) adds a value.
+enum ModuleKey {
+  eu_ai_act
+}
+
+/// A module switched on: a row present means on, absent means off. Turning a module off deletes
+/// the row only; the module's own data is kept and shows again when it is turned back on.
+model OrganisationModule {
+  key         ModuleKey @id
+  enabledAt   DateTime  @db.Timestamptz(3)
+  enabledById String    @db.Uuid
+
+  enabledBy User @relation("ModuleEnabledBy", fields: [enabledById], references: [id], onDelete: Restrict)
+}
+
 model Site {
   id          String   @id @default(uuid(7)) @db.Uuid
   name        String
@@ -40,6 +55,7 @@ model Department {
 
   roleAssignments RoleAssignment[]
   risks           Risk[]
+  aiSystems       AiSystem[]
 }
 
 enum OrganisationFrameworkStatus {
