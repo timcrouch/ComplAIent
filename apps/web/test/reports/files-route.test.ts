@@ -17,6 +17,7 @@ const { accessTokenFor, failureOf } = await import("../../lib/server-api");
 const actual = await vi.importActual<typeof import("../../lib/server-api")>("../../lib/server-api");
 const { ApiError, apiDownload } = await import("../../lib/api-client");
 const { GET } = await import("../../app/(app)/reports/files/[file]/route");
+const { requestId } = await import("../../lib/request-id");
 
 const t = en.reports.files;
 const PDF = "application/pdf";
@@ -117,12 +118,19 @@ describe("GET /reports/files/[file]", () => {
     vi.mocked(apiDownload).mockRejectedValue(
       new ApiError({ status: 403, code: "FORBIDDEN", message: "x" }),
     );
+    let inside: string | undefined;
+    vi.mocked(accessTokenFor).mockImplementationOnce(async () => {
+      inside = await requestId();
+      return { ok: true, token: "token-1" };
+    });
     await call("soa.pdf", "", { headers: { "x-request-id": client } });
     const tokenOptions = vi.mocked(accessTokenFor).mock.calls[0]?.[1];
     expect(tokenOptions?.requestId).toMatch(UUID);
     expect(tokenOptions?.requestId).not.toBe(client);
     expect(vi.mocked(apiDownload).mock.calls[0]?.[4]).toEqual(tokenOptions);
     expect(vi.mocked(failureOf).mock.calls[0]?.[3]).toEqual(tokenOptions);
+    // Code the route reaches (a token refresh's log events) sees the same id.
+    expect(inside).toBe(tokenOptions?.requestId);
     await call("soa.pdf");
     expect(vi.mocked(accessTokenFor).mock.calls[1]?.[1]?.requestId).not.toBe(
       tokenOptions?.requestId,

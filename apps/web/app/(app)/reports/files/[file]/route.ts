@@ -2,6 +2,7 @@ import { reportRoutes } from "@isms/contracts";
 import type { NextRequest } from "next/server";
 import { apiDownload } from "../../../../../lib/api-client";
 import { redirectTo } from "../../../../../lib/auth-responses";
+import { withRequestId } from "../../../../../lib/request-id";
 import { accessTokenFor, failureOf } from "../../../../../lib/server-api";
 import messages from "../../../../../messages/index";
 
@@ -39,10 +40,21 @@ const plain = (status: 400 | 403 | 404 | 409 | 503, text: string) =>
  * GET /reports/files/{file}: a report file (XLSX or PDF) streamed from the API with the
  * viewer's token and the file's own query keys passed on (the register's filter and
  * includeClosed, the SoA's framework, the board's period); any other key is dropped. The API builds the file, applies risk visibility and audits it.
+ * The proxy skips paths with an extension, so the inbound x-request-id is the client's own:
+ * this route mints its own id for the log, the API call and so the audit row.
  */
-export async function GET(
+export function GET(
+  request: NextRequest,
+  context: { params: Promise<{ file: string }> },
+): Promise<Response> {
+  const requestId = crypto.randomUUID();
+  return withRequestId(requestId, () => download(request, context, requestId));
+}
+
+async function download(
   request: NextRequest,
   { params }: { params: Promise<{ file: string }> },
+  requestId: string,
 ): Promise<Response> {
   const { file } = await params;
   if (!isFile(file)) return plain(404, t.notFound);
@@ -59,9 +71,7 @@ export async function GET(
   }
   const search = new URLSearchParams(query).toString();
   const returnTo = `/reports/files/${file}${search === "" ? "" : `?${search}`}`;
-  // The proxy skips paths with an extension, so the inbound x-request-id is the client's own:
-  // this route makes its own id for the log, the API call and so the audit row.
-  const options = { requestId: crypto.randomUUID() };
+  const options = { requestId };
   const token = await accessTokenFor(returnTo, options);
   let failure = token.ok ? null : token;
   if (token.ok) {
