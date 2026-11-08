@@ -68,7 +68,6 @@ export class NarrativeService {
       topRisks: topRisks.map((r) => ({
         reference: r.reference,
         title: r.title,
-        owner: r.owner,
         treatment: r.treatment,
       })),
     };
