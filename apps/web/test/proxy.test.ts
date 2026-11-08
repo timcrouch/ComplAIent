@@ -74,6 +74,9 @@ describe("proxy", () => {
     ["/_next/image", false],
     ["/favicon.ico", false],
     ["/logo.svg", false],
+    // Report files end in an extension, so they skip it too: the route mints its own request id.
+    ["/reports/files/soa.pdf", false],
+    ["/reports/files/risk-register.xlsx", false],
     // Uploads skip the proxy: it would buffer the body (and cut it off past its limit).
     ["/risks/1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/evidence", false],
     ["/tasks/1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/evidence", false],
