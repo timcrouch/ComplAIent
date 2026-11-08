@@ -1,0 +1,108 @@
+// EU AI Act module (#16): the AI system register, its obligations and its links to risks.
+// All three tables are mutable; their history lives in the audit trail (ai_system.*).
+
+enum AiActRole {
+  provider
+  deployer
+  importer
+  distributor
+}
+
+enum AiSystemStatus {
+  planned
+  in_use
+  retired
+}
+
+/// unclassified only before the first classification is saved (@isms/domain classifyAiSystem).
+enum AiRiskClass {
+  unclassified
+  out_of_scope
+  prohibited
+  high_risk
+  limited_risk
+  minimal_risk
+}
+
+enum AiObligationStatus {
+  open
+  in_progress
+  met
+  not_applicable
+}
+
+/// An AI system the organisation provides, deploys, imports or distributes. Never deleted:
+/// retiring is a status change.
+model AiSystem {
+  id                      String         @id @default(uuid(7)) @db.Uuid
+  /// 1-200 characters (check constraint in the migration).
+  name                    String
+  /// lower(btrim(name)) (check constraint in the migration); makes names unique ignoring case.
+  nameKey                 String         @unique
+  /// 0-2000 characters; intendedPurpose 1-2000 (check constraints in the migration).
+  description             String         @default("")
+  intendedPurpose         String
+  role                    AiActRole
+  /// Free text, at most 200 characters each (check constraints in the migration).
+  supplier                String?
+  model                   String?
+  usesGeneralPurposeModel Boolean
+  status                  AiSystemStatus
+  ownerId                 String         @db.Uuid
+  departmentId            String?        @db.Uuid
+  riskClass               AiRiskClass    @default(unclassified)
+  /// { version: 1, answers, source, result } (contracts AiClassificationRecord). classification,
+  /// classifiedAt and classifiedById are all NULL exactly while riskClass = unclassified (check
+  /// constraint in the migration).
+  classification          Json?
+  classifiedAt            DateTime?      @db.Timestamptz(3)
+  classifiedById          String?        @db.Uuid
+  createdById             String         @db.Uuid
+  createdAt               DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt               DateTime       @updatedAt @db.Timestamptz(3)
+
+  owner        User                 @relation("AiSystemOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  department   Department?          @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  classifiedBy User?                @relation("AiSystemClassifiedBy", fields: [classifiedById], references: [id], onDelete: Restrict)
+  createdBy    User                 @relation("AiSystemCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  obligations  AiSystemObligation[]
+  risks        AiSystemRisk[]
+
+  @@index([ownerId])
+  @@index([departmentId])
+}
+
+/// One obligation of the catalogue (@isms/domain AI_OBLIGATIONS) for a system. A row that no
+/// longer applies is kept with applicable = false, so the work recorded on it is never lost.
+model AiSystemObligation {
+  aiSystemId  String             @db.Uuid
+  /// A catalogue key: lower snake case (check constraint in the migration).
+  key         String
+  applicable  Boolean
+  status      AiObligationStatus @default(open)
+  /// 0-2000 characters (check constraint in the migration).
+  note        String             @default("")
+  updatedById String?            @db.Uuid
+  createdAt   DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime           @updatedAt @db.Timestamptz(3)
+
+  aiSystem  AiSystem @relation(fields: [aiSystemId], references: [id], onDelete: Restrict)
+  updatedBy User?    @relation("AiObligationUpdatedBy", fields: [updatedById], references: [id], onDelete: Restrict)
+
+  @@id([aiSystemId, key])
+}
+
+/// A link from a system to a risk in the register.
+model AiSystemRisk {
+  aiSystemId String   @db.Uuid
+  riskId     String   @db.Uuid
+  linkedById String   @db.Uuid
+  linkedAt   DateTime @db.Timestamptz(3)
+
+  aiSystem AiSystem @relation(fields: [aiSystemId], references: [id], onDelete: Restrict)
+  risk     Risk     @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  linkedBy User     @relation("AiSystemRiskLinkedBy", fields: [linkedById], references: [id], onDelete: Restrict)
+
+  @@id([aiSystemId, riskId])
+  @@index([riskId])
+}
