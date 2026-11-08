@@ -1,0 +1,57 @@
+{
+  "framework": {
+    "key": "eu-ai-act",
+    "name": "EU AI Act",
+    "publisher": "European Union",
+    "summary": "EU law on artificial intelligence for organisations that build, sell or use AI systems in the EU. The heaviest duties cover high-risk uses such as credit scoring and life and health insurance pricing. Check whether and how it applies to you."
+  },
+  "version": {
+    "key": "eu-2024-1689",
+    "label": "Regulation (EU) 2024/1689"
+  },
+  "groups": [
+    { "key": "Chapter I", "title": "General provisions" },
+    { "key": "Chapter II", "title": "Prohibited AI practices" },
+    { "key": "Chapter III", "title": "High-risk AI systems" },
+    { "key": "Chapter IV", "title": "Transparency obligations for providers and deployers of certain AI systems" },
+    { "key": "Chapter IX", "title": "Post-market monitoring, information sharing and market surveillance" }
+  ],
+  "requirements": [
+    { "ref": "Art. 4", "group": "Chapter I", "title": "Staff and others operating AI systems for the organisation have sufficient AI literacy." },
+    { "ref": "Art. 5", "group": "Chapter II", "title": "No AI system is offered or used for any practice the Act prohibits." },
+    { "ref": "Art. 6(3)", "group": "Chapter III", "title": "An Annex III system is classed not high-risk only under a listed condition and without profiling." },
+    { "ref": "Art. 6(4)", "group": "Chapter III", "title": "Providers document why an Annex III system is not high-risk before releasing it." },
+    { "ref": "Art. 9", "group": "Chapter III", "title": "A risk management system runs through the whole life of a high-risk AI system." },
+    { "ref": "Art. 10", "group": "Chapter III", "title": "Training, validation and test data for high-risk AI is governed, relevant and representative." },
+    { "ref": "Art. 11", "group": "Chapter III", "title": "Technical documentation showing a high-risk system meets the requirements exists before release and stays current." },
+    { "ref": "Art. 12", "group": "Chapter III", "title": "High-risk AI systems are built to log events automatically throughout their lifetime." },
+    { "ref": "Art. 13", "group": "Chapter III", "title": "High-risk AI systems come with clear instructions so deployers can interpret and use their output." },
+    { "ref": "Art. 14", "group": "Chapter III", "title": "High-risk AI systems are designed so that people can oversee them effectively while in use." },
+    { "ref": "Art. 15", "group": "Chapter III", "title": "High-risk AI systems reach appropriate accuracy, robustness and cybersecurity throughout their lifecycle." },
+    { "ref": "Art. 17", "group": "Chapter III", "title": "Providers of high-risk AI systems run a documented quality management system." },
+    { "ref": "Art. 20", "group": "Chapter III", "title": "Providers correct, withdraw or recall a non-conforming high-risk system and inform the supply chain." },
+    { "ref": "Art. 23", "group": "Chapter III", "title": "Importers check a high-risk system's conformity assessment, documentation and marking before placing it on the market." },
+    { "ref": "Art. 24", "group": "Chapter III", "title": "Distributors check a high-risk system's CE marking, declaration and instructions before making it available." },
+    { "ref": "Art. 26(1)", "group": "Chapter III", "title": "Deployers take technical and organisational measures to use high-risk systems as their instructions say." },
+    { "ref": "Art. 26(2)", "group": "Chapter III", "title": "Deployers assign human oversight to competent, trained people with the authority and support needed." },
+    { "ref": "Art. 26(4)", "group": "Chapter III", "title": "Deployers ensure input data they control is relevant and representative for the intended purpose." },
+    { "ref": "Art. 26(5)", "group": "Chapter III", "title": "Deployers monitor high-risk systems, suspend risky use and report serious incidents without delay." },
+    { "ref": "Art. 26(6)", "group": "Chapter III", "title": "Deployers keep the automatic logs of a high-risk system they control for at least six months." },
+    { "ref": "Art. 26(7)", "group": "Chapter III", "title": "Employers inform workers and their representatives before using a high-risk system at work." },
+    { "ref": "Art. 26(9)", "group": "Chapter III", "title": "Deployers use the provider's instructions to carry out any required data protection impact assessment." },
+    { "ref": "Art. 26(11)", "group": "Chapter III", "title": "Deployers tell people when an Annex III system makes or helps make decisions about them." },
+    { "ref": "Art. 27", "group": "Chapter III", "title": "Public-service, credit-scoring and insurance-pricing deployers assess the impact on fundamental rights before use." },
+    { "ref": "Art. 43", "group": "Chapter III", "title": "High-risk AI systems pass the required conformity assessment before they are released." },
+    { "ref": "Art. 47", "group": "Chapter III", "title": "Providers draw up and keep a signed EU declaration of conformity for each high-risk system." },
+    { "ref": "Art. 48", "group": "Chapter III", "title": "Providers affix the CE marking visibly, legibly and indelibly to conforming high-risk systems." },
+    { "ref": "Art. 49(1)", "group": "Chapter III", "title": "Providers register Annex III high-risk systems in the EU database before release." },
+    { "ref": "Art. 49(2)", "group": "Chapter III", "title": "Providers also register Annex III systems they have judged not to be high-risk." },
+    { "ref": "Art. 50(1)", "group": "Chapter IV", "title": "Providers make sure people know when they are interacting with an AI system, unless obvious." },
+    { "ref": "Art. 50(2)", "group": "Chapter IV", "title": "Providers mark synthetic audio, image, video and text output as AI-generated in machine-readable form." },
+    { "ref": "Art. 50(3)", "group": "Chapter IV", "title": "Deployers tell people exposed to emotion recognition or biometric categorisation that it is running." },
+    { "ref": "Art. 50(4)", "group": "Chapter IV", "title": "Deployers disclose deep fakes, and AI-generated text published on matters of public interest." },
+    { "ref": "Art. 72", "group": "Chapter IX", "title": "Providers collect and analyse data on how high-risk systems perform after release." },
+    { "ref": "Art. 73", "group": "Chapter IX", "title": "Providers report serious incidents involving high-risk systems to market surveillance authorities on time." },
+    { "ref": "Art. 86", "group": "Chapter IX", "title": "Deployers explain the AI's role and main reasons to people significantly affected by its decisions." }
+  ]
+}
