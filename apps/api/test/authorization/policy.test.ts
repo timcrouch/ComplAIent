@@ -57,6 +57,7 @@ describe("ROLE_PERMISSIONS", () => {
         "organisation.manage",
         "risks.report",
         "ai.transcripts.read",
+        "aiact.read",
       ],
       ciso: [
         "me.read",
@@ -72,6 +73,8 @@ describe("ROLE_PERMISSIONS", () => {
         "reports.read",
         "reports.narrative",
         "soa.manage",
+        "aiact.read",
+        "aiact.manage",
       ],
       auditor: [
         "me.read",
@@ -80,6 +83,7 @@ describe("ROLE_PERMISSIONS", () => {
         "risks.read",
         "ai.transcripts.read",
         "reports.read",
+        "aiact.read",
       ],
       risk_owner: [
         "me.read",
@@ -88,6 +92,8 @@ describe("ROLE_PERMISSIONS", () => {
         "risks.read",
         "risks.review",
         "controls.test",
+        "aiact.read",
+        "aiact.manage",
       ],
       risk_approver: [
         "me.read",
@@ -97,9 +103,10 @@ describe("ROLE_PERMISSIONS", () => {
         "risks.approve",
         "reports.read",
         "reports.narrative",
+        "aiact.read",
       ],
       contributor: ["me.read", "risks.report"],
-      viewer: ["me.read", "library.read", "risks.report", "risks.read"],
+      viewer: ["me.read", "library.read", "risks.report", "risks.read", "aiact.read"],
     });
   });
 
@@ -194,6 +201,7 @@ describe("PolicyService.permissionsFor", () => {
       "risks.read",
       "ai.transcripts.read",
       "reports.read",
+      "aiact.read",
       "users.list",
       "roles.assign",
       "settings.ai.manage",
@@ -348,5 +356,41 @@ describe("scoped permissions (P2-R10)", () => {
         expect(guardAllows(a, p), `${p}, subset ${String(mask)}`).toBe(reported.includes(p));
       }
     }
+  });
+});
+
+describe("AI Act permissions (#16 §2)", () => {
+  const owner = (scope: RoleAssignmentDto["scope"]): RoleAssignmentDto => ({
+    role: "risk_owner",
+    scope,
+  });
+
+  it("are organisation-level only: a scoped assignment does not grant them", () => {
+    expect(DEFAULT_SCOPED_PERMISSIONS).not.toContain("aiact.read");
+    expect(DEFAULT_SCOPED_PERMISSIONS).not.toContain("aiact.manage");
+    const siteOwner = actor([owner({ type: "site", id: "A" })]);
+    expect(defaults.can(siteOwner, "aiact.read")).toBe(false);
+    expect(defaults.permissionsFor(siteOwner)).not.toContain("aiact.read");
+    const orgOwner = actor([owner({ type: "organisation", id: null })]);
+    expect(defaults.permissionsFor(orgOwner)).toEqual(
+      expect.arrayContaining(["aiact.read", "aiact.manage"]),
+    );
+  });
+
+  it("read for every role but contributor, manage for ciso and risk_owner", () => {
+    const holders = (p: Permission) =>
+      Object.entries(ROLE_PERMISSIONS)
+        .filter(([, ps]) => ps.includes(p))
+        .map(([role]) => role)
+        .sort();
+    expect(holders("aiact.read")).toEqual([
+      "administrator",
+      "auditor",
+      "ciso",
+      "risk_approver",
+      "risk_owner",
+      "viewer",
+    ]);
+    expect(holders("aiact.manage")).toEqual(["ciso", "risk_owner"]);
   });
 });

@@ -3,6 +3,7 @@ import type { Permission } from "@isms/contracts";
 import { APP_GUARD } from "@nestjs/core";
 import { PERMISSIONS_PROVIDER } from "../identity/index.js";
 import { PolicyService } from "./policy.service.js";
+import { ModuleGate } from "./module-gate.js";
 import { AccessGuard, PermissionGuard } from "./require-permission.js";
 import { DEFAULT_SCOPED_PERMISSIONS, SCOPED_PERMISSIONS } from "./scoped-permissions.js";
 
@@ -28,6 +29,7 @@ export class AuthorizationModule {
         PolicyService,
         { provide: PERMISSIONS_PROVIDER, useExisting: PolicyService },
         PermissionGuard,
+        ModuleGate,
         { provide: APP_GUARD, useClass: AccessGuard },
       ],
       exports: [PolicyService, PERMISSIONS_PROVIDER],

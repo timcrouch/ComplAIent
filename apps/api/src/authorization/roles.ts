@@ -1,6 +1,11 @@
 import type { Permission, Role } from "@isms/contracts";
 
-/** What each role may do. Later plans extend these lists. */
+/**
+ * What each role may do. Later plans extend these lists. The AI Act permissions (#16 §2) are
+ * organisation-level only: they are not in DEFAULT_SCOPED_PERMISSIONS, so a site- or
+ * department-scoped assignment does not grant them. risk_owner manages AI systems because a
+ * system's owner is usually a business owner, not the CISO.
+ */
 export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = Object.freeze({
   administrator: [
     "me.read",
@@ -12,6 +17,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = O
     "organisation.manage",
     "risks.report",
     "ai.transcripts.read",
+    "aiact.read",
   ],
   ciso: [
     "me.read",
@@ -27,6 +33,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = O
     "reports.read",
     "reports.narrative",
     "soa.manage",
+    "aiact.read",
+    "aiact.manage",
   ],
   auditor: [
     "me.read",
@@ -35,6 +43,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = O
     "risks.read",
     "ai.transcripts.read",
     "reports.read",
+    "aiact.read",
   ],
   risk_owner: [
     "me.read",
@@ -43,6 +52,8 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = O
     "risks.read",
     "risks.review",
     "controls.test",
+    "aiact.read",
+    "aiact.manage",
   ],
   risk_approver: [
     "me.read",
@@ -52,9 +63,10 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = O
     "risks.approve",
     "reports.read",
     "reports.narrative",
+    "aiact.read",
   ],
   contributor: ["me.read", "risks.report"],
-  viewer: ["me.read", "library.read", "risks.report", "risks.read"],
+  viewer: ["me.read", "library.read", "risks.report", "risks.read", "aiact.read"],
 });
 
 /**

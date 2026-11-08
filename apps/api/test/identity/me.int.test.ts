@@ -178,6 +178,7 @@ describe("identity", () => {
         permissions: ["me.read", "me.update", "organisation.read"],
         viewMode: "guided",
         theme: "system",
+        modules: [],
       });
       expect(user.idpIssuer).toBe(idp.issuer);
       expect(user.idpSubject).toBe("subject-1");
@@ -327,6 +328,7 @@ describe("identity", () => {
         "organisation.manage",
         "risks.report",
         "ai.transcripts.read",
+        "aiact.read",
       ]);
       const grant = await db.roleAssignment.findFirstOrThrow();
       expect(grant).toMatchObject({
