@@ -1,5 +1,6 @@
 import { demoRoutes } from "@isms/contracts";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { CallResult } from "../../lib/server-api";
 
 // The API call, the cookie store and the redirect are replaced; the session cookie's settings
 // are the real ones (from the unit-test WEB_BASE_URL, plain http on localhost).
@@ -63,7 +64,12 @@ describe.each(actions)("%s (Setup → Demo and training)", (_name, action, route
   });
 
   it("on a refusal: returns it, and keeps the cookie and the page", async () => {
-    const refusal = { ok: false, kind: "reauth", details: [], href: "/auth/step-up" } as const;
+    const refusal: CallResult<never> = {
+      ok: false,
+      kind: "reauth",
+      details: [],
+      href: "/auth/step-up",
+    };
     vi.mocked(callApi).mockResolvedValue(refusal);
     expect(await action("RESET")).toEqual(refusal);
     expect(deleteCookie).not.toHaveBeenCalled();
