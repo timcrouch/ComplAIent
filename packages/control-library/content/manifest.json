@@ -1,11 +1,12 @@
 {
-  "libraryVersion": "2026.11.3",
+  "libraryVersion": "2026.11.4",
   "frameworks": [
     "frameworks/iso27001-2022.json",
     "frameworks/gdpr-2016-679.json",
     "frameworks/nis2-2022-2555.json",
     "frameworks/nist-csf-2.0.json",
-    "frameworks/nist-sp800-53-r5.json"
+    "frameworks/nist-sp800-53-r5.json",
+    "frameworks/eu-ai-act-2024-1689.json"
   ],
   "controls": [
     "controls/governance.json",
@@ -18,7 +19,8 @@
     "controls/operations.json",
     "controls/resilience.json",
     "controls/incidents.json",
-    "controls/development.json"
+    "controls/development.json",
+    "controls/ai-governance.json"
   ],
-  "mappings": ["mappings/nist-sp800-53-r5.json"]
+  "mappings": ["mappings/nist-sp800-53-r5.json", "mappings/eu-ai-act-2024-1689.json"]
 }

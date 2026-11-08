@@ -32,6 +32,28 @@ export const GDPR_REFS = [
 export const NIS2_REFS = "abcdefghij".split("").map((letter) => `Art. 21(2)(${letter})`);
 
 /**
+ * EU AI Act (Regulation (EU) 2024/1689): the obligation-bearing provisions the AI system
+ * register's obligation catalogue uses (#16), in article order, each with the Chapter it sits in.
+ */
+export const EU_AI_ACT_CHAPTER_REFS: [chapter: string, refs: string[]][] = [
+  ["Chapter I", ["Art. 4"]],
+  ["Chapter II", ["Art. 5"]],
+  [
+    "Chapter III",
+    [
+      ...["Art. 6(3)", "Art. 6(4)", "Art. 9", "Art. 10", "Art. 11", "Art. 12", "Art. 13"],
+      ...["Art. 14", "Art. 15", "Art. 17", "Art. 20", "Art. 23", "Art. 24"],
+      ...["1", "2", "4", "5", "6", "7", "9", "11"].map((p) => `Art. 26(${p})`),
+      ...["Art. 27", "Art. 43", "Art. 47", "Art. 48", "Art. 49(1)", "Art. 49(2)"],
+    ],
+  ],
+  ["Chapter IV", ["1", "2", "3", "4"].map((p) => `Art. 50(${p})`)],
+  ["Chapter IX", ["Art. 72", "Art. 73", "Art. 86"]],
+];
+
+export const EU_AI_ACT_REFS: string[] = EU_AI_ACT_CHAPTER_REFS.flatMap(([, refs]) => refs);
+
+/**
  * NIST CSF 2.0 subcategories in Core order (CSWP 29, Appendix A). Each category lists its
  * numbers; withdrawn numbers (for example ID.AM-06) are left out.
  */

@@ -10,6 +10,7 @@ export const CONTROL_CATEGORIES = [
   "resilience",
   "incidents",
   "development",
+  "ai_governance",
 ] as const;
 
 export type ControlCategory = (typeof CONTROL_CATEGORIES)[number];
@@ -27,9 +28,10 @@ export const CONTROL_CODE_PREFIX_CATEGORY = {
   RES: "resilience",
   INC: "incidents",
   DEV: "development",
+  AIG: "ai_governance",
 } as const satisfies Record<string, ControlCategory>;
 
-export const CONTROL_CODE_PATTERN = /^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV)-\d{2}$/;
+export const CONTROL_CODE_PATTERN = /^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV|AIG)-\d{2}$/;
 
 export function controlCategoryForCode(code: string): ControlCategory | undefined {
   const prefix = code.split("-")[0] as keyof typeof CONTROL_CODE_PREFIX_CATEGORY;

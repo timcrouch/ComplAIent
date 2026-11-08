@@ -5,12 +5,14 @@ import { describe, expect, it } from "vitest";
 import { loadLibrary } from "../src/load.js";
 import {
   ANNEX_A_2022_REFS,
+  EU_AI_ACT_CHAPTER_REFS,
+  EU_AI_ACT_REFS,
   GDPR_REFS,
   NIS2_REFS,
   NIST_CSF_2_REFS,
   NIST_SP800_53_MODERATE_REFS,
 } from "../src/references.js";
-import type { LibraryContent } from "../src/schema.js";
+import { ControlFileSchema, type LibraryContent } from "../src/schema.js";
 import { THEMES } from "../src/themes.js";
 import { coverageGaps, validateLibrary } from "../src/validate.js";
 
@@ -36,7 +38,7 @@ describe("shipped library content", () => {
     expect(validateLibrary(lib)).toEqual([]);
   });
 
-  it("ships the five framework versions with their keys, names and labels", () => {
+  it("ships the six framework versions with their keys, names and labels", () => {
     expect(
       lib.frameworks.map((f) => [
         f.version.key,
@@ -51,6 +53,13 @@ describe("shipped library content", () => {
       ["nis2-2022-2555", "nis2", "NIS2", "European Union", "Directive (EU) 2022/2555"],
       ["nist-csf-2.0", "nist-csf", "NIST CSF", "NIST", "2.0"],
       ["nist-sp800-53-r5", "nist-sp800-53", "NIST SP 800-53", "NIST", "Rev. 5 (Moderate baseline)"],
+      [
+        "eu-ai-act-2024-1689",
+        "eu-ai-act",
+        "EU AI Act",
+        "European Union",
+        "Regulation (EU) 2024/1689",
+      ],
     ]);
   });
 
@@ -121,6 +130,54 @@ describe("shipped library content", () => {
     ]);
     for (const r of file?.requirements ?? [])
       expect(r.group, r.ref).toBe(r.ref.split(".").slice(0, 2).join("."));
+  });
+
+  it("the EU AI Act lists the 36 obligation-bearing provisions in article order", () => {
+    expect(refsOf(lib, "eu-ai-act-2024-1689")).toEqual([...EU_AI_ACT_REFS]);
+    expect(EU_AI_ACT_REFS).toHaveLength(36);
+  });
+
+  it("the EU AI Act groups its provisions by Chapter", () => {
+    const file = lib.frameworks.find((f) => f.version.key === "eu-ai-act-2024-1689");
+    expect(file?.groups).toEqual([
+      { key: "Chapter I", title: "General provisions" },
+      { key: "Chapter II", title: "Prohibited AI practices" },
+      { key: "Chapter III", title: "High-risk AI systems" },
+      {
+        key: "Chapter IV",
+        title: "Transparency obligations for providers and deployers of certain AI systems",
+      },
+      {
+        key: "Chapter IX",
+        title: "Post-market monitoring, information sharing and market surveillance",
+      },
+    ]);
+    const chapterOf = new Map(
+      EU_AI_ACT_CHAPTER_REFS.flatMap(([chapter, refs]) => refs.map((r) => [r, chapter] as const)),
+    );
+    for (const r of file?.requirements ?? []) expect(r.group, r.ref).toBe(chapterOf.get(r.ref));
+  });
+
+  it("the AI governance file holds the AIG controls only, in their own category", () => {
+    const raw: unknown = JSON.parse(
+      readFileSync(join(contentDir, "controls/ai-governance.json"), "utf8"),
+    );
+    const { controls } = ControlFileSchema.parse(raw);
+    expect(controls.map((c) => c.code)).toEqual(
+      Array.from({ length: 11 }, (_, i) => `AIG-${String(i + 1).padStart(2, "0")}`),
+    );
+    for (const c of controls) expect(c.category, c.code).toBe("ai_governance");
+  });
+
+  it("every EU AI Act provision is mapped by at least one AIG control", () => {
+    const byAig = new Set(
+      lib.controls
+        .filter((c) => c.code.startsWith("AIG-"))
+        .flatMap((c) =>
+          c.mappings.filter((m) => m.framework === "eu-ai-act-2024-1689").map((m) => m.ref),
+        ),
+    );
+    expect(EU_AI_ACT_REFS.filter((r) => !byAig.has(r))).toEqual([]);
   });
 
   it("GDPR and NIS2 stay flat", () => {

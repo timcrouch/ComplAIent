@@ -1,0 +1,230 @@
+{
+  "controls": [
+    {
+      "code": "AIG-01",
+      "title": "Keep a register of every AI system you build, buy or use",
+      "description": "Every AI system you build, buy or use, including AI features inside software you already run, is listed with its purpose, a business owner and your role under the AI Act. You cannot meet duties for AI you do not know you run.",
+      "guidance": [
+        "Find AI in purchasing records and software lists, and ask each department which tools predict, recommend, decide or generate content.",
+        "Record each system's intended purpose, supplier, underlying model and the people or decisions it affects.",
+        "Name a business owner for each system who makes sure it is used as its instructions say.",
+        "Record whether you are its provider, deployer, importer or distributor, because your role decides your duties.",
+        "Review the register at least yearly, and whenever a new tool or AI feature is switched on."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(1)" },
+        { "framework": "iso27001-2022", "ref": "A.5.9" },
+        { "framework": "nist-csf-2.0", "ref": "ID.AM-02" },
+        { "framework": "nist-sp800-53-r5", "ref": "CM-8" }
+      ]
+    },
+    {
+      "code": "AIG-02",
+      "title": "Classify each AI system's risk under the AI Act before use",
+      "description": "Each AI system is checked against the prohibited practices, the high-risk uses and the transparency duties before it goes live, and the result decides which obligations apply. A credit scoring engine and a chatbot carry very different duties, and a wrong class means missed ones.",
+      "guidance": [
+        "Check first whether the system is an AI system at all, and stop any use that falls under a prohibited practice.",
+        "Check whether it is a safety component of a regulated product, or serves an Annex III use such as creditworthiness or life and health insurance pricing.",
+        "If you rely on an Annex III derogation, confirm the system profiles nobody, and record the reasons before release.",
+        "As provider of a system you judged not high-risk, register it in the EU database and show the assessment to authorities on request.",
+        "Record which transparency duties apply, such as telling people they are talking to an AI.",
+        "Classify again when the purpose, the model or your role changes."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 5" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 6(3)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 6(4)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 49(2)" }
+      ]
+    },
+    {
+      "code": "AIG-03",
+      "title": "Make sure people who work with AI understand it",
+      "description": "Everyone who builds, runs or relies on AI systems for you, contractors included, knows what the tools can and cannot do, the risks they carry and how to use them safely. The AI Act asks this AI literacy of providers and deployers alike.",
+      "guidance": [
+        "Give everyone a short course on what AI is, where it fails and the rules for using it at work.",
+        "Add role-specific training for system owners, the people who oversee AI decisions and those who build or tune models.",
+        "Match the depth to each person's technical knowledge, experience and the context the system is used in.",
+        "Cover approved and banned uses of public generative AI tools, including the data that must never be entered into them.",
+        "Record who completed which training, and refresh it when the tools or the rules change."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 4" },
+        { "framework": "iso27001-2022", "ref": "A.6.3" }
+      ]
+    },
+    {
+      "code": "AIG-04",
+      "title": "Give competent people the authority to oversee and overrule AI",
+      "description": "For each high-risk AI system, named people with the competence, training and authority to understand its output monitor it, can disregard or reverse its results and can stop it. Oversight on paper fails when reviewers simply approve whatever the system suggests.",
+      "guidance": [
+        "Name the overseers for each high-risk system, and give them the authority to overrule or halt it.",
+        "Train them on the system's capabilities, limits and known failure modes, using the provider's instructions.",
+        "Warn overseers against automation bias, and track how often they change or reject the system's output.",
+        "Make sure there is a working way to stop the system or fall back to a manual process.",
+        "Where you build the system, design in what overseers need, such as explanations, confidence levels and a stop function."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 14" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(2)" }
+      ]
+    },
+    {
+      "code": "AIG-05",
+      "title": "Tell people when they deal with AI or see AI-made content",
+      "description": "People know when they are talking to an AI, when emotion recognition or biometric categorisation is used on them, when content was made or altered by AI, and when AI helps decide about them. Hidden AI breaks the AI Act's transparency duties and the trust of customers and staff.",
+      "guidance": [
+        "Show a clear notice at the start of every chatbot or voice assistant conversation, unless it is obvious to the user.",
+        "Mark AI-generated audio, images, video and text in a machine-readable way, using the provider's watermarking or metadata where available.",
+        "Label deep fakes, and AI-written texts published on matters of public interest unless a person reviewed them and takes editorial responsibility.",
+        "Tell people before emotion recognition or biometric categorisation is used on them, and process their data lawfully.",
+        "Tell workers before a high-risk system is used at work, and tell people when one makes or supports decisions about them.",
+        "Be ready to explain to an affected person, on request, the AI's role and the main reasons behind a decision."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(7)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(11)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(1)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(2)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(3)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(4)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 86" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(a)" }
+      ]
+    },
+    {
+      "code": "AIG-06",
+      "title": "Log and monitor what your AI systems do in use",
+      "description": "High-risk AI systems record events automatically, the logs you control are kept for at least six months, and someone checks each system's performance against its instructions. Without logs and monitoring you cannot trace a bad decision or notice a system drifting.",
+      "guidance": [
+        "Turn on the system's automatic logging, and confirm which events, inputs and results it records.",
+        "Keep the logs under your control for at least six months, or longer where financial services or other law requires.",
+        "Monitor accuracy, error rates and complaints against the levels the provider's instructions state.",
+        "If the system appears to present a risk, suspend its use and tell the provider and the authority without delay.",
+        "Where you build the system, plan how you will collect and review its performance data after release."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 12" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(1)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(5)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(6)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 72" },
+        { "framework": "iso27001-2022", "ref": "A.8.15" }
+      ]
+    },
+    {
+      "code": "AIG-07",
+      "title": "Check AI suppliers and their models before you rely on them",
+      "description": "Before buying or deploying an AI system or model, you check that its supplier has met its AI Act duties, that its instructions tell you how to use it safely, and that the contract covers your data, changes and incidents. Most firms deploy AI built by others, so their compliance starts with what the supplier provides.",
+      "guidance": [
+        "For a high-risk system, check its CE marking, EU declaration of conformity, registration and instructions for use before signing.",
+        "Ask how the model was trained and tested, what its known limits are, and how accurate it is for uses like yours.",
+        "Find out whether your data trains the supplier's models and where it is processed, and how to switch that off.",
+        "Require the supplier to tell you of model changes, serious incidents and corrective actions that affect you.",
+        "If you import or distribute an AI system, verify the provider's conformity assessment and marking before making it available.",
+        "Check the supplier again when the model or its terms change."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 23" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 24" },
+        { "framework": "iso27001-2022", "ref": "A.5.19" },
+        { "framework": "iso27001-2022", "ref": "A.5.20" },
+        { "framework": "iso27001-2022", "ref": "A.5.21" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 28" },
+        { "framework": "nis2-2022-2555", "ref": "Art. 21(2)(d)" },
+        { "framework": "nist-csf-2.0", "ref": "GV.SC-06" }
+      ]
+    },
+    {
+      "code": "AIG-08",
+      "title": "Assess the impact on people's rights before using high-risk AI",
+      "description": "Before a high-risk AI system decides about people, as in credit scoring or insurance pricing, you assess who it affects, how it could harm them and which oversight and remedies are in place. This fundamental rights impact assessment sits alongside the data protection impact assessment, not in place of it.",
+      "guidance": [
+        "Describe the process the system is used in, how often and for how long, and the groups of people it affects.",
+        "Identify the specific risks of harm to those groups, using the information in the provider's instructions.",
+        "Record the human oversight measures, and what you will do if the risks materialise, including complaints and redress.",
+        "Run or update the data protection impact assessment where personal data is processed, reusing the provider's information.",
+        "Notify the market surveillance authority of the results, and update the assessment when anything relevant changes."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(9)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 27" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 35" }
+      ]
+    },
+    {
+      "code": "AIG-09",
+      "title": "Report serious AI incidents to providers and authorities on time",
+      "description": "When an AI system causes, or may have caused, a death, serious harm to health, property or the environment, serious disruption of critical infrastructure or a breach of fundamental rights law, it is reported within the AI Act's deadlines. AI failures go through the same incident process as any other.",
+      "guidance": [
+        "Add AI failures, harmful outputs and discriminatory results to your incident categories and severity scale.",
+        "As a deployer, tell the provider of a serious incident immediately, then the importer or distributor and the authority.",
+        "As a provider, report within 15 days of becoming aware, 10 days after a death, or 2 days for widespread or critical infrastructure harm.",
+        "Do not alter the system in a way that hides the cause before the authority has been told.",
+        "Investigate the cause, then correct, withdraw or recall the system if it no longer conforms."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 20" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(5)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 73" },
+        { "framework": "iso27001-2022", "ref": "A.5.24" }
+      ]
+    },
+    {
+      "code": "AIG-10",
+      "title": "Make sure the data behind your AI is fit and lawful",
+      "description": "Data used to train, test or feed an AI system is relevant, representative and as free of errors as possible, its origin and legal basis are known, and it is checked for bias. Flawed data produces flawed and unfair decisions at scale.",
+      "guidance": [
+        "Record where each training, validation and test data set came from, what it is for and the legal basis for using it.",
+        "Check data sets for gaps, errors and bias against the people the system will affect, and fix or document what you find.",
+        "As a deployer, make sure the input data you control suits the system's intended purpose.",
+        "Use special categories of personal data to detect bias only under the AI Act's strict safeguards, and delete it afterwards.",
+        "Keep AI data sets versioned and access-controlled, so results can be reproduced and checked."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 10" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(4)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(b)" },
+        { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(d)" }
+      ]
+    },
+    {
+      "code": "AIG-11",
+      "title": "Prove a high-risk AI system you build conforms before release",
+      "description": "If you build a high-risk AI system or put your name on one, you manage its risks and quality throughout its life, document it, and complete the conformity steps before release. A firm that develops its own credit scoring or pricing model for its own use is its provider.",
+      "guidance": [
+        "Run a documented risk management process that identifies, tests and reduces the system's risks across its whole life.",
+        "Write the technical documentation and the instructions for deployers before release, and keep both up to date.",
+        "Build in automatic logging, tools for human oversight, and measures for accuracy, robustness and cybersecurity.",
+        "Run a quality management system covering design, testing, data, changes, incidents and record-keeping.",
+        "Complete the conformity assessment, sign the EU declaration of conformity, affix the CE marking and register Annex III systems in the EU database.",
+        "If the system stops conforming, correct, withdraw or recall it, and inform deployers and distributors."
+      ],
+      "category": "ai_governance",
+      "mappings": [
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 9" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 11" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 12" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 13" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 14" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 15" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 17" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 20" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 43" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 47" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 48" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 49(1)" }
+      ]
+    }
+  ]
+}

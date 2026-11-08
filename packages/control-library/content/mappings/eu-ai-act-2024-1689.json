@@ -1,0 +1,11 @@
+{
+  "framework": "eu-ai-act-2024-1689",
+  "mappings": [
+    { "control": "DEV-01", "ref": "Art. 15" },
+    { "control": "DEV-05", "ref": "Art. 15" },
+    { "control": "OPS-08", "ref": "Art. 26(6)" },
+    { "control": "PRV-08", "ref": "Art. 26(9)" },
+    { "control": "PRV-02", "ref": "Art. 50(3)" },
+    { "control": "INC-06", "ref": "Art. 73" }
+  ]
+}

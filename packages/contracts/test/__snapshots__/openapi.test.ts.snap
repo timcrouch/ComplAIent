@@ -604,7 +604,8 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "operations",
           "resilience",
           "incidents",
-          "development"
+          "development",
+          "ai_governance"
         ]
       },
       "ControlTestResult": {
@@ -2935,7 +2936,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           },
           "controlCode": {
             "type": "string",
-            "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV)-\\\\d{2}$"
+            "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV|AIG)-\\\\d{2}$"
           },
           "reason": {
             "type": "string",
@@ -5996,7 +5997,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           {
             "schema": {
               "type": "string",
-              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV)-\\\\d{2}$"
+              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV|AIG)-\\\\d{2}$"
             },
             "required": true,
             "name": "code",
@@ -6272,7 +6273,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           {
             "schema": {
               "type": "string",
-              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV)-\\\\d{2}$"
+              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV|AIG)-\\\\d{2}$"
             },
             "required": true,
             "name": "code",
@@ -6371,7 +6372,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           {
             "schema": {
               "type": "string",
-              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV)-\\\\d{2}$"
+              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV|AIG)-\\\\d{2}$"
             },
             "required": true,
             "name": "code",
@@ -6489,7 +6490,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           {
             "schema": {
               "type": "string",
-              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV)-\\\\d{2}$"
+              "pattern": "^(GOV|PRV|SUP|AST|ACC|PPL|PHY|OPS|RES|INC|DEV|AIG)-\\\\d{2}$"
             },
             "required": true,
             "name": "code",
