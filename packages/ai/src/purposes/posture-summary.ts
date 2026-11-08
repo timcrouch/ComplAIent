@@ -10,7 +10,8 @@ export type PostureSummaryOutput = z.infer<typeof PostureSummaryOutput>;
 
 /**
  * What the board narrative may be written from: the period, the headline facts and the top risks'
- * references, titles, owners and treatments. Nothing else reaches the model.
+ * references, titles and treatments. Nothing else reaches the model; in particular no person's
+ * name (data minimisation: the risk owner stays in the board pack, not in the prompt).
  */
 export type BoardFactsInput = {
   /** A board period: a month key ("2026-10") or "last-30-days"; dates are ISO, end inclusive. */
@@ -27,14 +28,13 @@ export type BoardFactsInput = {
   topRisks: readonly {
     reference: string;
     title: string;
-    owner: string | null;
     treatment: string | null;
   }[];
 };
 
-/** One top risk per line, `- R-0001: title (owner: …; treatment: …)`; the mock reads this format. */
+/** One top risk per line, `- R-0001: title (treatment: …)`; the mock reads this format. */
 const riskLine = (r: BoardFactsInput["topRisks"][number]): string =>
-  `- ${r.reference}: ${r.title} (owner: ${r.owner ?? "none"}; treatment: ${r.treatment ?? "not chosen"})`;
+  `- ${r.reference}: ${r.title} (treatment: ${r.treatment ?? "not chosen"})`;
 
 const MONTHS = [
   "January",
@@ -82,7 +82,7 @@ function factsBody(input: BoardFactsInput): string {
 
 /**
  * The board's posture summary. The system prompt holds only instructions; the facts (including
- * risk titles and owner names, which people typed) go in the user message inside
+ * risk titles, which people typed) go in the user message inside
  * `<facts>…</facts>`. The answer is checked afterwards with the number guard.
  */
 export function buildPostureSummaryPrompt(input: BoardFactsInput): {
@@ -106,11 +106,11 @@ export function buildPostureSummaryPrompt(input: BoardFactsInput): {
 
 /**
  * The figures a narrative may use (P7-R11): the facts, the numbers in the period's label (its
- * year; "30" for the rolling period), and numbers people typed in a top risk's title, owner or
+ * year; "30" for the rolling period), and numbers people typed in a top risk's title or
  * treatment. Not the period's dates and not the digits of references (see `guardText`).
  */
 export function allowedNumbers(input: BoardFactsInput): number[] {
-  const typed = input.topRisks.flatMap((r) => [r.title, r.owner ?? "", r.treatment ?? ""]);
+  const typed = input.topRisks.flatMap((r) => [r.title, r.treatment ?? ""]);
   return [
     ...new Set([
       ...Object.values(input.facts),
