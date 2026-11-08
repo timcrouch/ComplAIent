@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { NO_STORE, redirectToUrl, signInFailedPage } from "../../../lib/auth-responses";
 import { loginCookie } from "../../../lib/cookie";
 import { requestLog } from "../../../lib/log";
+import { withRequestId } from "../../../lib/request-id";
 import { saveLoginState } from "../../../lib/login-state";
 import { buildAuthorizationUrl } from "../../../lib/oidc";
 import { safeReturnTo } from "../../../lib/return-to";
@@ -10,8 +11,15 @@ export const dynamic = "force-dynamic";
 
 const LOGIN_COOKIE_MAX_AGE_S = 10 * 60;
 
-/** Starts sign-in. With `?error=…` (set by a failed callback) it shows a retry page instead. */
-export async function GET(request: NextRequest): Promise<Response> {
+/**
+ * Starts sign-in. With `?error=…` (set by a failed callback) it shows a retry page instead.
+ * The proxy skips /auth/*, so it logs with its own request id, never the client's.
+ */
+export function GET(request: NextRequest): Promise<Response> {
+  return withRequestId(crypto.randomUUID(), () => start(request));
+}
+
+async function start(request: NextRequest): Promise<Response> {
   const returnTo = safeReturnTo(request.nextUrl.searchParams.get("returnTo"));
   const stepUp = request.nextUrl.searchParams.get("stepUp") === "1";
   if (request.nextUrl.searchParams.has("error")) return signInFailedPage(returnTo, 401, stepUp);

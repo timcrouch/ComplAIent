@@ -4,6 +4,7 @@ import { apiCall } from "../../../lib/api-client";
 import { redirectTo } from "../../../lib/auth-responses";
 import { loginCookie, sessionCookie } from "../../../lib/cookie";
 import { requestLog } from "../../../lib/log";
+import { withRequestId } from "../../../lib/request-id";
 import { takeLoginState } from "../../../lib/login-state";
 import type { LoginState, Tokens } from "../../../lib/oidc";
 import { handleCallback } from "../../../lib/oidc";
@@ -52,7 +53,15 @@ async function savedTheme(accessToken: string): Promise<Theme | null> {
   }
 }
 
-export async function GET(request: NextRequest): Promise<Response> {
+/**
+ * The proxy skips /auth/*, so the inbound x-request-id is the client's own: the callback mints
+ * one id for its log events and the /me call to the API.
+ */
+export function GET(request: NextRequest): Promise<Response> {
+  return withRequestId(crypto.randomUUID(), () => complete(request));
+}
+
+async function complete(request: NextRequest): Promise<Response> {
   const params = request.nextUrl.searchParams;
   const state = params.get("state");
   if (!state) return fail("missing_state");

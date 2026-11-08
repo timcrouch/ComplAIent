@@ -323,12 +323,15 @@ export async function apiUpload<R extends UploadRoute>(
  * streamed on without a size cap. A query is checked against the contract and sent as given.
  * The timeout covers reaching the headers only. A non-2xx answer becomes an `ApiError` (its
  * small JSON body is read under the usual cap).
+ * `requestId`, when given, is sent instead of `requestId()`. A route the proxy skips (such as
+ * the report files, whose paths end in an extension) passes its own id, as `apiUpload` does.
  */
 export async function apiDownload<R extends DownloadRoute>(
   route: R,
   params: [ParamsOf<R>] extends [never] ? Record<string, never> : ParamsOf<R>,
   accessToken: string,
   query?: QueryOf<R>,
+  options: { requestId?: string } = {},
 ): Promise<Response> {
   const checkedParams = parseInput(route.request?.params, params, "params");
   parseInput(route.request?.query, query ?? {}, "query");
@@ -339,7 +342,7 @@ export async function apiDownload<R extends DownloadRoute>(
     res = await Promise.race([
       fetch(buildUrl(route, checkedParams, query ?? {}), {
         method: "GET",
-        headers: await baseHeaders(accessToken, "*/*"),
+        headers: await baseHeaders(accessToken, "*/*", options.requestId),
         cache: "no-store",
         redirect: "error",
         signal: controller.signal,

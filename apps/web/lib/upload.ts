@@ -4,6 +4,7 @@ import { EVIDENCE_TYPES } from "@isms/domain";
 import { z } from "zod";
 import { ApiError, apiUpload } from "./api-client";
 import { env } from "./env";
+import { withRequestId } from "./request-id";
 import { boundaryOf, MultipartError, readMultipart, type MultipartFile } from "./multipart";
 import { accessTokenFor, failureOf, type CallFailureKind } from "./server-api";
 
@@ -90,21 +91,25 @@ export type UploadFields = { fields: Map<string, string[]>; fileName: string; mi
  * API as its octet-stream body. In order, before any of the body is read: the Origin (403),
  * the id (404), the session (401) and the declared length (413). The fields come before the
  * file, which must be the last part; the size is counted again while streaming. The upload
- * gets a fresh request id here: these routes skip the proxy, so an inbound `x-request-id` is
- * the client's and is never forwarded or logged. Tokens and file bytes are never logged.
+ * gets a fresh request id here (for everything it calls, through `withRequestId`): these
+ * routes skip the proxy, so an inbound `x-request-id` is the client's and is never forwarded
+ * or logged. Tokens and file bytes are never logged.
  */
-export async function handleUpload(
-  request: Request,
-  spec: {
-    route: UploadRoute;
-    id: string;
-    returnTo: string;
-    query: (input: UploadFields) => Record<string, string>;
-  },
-): Promise<Response> {
+export function handleUpload(request: Request, spec: UploadSpec): Promise<Response> {
+  const requestId = crypto.randomUUID();
+  return withRequestId(requestId, () => forward(request, spec, requestId));
+}
+
+type UploadSpec = {
+  route: UploadRoute;
+  id: string;
+  returnTo: string;
+  query: (input: UploadFields) => Record<string, string>;
+};
+
+async function forward(request: Request, spec: UploadSpec, requestId: string): Promise<Response> {
   if (!sameOrigin(request)) return refuse("forbidden");
   if (!z.uuid().safeParse(spec.id).success) return refuse("not-found");
-  const requestId = crypto.randomUUID();
   const token = await accessTokenFor(spec.returnTo, { requestId });
   if (!token.ok) return answer(token);
 

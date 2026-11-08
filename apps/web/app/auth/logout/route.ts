@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { NO_STORE, redirectTo, redirectToUrl } from "../../../lib/auth-responses";
 import { sessionCookie, webBaseUrl } from "../../../lib/cookie";
 import { requestLog } from "../../../lib/log";
+import { withRequestId } from "../../../lib/request-id";
 import { endSessionUrl } from "../../../lib/oidc";
 import { endSession } from "../../../lib/session";
 import { THEME_COOKIE } from "../../../lib/theme";
@@ -24,8 +25,13 @@ function isSameOrigin(request: NextRequest): boolean {
 /**
  * POST only: there is no GET handler, so a link or image cannot sign anyone out. The cookie is
  * always cleared and the user always redirected, even when Redis or the IdP fails.
+ * The proxy skips /auth/*, so it logs with its own request id, never the client's.
  */
-export async function POST(request: NextRequest): Promise<Response> {
+export function POST(request: NextRequest): Promise<Response> {
+  return withRequestId(crypto.randomUUID(), () => signOut(request));
+}
+
+async function signOut(request: NextRequest): Promise<Response> {
   if (!isSameOrigin(request)) return new Response(null, { status: 403, headers: NO_STORE });
 
   const cookie = sessionCookie();

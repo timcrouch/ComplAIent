@@ -15,6 +15,7 @@ vi.mock("../../lib/api-client", async (importOriginal) => ({
 const { accessTokenFor } = await import("../../lib/server-api");
 const { ApiError, apiUpload } = await import("../../lib/api-client");
 const { MULTIPART_OVERHEAD_BYTES } = await import("../../lib/upload");
+const { requestId } = await import("../../lib/request-id");
 const riskUpload = await import("../../app/(app)/risks/[id]/evidence/route");
 const taskUpload = await import("../../app/(app)/tasks/[id]/evidence/route");
 
@@ -220,6 +221,11 @@ describe("evidence upload routes", () => {
   it("never forwards a client-chosen request id: the API gets a fresh one", async () => {
     vi.mocked(apiUpload).mockResolvedValue(evidence);
     const chosen = "11111111-2222-4333-8444-555555555555";
+    let inside: string | undefined;
+    vi.mocked(accessTokenFor).mockImplementationOnce(async () => {
+      inside = await requestId();
+      return { ok: true, token: "token-1" };
+    });
     const raw = multipart([["controlIds", CONTROL]], {
       name: "a.pdf",
       type: "application/pdf",
@@ -239,6 +245,8 @@ describe("evidence upload routes", () => {
     expect(vi.mocked(accessTokenFor).mock.calls[0]?.[1]).toEqual({
       requestId: options.requestId,
     });
+    // Code the upload reaches (a token refresh's log events) sees the same id.
+    expect(inside).toBe(options.requestId);
   });
 
   it("refuses a second file part (or a field after the file) with 400", async () => {
