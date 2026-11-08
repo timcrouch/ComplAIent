@@ -15,6 +15,10 @@ type ErrorKey =
 type Props = {
   period: string;
   narrative: BoardNarrativeDto | null;
+  /** The period is a month that ended yesterday: say so instead of "none approved yet". */
+  endedYesterday: boolean;
+  /** The period in words, for that message. */
+  periodLabel: string;
   canDraft: boolean;
   canApprove: boolean;
   /** Scoped readers: the summary covers the whole organisation, so it is not shown to them. */
@@ -46,6 +50,8 @@ function approveError(result: Failure): ErrorKey {
 export function BoardNarrative({
   period,
   narrative,
+  endedYesterday,
+  periodLabel,
   canDraft,
   canApprove,
   scoped,
@@ -129,7 +135,13 @@ export function BoardNarrative({
 
   function body() {
     if (scoped) return <p className="text-sm text-fg-muted">{t("scoped")}</p>;
-    if (!approved) return <p className="text-sm text-fg-muted">{t("none")}</p>;
+    if (!approved) {
+      return (
+        <p className="text-sm text-fg-muted">
+          {endedYesterday ? t("justEnded", { period: periodLabel }) : t("none")}
+        </p>
+      );
+    }
     return (
       <div ref={approvedRef} tabIndex={-1} className="flex flex-col gap-2 outline-none">
         <p className="max-w-[68ch] text-[15px] leading-relaxed whitespace-pre-line text-fg">
