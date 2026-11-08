@@ -141,7 +141,12 @@ export function DemoConfirmDialog({ mode, expected, open, onOpenChange, run }: P
             <DialogClose render={<Button type="button" variant="ghost" disabled={busy} />}>
               {t("dialog.cancel")}
             </DialogClose>
-            <Button type="submit" disabled={!matches || busy} focusableWhenDisabled>
+            <Button
+              type="submit"
+              variant="destructive"
+              disabled={!matches || busy}
+              focusableWhenDisabled
+            >
               {busy ? t(mode === "load" ? "loading" : "resetting") : t(`${mode}.confirm`)}
             </Button>
           </DialogFooter>

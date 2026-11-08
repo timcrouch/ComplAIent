@@ -19,6 +19,10 @@ const buttonVariants = cva(
         secondary:
           "border border-[color-mix(in_oklab,var(--isms-text)_10%,transparent)] bg-surface text-fg shadow-glass hover:bg-[color-mix(in_oklab,var(--isms-surface),var(--isms-text)_5%)]",
         ghost: "text-fg hover:bg-[color-mix(in_oklab,transparent,var(--isms-text)_7%)]",
+        // Irreversible actions. Critical text on its soft background, a pair both themes keep at
+        // 4.5:1 or more (test/contrast.test.ts); hover strengthens the border, not the colours.
+        destructive:
+          "border border-[color-mix(in_oklab,var(--isms-critical)_40%,transparent)] bg-critical-soft text-critical shadow-glass hover:border-critical",
       },
       size: {
         sm: "h-8 px-3 text-[13px]",

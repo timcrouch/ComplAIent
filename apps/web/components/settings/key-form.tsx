@@ -189,7 +189,7 @@ export function KeyForm({ keyStatus, secretsKeyConfigured, timeZone, onSaved }: 
             <DialogClose render={<Button type="button" variant="ghost" />}>
               {t("confirmCancel")}
             </DialogClose>
-            <Button type="button" onClick={() => void remove()}>
+            <Button type="button" variant="destructive" onClick={() => void remove()}>
               {t("confirmRemove")}
             </Button>
           </DialogFooter>

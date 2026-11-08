@@ -41,7 +41,8 @@ export function DemoTools({ status }: { status: DemoStatusResponse | null }) {
             <p className="text-sm text-fg-muted">{t(`${mode}.description`)}</p>
             <Button
               type="button"
-              variant="secondary"
+              // Reset only deletes; opening the load dialog leads to a choice (its confirm is red).
+              variant={mode === "reset" ? "destructive" : "secondary"}
               onClick={() => {
                 setOpen(mode);
               }}
