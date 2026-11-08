@@ -1,0 +1,248 @@
+{
+  "aiActRules": {
+    "practices": {
+      "subliminal_manipulation": {
+        "label": "Manipulates people below their awareness",
+        "help": "Subliminal, manipulative or deceptive techniques that distort behaviour and cause significant harm."
+      },
+      "exploiting_vulnerabilities": {
+        "label": "Exploits vulnerable people",
+        "help": "Takes advantage of age, disability or a social or economic situation to distort behaviour harmfully."
+      },
+      "social_scoring": {
+        "label": "Social scoring",
+        "help": "Rates people on social behaviour or personality, leading to unfair treatment in unrelated contexts."
+      },
+      "crime_prediction_profiling": {
+        "label": "Predicts crime from profiling",
+        "help": "Predicts whether a person will commit a crime based only on profiling or personality traits."
+      },
+      "untargeted_face_scraping": {
+        "label": "Scrapes faces to build a database",
+        "help": "Builds face recognition databases by untargeted scraping from the internet or CCTV."
+      },
+      "emotion_recognition_work_education": {
+        "label": "Recognises emotions at work or school",
+        "help": "Infers emotions of employees or students, except for medical or safety reasons."
+      },
+      "biometric_categorisation_sensitive": {
+        "label": "Sorts people by sensitive traits from biometrics",
+        "help": "Infers race, political opinions, union membership, religion, sex life or orientation from biometric data."
+      },
+      "realtime_remote_biometric_id": {
+        "label": "Real-time remote biometric identification in public",
+        "help": "Identifies people live, at a distance, in publicly accessible places for law enforcement."
+      }
+    },
+    "areas": {
+      "biometrics": {
+        "label": "Biometrics",
+        "help": "Remote biometric identification, categorisation by sensitive traits, or emotion recognition. Simply confirming that someone is who they claim to be doesn't count."
+      },
+      "critical_infrastructure": {
+        "label": "Critical infrastructure",
+        "help": "A safety component in running digital infrastructure, road traffic, or water, gas, heating or electricity supply."
+      },
+      "education": {
+        "label": "Education and training",
+        "help": "Deciding admission, grading learning outcomes, steering education levels or watching for cheating in tests."
+      },
+      "employment": {
+        "label": "Employment and workers",
+        "help": "Recruiting or screening candidates, deciding promotions or dismissals, allocating tasks, or monitoring workers' performance."
+      },
+      "essential_public_services": {
+        "label": "Public benefits and services",
+        "help": "Public authorities deciding who gets benefits and services such as healthcare, or reducing or revoking them."
+      },
+      "creditworthiness": {
+        "label": "Creditworthiness and credit scoring",
+        "help": "Evaluating whether a person is creditworthy, or setting their credit score. Not covered: systems used only to detect financial fraud (Annex III, point 5(b))."
+      },
+      "life_health_insurance": {
+        "label": "Life and health insurance",
+        "help": "Assessing risk and setting prices for individuals in life or health insurance."
+      },
+      "emergency_triage": {
+        "label": "Emergency calls and triage",
+        "help": "Evaluating emergency calls, dispatching police, fire or ambulance services, or triaging patients."
+      },
+      "law_enforcement": {
+        "label": "Law enforcement",
+        "help": "Used by or for police: assessing victims, evidence reliability, reoffending risk, or profiling in investigations."
+      },
+      "migration_border": {
+        "label": "Migration, asylum and border control",
+        "help": "Assessing risks of people entering, examining asylum, visa or residence applications, or detecting people at borders."
+      },
+      "justice_democracy": {
+        "label": "Justice and elections",
+        "help": "Helping courts research or apply the law, or influencing how people vote in elections or referendums."
+      }
+    },
+    "derogations": {
+      "none": {
+        "label": "None of these",
+        "help": "The system influences decisions about people, so it stays high-risk."
+      },
+      "narrow_procedural_task": {
+        "label": "A narrow procedural task",
+        "help": "For example turning unstructured documents into structured data, or sorting incoming documents into categories."
+      },
+      "improves_completed_human_activity": {
+        "label": "Improves work a person has already finished",
+        "help": "For example polishing the language of a letter someone already wrote."
+      },
+      "detects_patterns_without_replacing_review": {
+        "label": "Spots patterns for a person to review",
+        "help": "It flags deviations from earlier decisions, but doesn't replace or influence the person's assessment without proper review."
+      },
+      "preparatory_task": {
+        "label": "Prepares an assessment a person makes",
+        "help": "For example indexing, searching or translating files that a person then assesses."
+      }
+    },
+    "duties": {
+      "interacts_with_people": {
+        "label": "People talk to it directly",
+        "help": "For example a chatbot or voice assistant, unless it is obvious they are dealing with AI."
+      },
+      "generates_synthetic_content": {
+        "label": "It generates images, audio, video or text",
+        "help": "Synthetic content that could pass as made by a person."
+      },
+      "emotion_recognition_or_biometric_categorisation": {
+        "label": "It recognises emotions or sorts people by biometrics",
+        "help": "People exposed to it must be told it is running."
+      },
+      "deep_fake": {
+        "label": "It produces deep fakes",
+        "help": "Images, audio or video that resemble real people, places or events and could seem authentic."
+      },
+      "public_interest_text": {
+        "label": "It writes text published to inform the public",
+        "help": "Text on matters of public interest, unless a person reviews it and takes editorial responsibility."
+      }
+    },
+    "reasons": {
+      "unknown": "A rule of the Regulation applies.",
+      "not_ai_system": "It isn't an AI system as the Regulation defines one, so the Regulation doesn't apply.",
+      "prohibited": {
+        "subliminal_manipulation": "It manipulates people below their awareness, which is prohibited.",
+        "exploiting_vulnerabilities": "It exploits vulnerable people, which is prohibited.",
+        "social_scoring": "It scores people on social behaviour, which is prohibited.",
+        "crime_prediction_profiling": "It predicts crime from profiling alone, which is prohibited.",
+        "untargeted_face_scraping": "It builds face databases by untargeted scraping, which is prohibited.",
+        "emotion_recognition_work_education": "It recognises emotions at work or in education, which is prohibited.",
+        "biometric_categorisation_sensitive": "It infers sensitive traits from biometrics, which is prohibited.",
+        "realtime_remote_biometric_id": "It identifies people remotely in real time in public, which is prohibited."
+      },
+      "annex_i": {
+        "safety_component": "It is a safety component of a product under Annex I, so it is high-risk."
+      },
+      "annex_iii": {
+        "biometrics": "It is used for biometrics, a high-risk use.",
+        "critical_infrastructure": "It is used in critical infrastructure, a high-risk use.",
+        "education": "It is used in education or training, a high-risk use.",
+        "employment": "It is used in employment or managing workers, a high-risk use.",
+        "essential_public_services": "It decides access to public benefits or services, a high-risk use.",
+        "creditworthiness": "It evaluates creditworthiness or sets credit scores, a high-risk use.",
+        "life_health_insurance": "It prices or assesses risk in life or health insurance, a high-risk use.",
+        "emergency_triage": "It is used for emergency calls or triage, a high-risk use.",
+        "law_enforcement": "It is used in law enforcement, a high-risk use.",
+        "migration_border": "It is used in migration, asylum or border control, a high-risk use.",
+        "justice_democracy": "It is used in justice or elections, a high-risk use.",
+        "profiling": "It profiles people, so it stays high-risk whatever its task.",
+        "no_derogation": "None of the exceptions for narrow or supporting tasks applies, so it is high-risk."
+      },
+      "derogation": {
+        "narrow_procedural_task": "It only does a narrow procedural task, so it isn't high-risk. Record this assessment.",
+        "improves_completed_human_activity": "It only improves work a person has finished, so it isn't high-risk. Record this assessment.",
+        "detects_patterns_without_replacing_review": "It only spots patterns for a person to review, so it isn't high-risk. Record this assessment.",
+        "preparatory_task": "It only prepares an assessment a person makes, so it isn't high-risk. Record this assessment."
+      },
+      "transparency": {
+        "interacts_with_people": "People talk to it directly, so they must be told they are dealing with AI.",
+        "generates_synthetic_content": "It generates content, which must be marked as AI-generated.",
+        "emotion_recognition_or_biometric_categorisation": "It recognises emotions or sorts people by biometrics, so people must be told.",
+        "deep_fake": "It produces deep fakes, which must be disclosed as such.",
+        "public_interest_text": "It writes text for the public, which must be disclosed as AI-generated."
+      },
+      "minimal_risk": "No high-risk use or transparency duty applies: it is minimal risk, with voluntary codes of conduct only."
+    },
+    "obligationTitles": {
+      "ai_literacy": "Make sure staff understand AI",
+      "stop_prohibited_practice": "Stop the prohibited practice",
+      "risk_management_system": "Run a risk management process",
+      "data_governance": "Govern training and test data",
+      "technical_documentation": "Keep technical documentation",
+      "automatic_logging": "Log events automatically",
+      "instructions_for_deployers": "Give instructions for use",
+      "human_oversight_by_design": "Design for human oversight",
+      "accuracy_robustness_security": "Ensure accuracy, robustness and security",
+      "quality_management_system": "Run a quality management system",
+      "conformity_assessment": "Pass the conformity assessment",
+      "eu_declaration_and_ce_marking": "Sign the EU declaration and add the CE mark",
+      "eu_database_registration": "Register in the EU database",
+      "post_market_monitoring": "Monitor after release",
+      "serious_incident_reporting": "Report serious incidents",
+      "corrective_actions": "Correct non-conformities",
+      "use_per_instructions": "Use it as instructed",
+      "assign_human_oversight": "Assign human oversight",
+      "input_data_quality": "Check the input data",
+      "monitor_and_report": "Monitor and report problems",
+      "keep_logs_six_months": "Keep the logs for six months",
+      "inform_workers": "Inform workers before use at work",
+      "inform_affected_people": "Tell people it is used on them",
+      "dpia_where_required": "Do a DPIA where required",
+      "right_to_explanation": "Explain decisions on request",
+      "fundamental_rights_impact_assessment": "Assess the impact on fundamental rights",
+      "importer_verification": "Check the system before importing it",
+      "distributor_verification": "Check the system before distributing it",
+      "document_not_high_risk_assessment": "Document why it isn't high-risk",
+      "register_not_high_risk": "Register the not-high-risk system",
+      "disclose_ai_interaction": "Tell people they are talking to AI",
+      "mark_synthetic_content": "Mark AI-generated content",
+      "inform_emotion_or_biometric_exposure": "Tell people about emotion or biometric analysis",
+      "disclose_deep_fake": "Disclose deep fakes",
+      "disclose_ai_generated_text": "Disclose AI-written public text"
+    },
+    "obligationDescriptions": {
+      "ai_literacy": "Give the people who run or use this system enough training to understand what it does, its limits and its risks. Record who was trained, when, and on what.",
+      "stop_prohibited_practice": "This use is banned in the EU. Stop it, or change the system so the practice no longer happens, and record when and how you did so.",
+      "risk_management_system": "Identify and assess the risks the system poses to health, safety and fundamental rights, decide measures for each, test them, and review the whole process regularly over the system's life.",
+      "data_governance": "Document where training, validation and test data come from, check them for errors, gaps and bias, and record how you prepared them.",
+      "technical_documentation": "Write and keep up to date a description of the system's design, purpose, data, testing and performance, detailed enough for an authority to check compliance (Annex IV).",
+      "automatic_logging": "Build the system so it records events while it runs, enough to trace what happened, find risks and support monitoring.",
+      "instructions_for_deployers": "Provide clear instructions that tell deployers what the system is for, its accuracy and limits, the human oversight it needs and how to read its outputs.",
+      "human_oversight_by_design": "Build in ways for people to understand, monitor, override and stop the system, and say in the instructions how oversight should work.",
+      "accuracy_robustness_security": "Set and measure accuracy levels, test that the system copes with errors and misuse, and protect it against attacks such as data poisoning.",
+      "quality_management_system": "Have written policies and procedures covering design, testing, data, risk management, monitoring, incident reporting and who is responsible for each.",
+      "conformity_assessment": "Before placing the system on the market, carry out the conformity assessment that applies to it, internally or with a notified body, and keep the results.",
+      "eu_declaration_and_ce_marking": "Draw up and sign the EU declaration of conformity, keep it for ten years, and put the CE marking on the system or its documentation.",
+      "eu_database_registration": "Register the system and your organisation in the EU database for high-risk AI systems before placing it on the market or putting it into service.",
+      "post_market_monitoring": "Collect and review data on how the system performs once it is in use, following a written monitoring plan, and act on what you find.",
+      "serious_incident_reporting": "Agree who reports, to which market surveillance authority, and how. Report any serious incident without delay once you know of it, and within the legal deadline.",
+      "corrective_actions": "When the system doesn't conform, fix it, withdraw or recall it as needed, and inform distributors, deployers and, where there is a risk, the authorities.",
+      "use_per_instructions": "Read the provider's instructions for use and put technical and organisational measures in place so the system is used only as they describe.",
+      "assign_human_oversight": "Name the people who oversee the system, make sure they have the skills, training and authority to do it, and give them the support they need.",
+      "input_data_quality": "Where you control the input data, make sure it is relevant and representative enough for the system's intended purpose.",
+      "monitor_and_report": "Watch how the system works in practice. If it presents a risk, or a serious incident happens, stop using it where needed and inform the provider and the authority.",
+      "keep_logs_six_months": "Keep the logs the system generates, as far as they are under your control, for at least six months, or longer if other law requires.",
+      "inform_workers": "Before using the system at work, tell the workers concerned and their representatives that they will be subject to it.",
+      "inform_affected_people": "When the system makes or helps make decisions about people, tell them that a high-risk AI system is used in decisions about them.",
+      "dpia_where_required": "Use the provider's information to carry out a data protection impact assessment under GDPR Art. 35 where one is required.",
+      "right_to_explanation": "Be ready to give a person affected by a decision based on the system a clear explanation of the system's role and the main elements of the decision.",
+      "fundamental_rights_impact_assessment": "Before first use, assess how the system could affect people's fundamental rights: who is affected, the risks, human oversight and what you do if risks materialise. Notify the authority of the result.",
+      "importer_verification": "Before placing it on the market, check that the provider did the conformity assessment, drew up the documentation, added the CE mark and appointed a representative. Put your name and contact on it.",
+      "distributor_verification": "Before making it available, check that it carries the CE mark, comes with the declaration of conformity and instructions, and that the provider and importer met their duties.",
+      "document_not_high_risk_assessment": "Write down your assessment of why the system is not high-risk despite its Annex III use, before placing it on the market, and give it to the authorities on request.",
+      "register_not_high_risk": "Register the system in the EU database even though you assessed it as not high-risk.",
+      "disclose_ai_interaction": "Design the system so people are told they are interacting with AI, at the latest at their first interaction, unless it is obvious.",
+      "mark_synthetic_content": "Make the images, audio, video or text the system generates detectable as AI-generated, in a machine-readable format.",
+      "inform_emotion_or_biometric_exposure": "Tell the people exposed to the system that it recognises emotions or sorts people by biometrics, and handle their data under the GDPR.",
+      "disclose_deep_fake": "Say clearly that images, audio or video you publish were generated or changed by AI.",
+      "disclose_ai_generated_text": "Say that text published to inform the public was generated by AI, unless a person reviewed it and takes editorial responsibility."
+    }
+  }
+}

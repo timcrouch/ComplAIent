@@ -2,13 +2,17 @@
 
 import {
   FrameworksInput,
+  ModuleKeySchema,
   organisationRoutes,
   ProfileInput,
   ReviewIntervalInput,
   RiskScaleInput,
+  SetModuleInput,
   UnitsInput,
   type CompleteSetupResponse,
   type FrameworksResponse,
+  type ModuleKey,
+  type ModulesResponse,
   type OrganisationResponse,
   type RiskScaleDto,
   type UnitsResponse,
@@ -106,6 +110,28 @@ export async function saveReviewInterval(
 export async function completeSetup(): Promise<CallResult<CompleteSetupResponse>> {
   return revalidated(
     await callApi(organisationRoutes.completeSetup, {}, { returnTo: "/setup/review" }),
+    "/",
+  );
+}
+
+/**
+ * Turns an optional module on or off; off hides it and keeps its data. Every page is
+ * refreshed, not only /setup: the navigation shows or hides the module's item.
+ */
+export async function setModule(
+  key: ModuleKey,
+  enabled: boolean,
+): Promise<CallResult<ModulesResponse>> {
+  const parsedKey = ModuleKeySchema.safeParse(key);
+  if (!parsedKey.success) return invalid(parsedKey.error);
+  const body = SetModuleInput.safeParse({ enabled });
+  if (!body.success) return invalid(body.error);
+  return revalidated(
+    await callApi(
+      organisationRoutes.setModule,
+      { params: { key: parsedKey.data }, body: body.data },
+      { returnTo: "/setup/modules" },
+    ),
     "/",
   );
 }

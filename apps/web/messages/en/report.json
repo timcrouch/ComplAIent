@@ -12,6 +12,7 @@
       "firstPrompt": "What are you worried might happen?",
       "assistant": "Assistant",
       "aiBadge": "AI assistant",
+      "aiNotice": "You're talking to an AI assistant, not a person. It only helps you put your concern into words. A person reviews everything before anything is decided.",
       "chipsBadge": "Suggested by AI",
       "you": "You",
       "composerLabel": "Your answer",

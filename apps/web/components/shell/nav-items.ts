@@ -1,4 +1,4 @@
-import type { Permission } from "@isms/contracts";
+import type { ModuleKey, Permission } from "@isms/contracts";
 import {
   Building2Icon,
   FileBarChartIcon,
@@ -6,6 +6,7 @@ import {
   LibraryBigIcon,
   ListTodoIcon,
   MessageSquareWarningIcon,
+  ScaleIcon,
   SettingsIcon,
   ShieldAlertIcon,
   type LucideIcon,
@@ -14,7 +15,16 @@ import {
 export type NavItem = {
   href: string;
   /** Message key under `nav.` */
-  key: "home" | "report" | "tasks" | "risks" | "reports" | "library" | "organisation" | "settings";
+  key:
+    | "home"
+    | "report"
+    | "tasks"
+    | "risks"
+    | "reports"
+    | "library"
+    | "aiAct"
+    | "organisation"
+    | "settings";
   icon: LucideIcon;
   /** Current for this path and everything below it (Home is current only on "/"). */
   section: boolean;
@@ -22,9 +32,13 @@ export type NavItem = {
 
 /**
  * Primary navigation for the viewer. Hiding an item is presentation only: the API checks
- * every request itself. Later plans add their sections here.
+ * every request itself. Later plans add their sections here. A module's item shows only while
+ * the module is on (`modules`, from /me) and the viewer may read it.
  */
-export function navItemsFor(permissions: readonly Permission[]): NavItem[] {
+export function navItemsFor(
+  permissions: readonly Permission[],
+  modules: readonly ModuleKey[] = [],
+): NavItem[] {
   const items: NavItem[] = [{ href: "/", key: "home", icon: HouseIcon, section: false }];
   if (permissions.includes("risks.report")) {
     items.push({ href: "/report", key: "report", icon: MessageSquareWarningIcon, section: true });
@@ -39,6 +53,9 @@ export function navItemsFor(permissions: readonly Permission[]): NavItem[] {
   }
   if (permissions.includes("library.read")) {
     items.push({ href: "/library", key: "library", icon: LibraryBigIcon, section: true });
+  }
+  if (modules.includes("eu_ai_act") && permissions.includes("aiact.read")) {
+    items.push({ href: "/ai-act", key: "aiAct", icon: ScaleIcon, section: true });
   }
   if (permissions.includes("organisation.manage")) {
     items.push({ href: "/setup", key: "organisation", icon: Building2Icon, section: true });

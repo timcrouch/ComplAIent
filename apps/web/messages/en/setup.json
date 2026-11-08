@@ -19,6 +19,18 @@
       "people": "People",
       "review": "Review"
     },
+    "sectionsLabel": "Optional",
+    "sections": {
+      "modules": "Modules"
+    },
+    "optional": "Optional · not a setup step",
+    "modules": {
+      "title": "Optional modules",
+      "why": "Modules add work some organisations need and others don't. Each stays hidden for everyone until you turn it on, and turning it off later keeps its data.",
+      "listLabel": "Modules",
+      "summary": "Modules on",
+      "none": "No modules are on."
+    },
     "organisation": {
       "title": "About your organisation",
       "why": "Your answers describe your organisation for everyone who uses this workspace.",

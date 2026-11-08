@@ -2,7 +2,7 @@
 
 import type { SetupStep } from "@isms/contracts";
 import { cn } from "@isms/ui";
-import { CheckIcon, LightbulbIcon } from "lucide-react";
+import { CheckIcon, LightbulbIcon, PuzzleIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, type ReactNode } from "react";
@@ -10,12 +10,26 @@ import { consumeStepHeadingFocus, requestStepHeadingFocus } from "../../lib/step
 import { Entrance } from "../motion/entrance";
 import { focusRingClass } from "../shell/styles";
 import { glass } from "./styles";
-import { firstIncompleteStep, isStepDone, SETUP_STEPS, type FrameStepKey } from "./steps";
+import {
+  firstIncompleteStep,
+  isStepDone,
+  SETUP_SECTIONS,
+  SETUP_STEPS,
+  type FramePageKey,
+  type FrameStepKey,
+} from "./steps";
 
-export type { FrameStepKey };
+export type { FramePageKey, FrameStepKey };
+
+const railLink = cn(
+  "transition-colors duration-(--motion-fast) ease-standard hover:text-fg",
+  "hover:bg-[color-mix(in_oklab,transparent,var(--isms-text)_6%)]",
+  focusRingClass,
+);
 
 type SetupFrameProps = {
-  current: FrameStepKey;
+  /** A step, or an optional section (not numbered, never in `missing`). */
+  current: FramePageKey;
   /** The API's `setup.missing`, which decides what shows as done. */
   missing: readonly SetupStep[];
   children: ReactNode;
@@ -24,6 +38,7 @@ type SetupFrameProps = {
 /**
  * The frame every setup step shares: the ordered step list, where you are, and why the step
  * asks what it asks. A step is done only when the API no longer reports it as missing.
+ * Optional sections (Modules) follow the steps, unnumbered, and are always reachable.
  */
 export function SetupFrame({ current, missing, children }: SetupFrameProps) {
   const t = useTranslations("setup");
@@ -82,12 +97,7 @@ export function SetupFrame({ current, missing, children }: SetupFrameProps) {
                     <Link
                       href={step.path}
                       onClick={requestStepHeadingFocus}
-                      className={cn(
-                        itemClass,
-                        "transition-colors duration-(--motion-fast) ease-standard hover:text-fg",
-                        "hover:bg-[color-mix(in_oklab,transparent,var(--isms-text)_6%)]",
-                        focusRingClass,
-                      )}
+                      className={cn(itemClass, railLink)}
                     >
                       {body}
                     </Link>
@@ -100,13 +110,58 @@ export function SetupFrame({ current, missing, children }: SetupFrameProps) {
               );
             })}
           </ol>
+          <p className="hidden px-2 pt-4 pb-2 text-xs font-bold tracking-[0.08em] text-fg-muted uppercase lg:block">
+            {t("sectionsLabel")}
+          </p>
+          <ul
+            aria-label={t("sectionsLabel")}
+            className="mt-1 grid grid-cols-2 gap-1 border-t border-[color-mix(in_oklab,var(--isms-text)_8%,transparent)] pt-1 sm:grid-cols-3 md:grid-cols-6 lg:mt-0 lg:grid-cols-1 lg:border-t-0 lg:pt-0"
+          >
+            {SETUP_SECTIONS.map((section) => {
+              const isCurrent = section.key === current;
+              const itemClass = cn(
+                "flex min-h-10 items-center gap-2 rounded-md px-2 py-1.5 text-[13px] font-semibold md:flex-col md:text-center lg:flex-row lg:px-2.5 lg:text-left lg:text-sm",
+                isCurrent ? "bg-accent-soft text-accent" : "text-fg-muted",
+              );
+              const body = (
+                <>
+                  <span
+                    aria-hidden
+                    className="inline-flex size-6 shrink-0 items-center justify-center rounded-full border border-dashed border-control-border"
+                  >
+                    <PuzzleIcon className="size-3.5" strokeWidth={2.25} />
+                  </span>
+                  <span className="min-w-0 leading-tight">{t(`sections.${section.key}`)}</span>
+                </>
+              );
+              return (
+                <li key={section.key}>
+                  {isCurrent ? (
+                    <span aria-current="page" className={itemClass}>
+                      {body}
+                    </span>
+                  ) : (
+                    <Link
+                      href={section.path}
+                      onClick={requestStepHeadingFocus}
+                      className={cn(itemClass, railLink)}
+                    >
+                      {body}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </nav>
       </Entrance>
 
       <div className="flex min-w-0 flex-col gap-6">
         <Entrance order={1} className="flex flex-col gap-3">
           <p className="text-[13px] font-semibold text-accent">
-            {t("stepOf", { current: index + 1, total: SETUP_STEPS.length })}
+            {index >= 0
+              ? t("stepOf", { current: index + 1, total: SETUP_STEPS.length })
+              : t("optional")}
           </p>
           <h1
             ref={headingRef}
