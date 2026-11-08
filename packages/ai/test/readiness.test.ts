@@ -43,6 +43,8 @@ describe("aiReadiness", () => {
       connection_test: "conversation",
       posture_summary: "conversation",
       control_test_steps: "controls",
+      ai_act_classification: "controls",
+      ai_act_obligation_guidance: "controls",
     });
   });
 

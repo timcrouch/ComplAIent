@@ -114,6 +114,17 @@ export {
   ControlTestStepsOutput,
   type ControlText,
 } from "./purposes/control-test-steps.js";
+export {
+  AiActClassificationOutput,
+  buildAiActClassificationPrompt,
+  type AiSystemProfileText,
+} from "./purposes/ai-act-classification.js";
+export {
+  AiActGuidanceOutput,
+  buildAiActGuidancePrompt,
+  type AiActGuidanceInput,
+} from "./purposes/ai-act-guidance.js";
+export { MOCK_AI_ACT_RATIONALE } from "./mock/ai-act.js";
 export { wrapUntrusted } from "./untrusted.js";
 export {
   downloadModel,

@@ -7,7 +7,9 @@ export type AiPurpose =
   | "framework_suggestion"
   | "connection_test"
   | "posture_summary"
-  | "control_test_steps";
+  | "control_test_steps"
+  | "ai_act_classification"
+  | "ai_act_obligation_guidance";
 export type AiCallStatus = "ok" | "invalid_output" | "provider_error" | "refused";
 export type AiOutcome = "none" | "pending" | "accepted" | "rejected" | "partial";
 
