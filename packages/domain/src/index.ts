@@ -60,3 +60,34 @@ export type { BoardTile, BoardTileKey, Change, ChangeTone, TileToken } from "./b
 export type { BoardPeriod } from "./board-period.js";
 export { applicabilityHint, implementationStatus } from "./soa.js";
 export type { ImplementationStatus } from "./soa.js";
+export {
+  AI_ACT_ROLES,
+  AI_OBLIGATIONS,
+  AI_OBLIGATION_KEYS,
+  AI_OBLIGATION_STATUSES,
+  AI_RISK_CLASSES,
+  AI_SYSTEM_RISK_CLASSES,
+  AI_SYSTEM_STATUSES,
+  ANNEX_III_AREAS,
+  DEROGATIONS,
+  PROHIBITED_PRACTICES,
+  TRANSPARENCY_DUTIES,
+  aiObligation,
+  applicableObligations,
+  classifyAiSystem,
+} from "./ai-act/index.js";
+export type {
+  AiActRole,
+  AiObligationKey,
+  AiObligationStatus,
+  AiRiskClass,
+  AiSystemRiskClass,
+  AiSystemStatus,
+  AnnexIIIArea,
+  ClassificationAnswers,
+  ClassificationReason,
+  ClassificationResult,
+  Derogation,
+  ProhibitedPractice,
+  TransparencyDuty,
+} from "./ai-act/index.js";
