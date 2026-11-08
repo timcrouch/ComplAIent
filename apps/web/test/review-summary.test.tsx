@@ -39,6 +39,7 @@ const done: OrganisationResponse = {
   defaultRiskScale: { ...scale, version: null },
   reviewIntervalMonths: 12,
   setup: { completedAt: null, missing: [] },
+  modules: [],
 };
 const countries = [{ code: "LV", name: "Latvia" }];
 const finish = () => screen.getByRole("button", { name: t.finish });
