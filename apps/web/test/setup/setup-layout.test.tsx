@@ -68,12 +68,19 @@ describe("Setup layout: demo and training", () => {
     expect(warn).not.toHaveBeenCalled();
   });
 
-  it("shows no section when the API refuses (403), and logs it", async () => {
+  it("shows no section when the API refuses (403), and logs nothing: no setup rights is normal", async () => {
     fetchMock.mockResolvedValue(error(403, "FORBIDDEN"));
     await renderLayout();
     expect(section()).toBeNull();
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it("shows no section when the API fails (500), and logs it", async () => {
+    fetchMock.mockResolvedValue(error(500, "INTERNAL"));
+    await renderLayout();
+    expect(section()).toBeNull();
     expect(warn).toHaveBeenCalledWith(
-      expect.objectContaining({ event: "web.demo_status_unavailable", kind: "forbidden" }),
+      expect.objectContaining({ event: "web.demo_status_unavailable", kind: "unavailable" }),
     );
   });
 
