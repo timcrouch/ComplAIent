@@ -35,6 +35,8 @@ export const PermissionSchema = z
     "reports.read",
     "reports.narrative",
     "soa.manage",
+    "aiact.read",
+    "aiact.manage",
   ])
   .openapi("Permission");
 export type Permission = z.infer<typeof PermissionSchema>;

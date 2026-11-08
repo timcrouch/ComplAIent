@@ -37,7 +37,9 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "keyUnreadable",
           "reportTooLarge",
           "narrativeUnverifiable",
-          "confirmationMismatch"
+          "confirmationMismatch",
+          "duplicateAiSystemName",
+          "duplicateAiSystemRisk"
         ]
       },
       "HealthResponse": {
@@ -166,6 +168,12 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           },
           "theme": {
             "$ref": "#/components/schemas/Theme"
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModuleKey"
+            }
           }
         },
         "required": [
@@ -175,7 +183,8 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "roles",
           "permissions",
           "viewMode",
-          "theme"
+          "theme",
+          "modules"
         ]
       },
       "RoleAssignmentDto": {
@@ -246,7 +255,9 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "ai.transcripts.read",
           "reports.read",
           "reports.narrative",
-          "soa.manage"
+          "soa.manage",
+          "aiact.read",
+          "aiact.manage"
         ]
       },
       "ViewMode": {
@@ -263,6 +274,12 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "light",
           "dark",
           "system"
+        ]
+      },
+      "ModuleKey": {
+        "type": "string",
+        "enum": [
+          "eu_ai_act"
         ]
       },
       "PreferencesResponse": {
@@ -1126,6 +1143,12 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
               "completedAt",
               "missing"
             ]
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModuleKey"
+            }
           }
         },
         "required": [
@@ -1136,7 +1159,8 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "riskScale",
           "defaultRiskScale",
           "reviewIntervalMonths",
-          "setup"
+          "setup",
+          "modules"
         ]
       },
       "OrganisationProfileDto": {
@@ -1513,6 +1537,32 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
         },
         "required": [
           "months"
+        ],
+        "additionalProperties": false
+      },
+      "ModulesResponse": {
+        "type": "object",
+        "properties": {
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModuleKey"
+            }
+          }
+        },
+        "required": [
+          "modules"
+        ]
+      },
+      "SetModuleInput": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
         ],
         "additionalProperties": false
       },
@@ -5157,6 +5207,766 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
         ],
         "additionalProperties": false
       },
+      "AiSystemListResponse": {
+        "type": "object",
+        "properties": {
+          "systems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiSystemSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "systems"
+        ]
+      },
+      "AiSystemSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/components/schemas/AiActRole"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AiSystemStatus"
+          },
+          "riskClass": {
+            "$ref": "#/components/schemas/AiSystemRiskClass"
+          },
+          "owner": {
+            "$ref": "#/components/schemas/PersonRef"
+          },
+          "department": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/DepartmentDto"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            ]
+          },
+          "openObligationCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "role",
+          "status",
+          "riskClass",
+          "owner",
+          "department",
+          "openObligationCount",
+          "updatedAt"
+        ]
+      },
+      "AiActRole": {
+        "type": "string",
+        "enum": [
+          "provider",
+          "deployer",
+          "importer",
+          "distributor"
+        ]
+      },
+      "AiSystemStatus": {
+        "type": "string",
+        "enum": [
+          "planned",
+          "in_use",
+          "retired"
+        ]
+      },
+      "AiSystemRiskClass": {
+        "type": "string",
+        "enum": [
+          "unclassified",
+          "out_of_scope",
+          "prohibited",
+          "high_risk",
+          "limited_risk",
+          "minimal_risk"
+        ]
+      },
+      "AiSystemDetailDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AiSystemSummaryDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "intendedPurpose": {
+                "type": "string"
+              },
+              "supplier": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "model": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "usesGeneralPurposeModel": {
+                "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "classification": {
+                "$ref": "#/components/schemas/AiClassificationDto"
+              },
+              "obligations": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AiObligationDto"
+                }
+              },
+              "risks": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AiSystemRiskDto"
+                }
+              },
+              "canDraftClassification": {
+                "type": "boolean"
+              },
+              "canSuggestGuidance": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "description",
+              "intendedPurpose",
+              "supplier",
+              "model",
+              "usesGeneralPurposeModel",
+              "createdAt",
+              "classification",
+              "obligations",
+              "risks",
+              "canDraftClassification",
+              "canSuggestGuidance"
+            ]
+          }
+        ]
+      },
+      "AiClassificationDto": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "answers": {
+            "$ref": "#/components/schemas/AiClassificationAnswers"
+          },
+          "source": {
+            "$ref": "#/components/schemas/ClassificationSource"
+          },
+          "result": {
+            "$ref": "#/components/schemas/AiClassificationResultDto"
+          },
+          "classifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "classifiedBy": {
+            "$ref": "#/components/schemas/PersonRef"
+          }
+        },
+        "required": [
+          "answers",
+          "source",
+          "result",
+          "classifiedAt",
+          "classifiedBy"
+        ]
+      },
+      "AiClassificationAnswers": {
+        "type": "object",
+        "properties": {
+          "isAiSystem": {
+            "type": "boolean"
+          },
+          "prohibitedPractices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProhibitedPractice"
+            },
+            "maxItems": 8
+          },
+          "annexISafetyComponent": {
+            "type": "boolean"
+          },
+          "annexIIIAreas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnnexIIIArea"
+            },
+            "maxItems": 11
+          },
+          "profilesPeople": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "derogation": {
+            "$ref": "#/components/schemas/Derogation"
+          },
+          "transparency": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransparencyDuty"
+            },
+            "maxItems": 5
+          }
+        },
+        "required": [
+          "isAiSystem",
+          "prohibitedPractices",
+          "annexISafetyComponent",
+          "annexIIIAreas",
+          "profilesPeople",
+          "derogation",
+          "transparency"
+        ],
+        "additionalProperties": false
+      },
+      "ProhibitedPractice": {
+        "type": "string",
+        "enum": [
+          "subliminal_manipulation",
+          "exploiting_vulnerabilities",
+          "social_scoring",
+          "crime_prediction_profiling",
+          "untargeted_face_scraping",
+          "emotion_recognition_work_education",
+          "biometric_categorisation_sensitive",
+          "realtime_remote_biometric_id"
+        ]
+      },
+      "AnnexIIIArea": {
+        "type": "string",
+        "enum": [
+          "biometrics",
+          "critical_infrastructure",
+          "education",
+          "employment",
+          "essential_public_services",
+          "creditworthiness",
+          "life_health_insurance",
+          "emergency_triage",
+          "law_enforcement",
+          "migration_border",
+          "justice_democracy"
+        ]
+      },
+      "Derogation": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "none",
+          "narrow_procedural_task",
+          "improves_completed_human_activity",
+          "detects_patterns_without_replacing_review",
+          "preparatory_task",
+          null
+        ]
+      },
+      "TransparencyDuty": {
+        "type": "string",
+        "enum": [
+          "interacts_with_people",
+          "generates_synthetic_content",
+          "emotion_recognition_or_biometric_categorisation",
+          "deep_fake",
+          "public_interest_text"
+        ]
+      },
+      "ClassificationSource": {
+        "type": "string",
+        "enum": [
+          "manual",
+          "ai_assisted"
+        ]
+      },
+      "AiClassificationResultDto": {
+        "type": "object",
+        "properties": {
+          "riskClass": {
+            "$ref": "#/components/schemas/AiRiskClass"
+          },
+          "transparencyDuties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransparencyDuty"
+            }
+          },
+          "derogationApplied": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AiClassificationReasonDto"
+            }
+          }
+        },
+        "required": [
+          "riskClass",
+          "transparencyDuties",
+          "derogationApplied",
+          "reasons"
+        ]
+      },
+      "AiRiskClass": {
+        "type": "string",
+        "enum": [
+          "out_of_scope",
+          "prohibited",
+          "high_risk",
+          "limited_risk",
+          "minimal_risk"
+        ]
+      },
+      "AiClassificationReasonDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "article": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "article"
+        ]
+      },
+      "AiObligationDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "$ref": "#/components/schemas/AiObligationKey"
+          },
+          "article": {
+            "type": "string"
+          },
+          "applicable": {
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AiObligationStatus"
+          },
+          "note": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedBy": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PersonRef"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "article",
+          "applicable",
+          "status",
+          "note",
+          "updatedAt",
+          "updatedBy"
+        ]
+      },
+      "AiObligationKey": {
+        "type": "string",
+        "enum": [
+          "ai_literacy",
+          "stop_prohibited_practice",
+          "risk_management_system",
+          "data_governance",
+          "technical_documentation",
+          "automatic_logging",
+          "instructions_for_deployers",
+          "human_oversight_by_design",
+          "accuracy_robustness_security",
+          "quality_management_system",
+          "conformity_assessment",
+          "eu_declaration_and_ce_marking",
+          "eu_database_registration",
+          "post_market_monitoring",
+          "serious_incident_reporting",
+          "corrective_actions",
+          "use_per_instructions",
+          "assign_human_oversight",
+          "input_data_quality",
+          "monitor_and_report",
+          "keep_logs_six_months",
+          "inform_workers",
+          "inform_affected_people",
+          "dpia_where_required",
+          "right_to_explanation",
+          "fundamental_rights_impact_assessment",
+          "importer_verification",
+          "distributor_verification",
+          "document_not_high_risk_assessment",
+          "register_not_high_risk",
+          "disclose_ai_interaction",
+          "mark_synthetic_content",
+          "inform_emotion_or_biometric_exposure",
+          "disclose_deep_fake",
+          "disclose_ai_generated_text"
+        ]
+      },
+      "AiObligationStatus": {
+        "type": "string",
+        "enum": [
+          "open",
+          "in_progress",
+          "met",
+          "not_applicable"
+        ]
+      },
+      "AiSystemRiskDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/RiskState"
+          },
+          "linkedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "linkedBy": {
+            "$ref": "#/components/schemas/PersonRef"
+          }
+        },
+        "required": [
+          "id",
+          "reference",
+          "title",
+          "state",
+          "linkedAt",
+          "linkedBy"
+        ]
+      },
+      "AiSystemInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^(?:[^\\\\s\\\\x00-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]| )*$"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "intendedPurpose": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "role": {
+            "$ref": "#/components/schemas/AiActRole"
+          },
+          "supplier": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[^\\\\x00-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "model": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[^\\\\x00-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "usesGeneralPurposeModel": {
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AiSystemStatus"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "departmentId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "intendedPurpose",
+          "role",
+          "supplier",
+          "model",
+          "usesGeneralPurposeModel",
+          "status",
+          "ownerId",
+          "departmentId"
+        ],
+        "additionalProperties": false
+      },
+      "AiSystemUpdateInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^(?:[^\\\\s\\\\x00-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]| )*$"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "intendedPurpose": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "role": {
+            "$ref": "#/components/schemas/AiActRole"
+          },
+          "supplier": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[^\\\\x00-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "model": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[^\\\\x00-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "usesGeneralPurposeModel": {
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AiSystemStatus"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "departmentId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClassifyAiSystemInput": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "$ref": "#/components/schemas/AiClassificationAnswers"
+          },
+          "interactionId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "answers",
+          "interactionId"
+        ],
+        "additionalProperties": false
+      },
+      "AiClassificationDraftResponse": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "$ref": "#/components/schemas/AiClassificationAnswers"
+          },
+          "rationales": {
+            "$ref": "#/components/schemas/AiClassificationRationales"
+          },
+          "interactionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "answers",
+          "rationales",
+          "interactionId"
+        ]
+      },
+      "AiClassificationRationales": {
+        "type": "object",
+        "properties": {
+          "isAiSystem": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "prohibitedPractices": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "annexISafetyComponent": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "annexIIIAreas": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "profilesPeople": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "derogation": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "transparency": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "isAiSystem",
+          "prohibitedPractices",
+          "annexISafetyComponent",
+          "annexIIIAreas",
+          "profilesPeople",
+          "derogation",
+          "transparency"
+        ]
+      },
+      "UpdateAiObligationInput": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/AiObligationStatus"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 2000,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AiObligationGuidanceResponse": {
+        "type": "object",
+        "properties": {
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 3,
+            "maxItems": 6
+          },
+          "evidenceHint": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "interactionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "steps",
+          "evidenceHint",
+          "interactionId"
+        ]
+      },
+      "LinkAiSystemRiskInput": {
+        "type": "object",
+        "properties": {
+          "riskId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "riskId"
+        ],
+        "additionalProperties": false
+      },
       "DemoStatusResponse": {
         "type": "object",
         "properties": {
@@ -7211,6 +8021,113 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           },
           "409": {
             "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organisation/modules/{key}": {
+      "put": {
+        "summary": "Turn an optional module on or off; off hides it (its routes answer 404) and keeps its data",
+        "x-permission": "organisation.manage",
+        "parameters": [
+          {
+            "schema": {
+              "$ref": "#/components/schemas/ModuleKey"
+            },
+            "required": true,
+            "name": "key",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetModuleInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModulesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -12775,6 +13692,1150 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           },
           "403": {
             "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems": {
+      "get": {
+        "summary": "The AI system register, by name",
+        "x-permission": "aiact.read",
+        "x-module": "eu_ai_act",
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND: the route exists only while the eu_ai_act module is on",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add an AI system to the register; it starts unclassified",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiSystemInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Response 201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response 400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT_FOUND: the route exists only while the eu_ai_act module is on",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}": {
+      "get": {
+        "summary": "One AI system with its classification, obligations and the linked risks you may see",
+        "x-permission": "aiact.read",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Change an AI system's profile; retiring is a status change, there is no delete",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiSystemUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response 400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}/classification": {
+      "put": {
+        "summary": "Save the questionnaire answers; the server decides the class and reconciles the obligations",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassifyAiSystemInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Response 400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}/classification/draft": {
+      "post": {
+        "summary": "Ask the AI to suggest answers from the system's profile; nothing is saved; 409 aiUnavailable.<reason>",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiClassificationDraftResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}/obligations/{key}": {
+      "patch": {
+        "summary": "Set an obligation's status or note",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/AiObligationKey"
+            },
+            "required": true,
+            "name": "key",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAiObligationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}/obligations/{key}/guidance": {
+      "post": {
+        "summary": "Ask the AI for practical steps towards an obligation; nothing is saved; 409 aiUnavailable.<reason>",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "$ref": "#/components/schemas/AiObligationKey"
+            },
+            "required": true,
+            "name": "key",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiObligationGuidanceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}/risks": {
+      "post": {
+        "summary": "Link a risk you may see to an AI system; needs risks.read too",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkAiSystemRiskInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Response 201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai-act/systems/{id}/risks/{riskId}": {
+      "delete": {
+        "summary": "Unlink a risk you may see from an AI system; needs risks.read too",
+        "x-permission": "aiact.manage",
+        "x-module": "eu_ai_act",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "riskId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AiSystemDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response 404",
             "content": {
               "application/json": {
                 "schema": {

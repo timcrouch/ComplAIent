@@ -34,6 +34,8 @@ export const ConflictReasonSchema = z
     "reportTooLarge",
     "narrativeUnverifiable",
     "confirmationMismatch",
+    "duplicateAiSystemName",
+    "duplicateAiSystemRisk",
   ])
   .openapi("ConflictReason");
 export type ConflictReason = z.infer<typeof ConflictReasonSchema>;
