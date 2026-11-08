@@ -87,6 +87,7 @@ model RiskScale {
   risks     Risk[]
 }
 
+/// Append-only: the app role may INSERT and SELECT but not UPDATE, DELETE or TRUNCATE.
 model RiskScaleLevel {
   id          String   @id @default(uuid(7)) @db.Uuid
   riskScaleId String   @db.Uuid

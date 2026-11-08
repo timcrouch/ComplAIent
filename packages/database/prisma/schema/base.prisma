@@ -101,6 +101,7 @@ model RoleAssignment {
   @@unique([userId, role, scopeType, siteId, departmentId])
 }
 
+/// Append-only: the app role may INSERT and SELECT but not UPDATE, DELETE or TRUNCATE.
 model AuditEvent {
   id          String   @id @default(uuid(7)) @db.Uuid
   occurredAt  DateTime @default(now()) @db.Timestamptz(3)
