@@ -53,7 +53,13 @@ describe("shipped library content", () => {
       ["nis2-2022-2555", "nis2", "NIS2", "European Union", "Directive (EU) 2022/2555"],
       ["nist-csf-2.0", "nist-csf", "NIST CSF", "NIST", "2.0"],
       ["nist-sp800-53-r5", "nist-sp800-53", "NIST SP 800-53", "NIST", "Rev. 5 (Moderate baseline)"],
-      ["eu-2024-1689", "eu-ai-act", "EU AI Act", "European Union", "Regulation (EU) 2024/1689"],
+      [
+        "eu-ai-act-2024-1689",
+        "eu-ai-act",
+        "EU AI Act",
+        "European Union",
+        "Regulation (EU) 2024/1689",
+      ],
     ]);
   });
 
@@ -127,12 +133,12 @@ describe("shipped library content", () => {
   });
 
   it("the EU AI Act lists the 36 obligation-bearing provisions in article order", () => {
-    expect(refsOf(lib, "eu-2024-1689")).toEqual([...EU_AI_ACT_REFS]);
+    expect(refsOf(lib, "eu-ai-act-2024-1689")).toEqual([...EU_AI_ACT_REFS]);
     expect(EU_AI_ACT_REFS).toHaveLength(36);
   });
 
   it("the EU AI Act groups its provisions by Chapter", () => {
-    const file = lib.frameworks.find((f) => f.version.key === "eu-2024-1689");
+    const file = lib.frameworks.find((f) => f.version.key === "eu-ai-act-2024-1689");
     expect(file?.groups).toEqual([
       { key: "Chapter I", title: "General provisions" },
       { key: "Chapter II", title: "Prohibited AI practices" },
@@ -167,7 +173,9 @@ describe("shipped library content", () => {
     const byAig = new Set(
       lib.controls
         .filter((c) => c.code.startsWith("AIG-"))
-        .flatMap((c) => c.mappings.filter((m) => m.framework === "eu-2024-1689").map((m) => m.ref)),
+        .flatMap((c) =>
+          c.mappings.filter((m) => m.framework === "eu-ai-act-2024-1689").map((m) => m.ref),
+        ),
     );
     expect(EU_AI_ACT_REFS.filter((r) => !byAig.has(r))).toEqual([]);
   });

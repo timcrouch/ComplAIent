@@ -138,7 +138,7 @@ There are two new AI purposes, `ai_act_classification` and `ai_act_obligation_gu
 ### 6. Linked to the rest of the ISMS
 
 - **The control library:**
-  - A new framework: key `eu-ai-act`, name `EU AI Act`, publisher `European Union`, version key `eu-2024-1689`, label `Regulation (EU) 2024/1689`.
+  - A new framework: key `eu-ai-act`, name `EU AI Act`, publisher `European Union`, version key `eu-ai-act-2024-1689`, label `Regulation (EU) 2024/1689`.
   - Its requirements are the articles listed in §5, plus Art. 6. Refs use the NIS2 form (`Art. 26(1)`), and titles are in our own words in the library's sentence style (EU law could ship as text, but we keep the library's style).
   - There is a new control file, `controls/ai-governance.json`, with about 10 `AIG-` controls: an AI system inventory, classification, AI literacy, human oversight, transparency notices, logging and monitoring, AI supplier due diligence, impact assessment, AI incident reporting, and data governance for AI.
   - Every requirement maps to at least one control. Existing controls are reused where they fit, for example incident, supplier and privacy controls.

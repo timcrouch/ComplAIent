@@ -13,7 +13,7 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 26(1)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(1)" },
         { "framework": "iso27001-2022", "ref": "A.5.9" },
         { "framework": "nist-csf-2.0", "ref": "ID.AM-02" },
         { "framework": "nist-sp800-53-r5", "ref": "CM-8" }
@@ -33,10 +33,10 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 5" },
-        { "framework": "eu-2024-1689", "ref": "Art. 6(3)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 6(4)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 49(2)" }
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 5" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 6(3)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 6(4)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 49(2)" }
       ]
     },
     {
@@ -52,7 +52,7 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 4" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 4" },
         { "framework": "iso27001-2022", "ref": "A.6.3" }
       ]
     },
@@ -69,8 +69,8 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 14" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(2)" }
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 14" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(2)" }
       ]
     },
     {
@@ -87,13 +87,13 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 26(7)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(11)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 50(1)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 50(2)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 50(3)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 50(4)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 86" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(7)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(11)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(1)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(2)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(3)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 50(4)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 86" },
         { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(a)" }
       ]
     },
@@ -110,11 +110,11 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 12" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(1)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(5)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(6)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 72" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 12" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(1)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(5)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(6)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 72" },
         { "framework": "iso27001-2022", "ref": "A.8.15" }
       ]
     },
@@ -132,8 +132,8 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 23" },
-        { "framework": "eu-2024-1689", "ref": "Art. 24" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 23" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 24" },
         { "framework": "iso27001-2022", "ref": "A.5.19" },
         { "framework": "iso27001-2022", "ref": "A.5.20" },
         { "framework": "iso27001-2022", "ref": "A.5.21" },
@@ -155,8 +155,8 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 26(9)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 27" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(9)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 27" },
         { "framework": "gdpr-2016-679", "ref": "Art. 35" }
       ]
     },
@@ -173,9 +173,9 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 20" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(5)" },
-        { "framework": "eu-2024-1689", "ref": "Art. 73" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 20" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(5)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 73" },
         { "framework": "iso27001-2022", "ref": "A.5.24" }
       ]
     },
@@ -192,8 +192,8 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 10" },
-        { "framework": "eu-2024-1689", "ref": "Art. 26(4)" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 10" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 26(4)" },
         { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(b)" },
         { "framework": "gdpr-2016-679", "ref": "Art. 5(1)(d)" }
       ]
@@ -212,18 +212,18 @@
       ],
       "category": "ai_governance",
       "mappings": [
-        { "framework": "eu-2024-1689", "ref": "Art. 9" },
-        { "framework": "eu-2024-1689", "ref": "Art. 11" },
-        { "framework": "eu-2024-1689", "ref": "Art. 12" },
-        { "framework": "eu-2024-1689", "ref": "Art. 13" },
-        { "framework": "eu-2024-1689", "ref": "Art. 14" },
-        { "framework": "eu-2024-1689", "ref": "Art. 15" },
-        { "framework": "eu-2024-1689", "ref": "Art. 17" },
-        { "framework": "eu-2024-1689", "ref": "Art. 20" },
-        { "framework": "eu-2024-1689", "ref": "Art. 43" },
-        { "framework": "eu-2024-1689", "ref": "Art. 47" },
-        { "framework": "eu-2024-1689", "ref": "Art. 48" },
-        { "framework": "eu-2024-1689", "ref": "Art. 49(1)" }
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 9" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 11" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 12" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 13" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 14" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 15" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 17" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 20" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 43" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 47" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 48" },
+        { "framework": "eu-ai-act-2024-1689", "ref": "Art. 49(1)" }
       ]
     }
   ]
