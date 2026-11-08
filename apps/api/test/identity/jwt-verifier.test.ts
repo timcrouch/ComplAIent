@@ -110,6 +110,41 @@ describe("JwtVerifier", () => {
     await expectUnauthenticated(verifier.verify(await idp.sign(claims)));
   });
 
+  describe("accepts only access tokens", () => {
+    it.each(["ID", "id"])("rejects header typ %s (a Keycloak ID token)", async (typ) => {
+      await expectUnauthenticated(verifier.verify(await idp.sign({}, undefined, typ)));
+    });
+
+    it("rejects a token carrying a nonce claim", async () => {
+      await expectUnauthenticated(verifier.verify(await idp.sign({ nonce: "n-0S6_WzA2Mj" })));
+      await expectUnauthenticated(verifier.verify(await idp.sign({ nonce: "" }, undefined, "JWT")));
+    });
+
+    it.each(["Bearer", "JWT", "at+jwt"])("accepts header typ %s by default", async (typ) => {
+      await expect(verifier.verify(await idp.sign({}, undefined, typ))).resolves.toBeDefined();
+    });
+
+    it("accepts a token without a typ header by default", async () => {
+      await expect(verifier.verify(await idp.sign())).resolves.toBeDefined();
+    });
+
+    it("enforces the configured access token typ case-insensitively", async () => {
+      const strict = new JwtVerifier({
+        issuer: idp.issuer,
+        audience: AUDIENCE,
+        accessTokenTyp: "at+jwt",
+      });
+      await expect(strict.verify(await idp.sign({}, undefined, "at+jwt"))).resolves.toBeDefined();
+      await expect(strict.verify(await idp.sign({}, undefined, "AT+JWT"))).resolves.toBeDefined();
+      await expectUnauthenticated(strict.verify(await idp.sign({}, undefined, "JWT")));
+      await expectUnauthenticated(strict.verify(await idp.sign({}, undefined, "Bearer")));
+      await expectUnauthenticated(strict.verify(await idp.sign()));
+      await expectUnauthenticated(
+        strict.verify(await idp.sign({ nonce: "n" }, undefined, "at+jwt")),
+      );
+    });
+  });
+
   it("rejects a tampered signature", async () => {
     const [h, p, s = ""] = (await idp.sign()).split(".");
     const flipped = (s.startsWith("A") ? "B" : "A") + s.slice(1);

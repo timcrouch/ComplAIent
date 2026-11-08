@@ -1,6 +1,13 @@
 import { Logger } from "@nestjs/common";
 import { type Clock, DomainError, systemClock } from "@isms/domain";
-import { type JWTPayload, type JWTVerifyGetKey, createRemoteJWKSet, errors, jwtVerify } from "jose";
+import {
+  type JWTHeaderParameters,
+  type JWTPayload,
+  type JWTVerifyGetKey,
+  createRemoteJWKSet,
+  errors,
+  jwtVerify,
+} from "jose";
 import { z } from "zod";
 
 export type VerifiedToken = {
@@ -25,6 +32,11 @@ export type JwtVerifierOptions = {
   issuer: string;
   /** Exact expected `aud` entry. */
   audience: string;
+  /**
+   * If set, the protected header `typ` must equal it, compared case-insensitively (for example
+   * `at+jwt`, RFC 9068). Unset, any `typ` but `ID` is accepted.
+   */
+  accessTokenTyp?: string | undefined;
   /** Timeout for each discovery and JWKS request (default 3000 ms). */
   fetchTimeoutMs?: number;
   clock?: Clock;
@@ -67,8 +79,9 @@ export const unauthenticated = (): DomainError =>
 
 /**
  * Verifies OIDC access tokens as a pure resource server. Only RS256/ES256, exact issuer and
- * audience, 30 s skew. Keys come from the issuer's discovered JWKS; jose refetches it for an
- * unknown kid at most once per cooldown (30 s). Key source failures map to AUTH_UNAVAILABLE,
+ * audience, 30 s skew; ID tokens (`typ: ID` or a `nonce` claim) are refused. Keys come from the
+ * issuer's discovered JWKS; jose refetches it for an unknown kid at most once per cooldown
+ * (30 s). Key source failures map to AUTH_UNAVAILABLE,
  * every other failure to UNAUTHENTICATED with a fixed message (the reason is never exposed).
  */
 export class JwtVerifier {
@@ -84,8 +97,9 @@ export class JwtVerifier {
 
   async verify(token: string): Promise<VerifiedToken> {
     let payload: JWTPayload;
+    let header: JWTHeaderParameters;
     try {
-      ({ payload } = await jwtVerify(token, this.getKey, {
+      ({ payload, protectedHeader: header } = await jwtVerify(token, this.getKey, {
         issuer: this.options.issuer,
         audience: this.options.audience,
         algorithms: ALGORITHMS,
@@ -101,7 +115,25 @@ export class JwtVerifier {
       this.logger.debug({ msg: "Token rejected", reason: reasonOf(err) });
       throw unauthenticated();
     }
+    const notAccessToken = this.notAccessToken(header, payload);
+    if (notAccessToken !== undefined) {
+      this.logger.debug({ msg: "Token rejected", reason: notAccessToken });
+      throw unauthenticated();
+    }
     return this.toVerified(payload);
+  }
+
+  /**
+   * Why a validly signed token is not an access token, or undefined. Keycloak ID tokens carry
+   * `typ: ID`; ID tokens from the code flow always carry a `nonce`, access tokens never do.
+   */
+  private notAccessToken(header: JWTHeaderParameters, payload: JWTPayload): string | undefined {
+    const typ = header.typ?.toLowerCase();
+    if (typ === "id") return "typ ID";
+    if (payload["nonce"] !== undefined) return "nonce";
+    const expected = this.options.accessTokenTyp?.toLowerCase();
+    if (expected !== undefined && typ !== expected) return "typ";
+    return undefined;
   }
 
   private toVerified(payload: JWTPayload): VerifiedToken {

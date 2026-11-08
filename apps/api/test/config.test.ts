@@ -39,6 +39,16 @@ describe("API configuration", () => {
     expect(config.S3_FORCE_PATH_STYLE).toBe(false);
   });
 
+  it("reads the optional access token typ, unset by default", () => {
+    expect(loadAppConfig(ENV).OIDC_ACCESS_TOKEN_TYP).toBeUndefined();
+    expect(loadAppConfig({ ...ENV, OIDC_ACCESS_TOKEN_TYP: "at+jwt" }).OIDC_ACCESS_TOKEN_TYP).toBe(
+      "at+jwt",
+    );
+    expect(() => loadAppConfig({ ...ENV, OIDC_ACCESS_TOKEN_TYP: "" })).toThrow(
+      /OIDC_ACCESS_TOKEN_TYP/,
+    );
+  });
+
   it("refuses the mock AI provider in production at startup", () => {
     expect(() => loadAppConfig({ ...ENV, NODE_ENV: "production", AI_PROVIDER: "mock" })).toThrow(
       /AI_PROVIDER=mock/,
