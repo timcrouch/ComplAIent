@@ -95,9 +95,9 @@ describe("demo routes, demo mode on (spec §5.1, §5.4)", () => {
     // The library is re-synced; the side effects ran through the ports.
     expect(await db.control.count()).toBeGreaterThan(0);
     expect(h.fake.calls).toEqual([
+      "drainQueues",
       "wipeEvidence",
       "wipeSessions",
-      "drainQueues",
       "enqueueLibraryEmbed",
     ]);
     // After reset there is no admin; the bootstrap rule applies again at the next sign-in.
@@ -130,6 +130,8 @@ describe("demo routes, demo mode on (spec §5.1, §5.4)", () => {
       ]);
       expect(actions.slice(-2)).toEqual(["demo.reset", "demo.sample_loaded"]);
       expect(h.fake.calls).toContain("putEvidence");
+      // Stale jobs are drained before the fresh sample's evidence goes in (#7).
+      expect(h.fake.calls[0]).toBe("drainQueues");
       // The organisation now exists, so the next confirmation is its name.
       const again = await h.post("/api/v1/demo/reset", { confirm: "RESET" });
       expect(again.status).toBe(400);

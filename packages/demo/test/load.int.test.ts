@@ -110,7 +110,8 @@ describe("resetInstance", () => {
       { n: bigint }[]
     >`SELECT count(*) AS n FROM "_prisma_migrations"`;
     expect(Number(migrations[0]?.n)).toBeGreaterThan(0);
-    expect(calls).toEqual(["wipeEvidence", "wipeSessions", "drainQueues", "enqueueLibraryEmbed"]);
+    // Stale jobs are drained first (#7), before anything else touches the fresh state.
+    expect(calls).toEqual(["drainQueues", "wipeEvidence", "wipeSessions", "enqueueLibraryEmbed"]);
   });
 
   it("restarts the Risk reference sequence", async () => {
@@ -157,14 +158,15 @@ describe("loadSample", () => {
       bootstrapEmail: null,
     });
     expect(result.evidenceFailed).toBe(0);
-    // After the commit: evidence wiped, then put; sessions end only once the sample is in.
+    // After the commit: stale jobs drained before the sample's evidence goes in (#7), evidence
+    // wiped, then put; sessions end only once the sample is in.
     const puts = calls.filter((c) => c === "putEvidence").length;
     expect(puts).toBeGreaterThan(0);
     expect(calls).toEqual([
+      "drainQueues",
       "wipeEvidence",
       ...Array<string>(puts).fill("putEvidence"),
       "wipeSessions",
-      "drainQueues",
       "enqueueLibraryEmbed",
     ]);
 

@@ -83,9 +83,11 @@ async function writeRows(tx: Prisma.TransactionClient, r: SampleRows): Promise<v
  * then claims its placeholder. The trail reads: backdated history, `demo.reset` at the real
  * time, `demo.sample_loaded` newest.
  *
- * After the commit: wipe the evidence files, put the sample's (a failure is counted in
- * `evidenceFailed`; the row stays and the download 404s like any missing object), then end
- * every session, drain the queues and enqueue the library embedding.
+ * After the commit: drain the queues first, so no job queued before the load acts on the
+ * fresh sample (#7; sample ids are the same on every load); then wipe the evidence files,
+ * put the sample's (a failure is counted in `evidenceFailed`; the row stays and the download
+ * 404s like any missing object), end every session and enqueue the library embedding. A job
+ * already running when the queues drain is left to finish.
  */
 export async function loadSample(
   ownerDb: PrismaClient,
@@ -133,6 +135,7 @@ export async function loadSample(
     return rows;
   }, DEMO_TRANSACTION_OPTIONS);
 
+  await ports.drainQueues();
   await ports.wipeEvidence();
   let evidenceFailed = 0;
   for (const object of rows.evidenceObjects) {
@@ -143,7 +146,6 @@ export async function loadSample(
     }
   }
   await ports.wipeSessions();
-  await ports.drainQueues();
   await ports.enqueueLibraryEmbed();
   return {
     risks: rows.risks.length,

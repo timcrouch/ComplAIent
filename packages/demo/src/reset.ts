@@ -50,8 +50,8 @@ export async function resetRows(
  * Returns the instance to a fresh install, as the owner role (the only way past the audit
  * trail's append-only trigger). One transaction (`resetRows`): the demo lock, TRUNCATE
  * everything but `_prisma_migrations` with RESTART IDENTITY (so the risk reference sequence
- * starts at 1), re-sync the control library, and record `demo.reset`. After the commit: delete
- * evidence files and sessions, drain the queues, and enqueue the library embedding.
+ * starts at 1), re-sync the control library, and record `demo.reset`. After the commit: drain
+ * the queues first (#7), delete evidence files and sessions, and enqueue the library embedding.
  *
  * Queued jobs that name deleted records are drained rather than left to fail; a job already
  * running finds no record and completes as a no-op (apps/worker/test/missing-risk.int.test.ts).
@@ -62,8 +62,8 @@ export async function resetInstance(
   actor: DemoActor,
 ): Promise<void> {
   await ownerDb.$transaction((tx) => resetRows(tx, actor), DEMO_TRANSACTION_OPTIONS);
+  await ports.drainQueues();
   await ports.wipeEvidence();
   await ports.wipeSessions();
-  await ports.drainQueues();
   await ports.enqueueLibraryEmbed();
 }
