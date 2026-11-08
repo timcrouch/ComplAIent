@@ -30,7 +30,7 @@ export type {
   SampleRows,
   SampleScope,
 } from "./types.js";
-export { createDefaultPorts } from "./ports.js";
-export type { DemoActor, DemoPorts, StorageSettings } from "./ports.js";
+export { DemoPortsError, createDefaultPorts } from "./ports.js";
+export type { DemoActor, DemoPorts, PortFailure, StorageSettings } from "./ports.js";
 export { DEMO_LOCK, resetInstance } from "./reset.js";
 export { loadLibraryIds, loadSample } from "./load.js";

@@ -4,6 +4,7 @@ import { assertTestDatabaseUrl, resetTestDatabase } from "@isms/database/testing
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import {
   DEMO_LOCK,
+  DemoPortsError,
   loadLibraryIds,
   loadSample,
   planSampleYear,
@@ -32,14 +33,20 @@ const LIBRARY_TABLES = new Set([
   "ControlRequirementMapping",
 ]);
 
-function fakePorts(opts: { failEvidence?: number } = {}) {
+/** `fail` names steps that reject (after being recorded); `failEvidence` fails the first puts. */
+function fakePorts(opts: { failEvidence?: number; fail?: readonly (keyof DemoPorts)[] } = {}) {
   const calls: string[] = [];
   let puts = 0;
+  const step =
+    <T>(name: keyof DemoPorts, value: T) =>
+    () => {
+      calls.push(name);
+      return opts.fail?.includes(name)
+        ? Promise.reject(new Error(`${name} down`))
+        : Promise.resolve(value);
+    };
   const ports: DemoPorts = {
-    wipeEvidence: () => {
-      calls.push("wipeEvidence");
-      return Promise.resolve(0);
-    },
+    wipeEvidence: step("wipeEvidence", 0),
     putEvidence: () => {
       puts += 1;
       if (opts.failEvidence !== undefined && puts <= opts.failEvidence)
@@ -47,18 +54,9 @@ function fakePorts(opts: { failEvidence?: number } = {}) {
       calls.push("putEvidence");
       return Promise.resolve();
     },
-    wipeSessions: () => {
-      calls.push("wipeSessions");
-      return Promise.resolve(0);
-    },
-    drainQueues: () => {
-      calls.push("drainQueues");
-      return Promise.resolve();
-    },
-    enqueueLibraryEmbed: () => {
-      calls.push("enqueueLibraryEmbed");
-      return Promise.resolve();
-    },
+    wipeSessions: step("wipeSessions", 0),
+    drainQueues: step("drainQueues", undefined),
+    enqueueLibraryEmbed: step("enqueueLibraryEmbed", undefined),
   };
   return { ports, calls };
 }
@@ -277,6 +275,45 @@ describe("loadSample", () => {
       bootstrapEmail: null,
     });
     expect(await db.user.count({ where: { idpSubject: LOADER.idpSubject } })).toBe(0);
+  });
+});
+
+describe("steps outside the database (#7)", () => {
+  it("a load tries every step after a failed one and reports all the failures together", async () => {
+    const { ports, calls } = fakePorts({ fail: ["drainQueues", "wipeSessions"] });
+    const error = await loadSample(db, ports, CLI, { now: NOW, bootstrapEmail: null }).then(
+      () => null,
+      (err: unknown) => err,
+    );
+    expect(error).toBeInstanceOf(DemoPortsError);
+    const failure = error as DemoPortsError;
+    expect(failure.failures).toEqual([
+      { step: "drainQueues", message: "drainQueues down" },
+      { step: "wipeSessions", message: "wipeSessions down" },
+    ]);
+    expect(failure.message).toMatch(/^The sample data was loaded, but 2 follow-up steps failed/);
+    expect(failure.message).toContain("drainQueues: drainQueues down");
+    // Every step still ran, and the sample is in.
+    expect(calls[0]).toBe("drainQueues");
+    expect(calls).toContain("putEvidence");
+    expect(calls.slice(-2)).toEqual(["wipeSessions", "enqueueLibraryEmbed"]);
+    expect(await db.risk.count()).toBeGreaterThan(0);
+  });
+
+  it("a reset tries every step after a failed one and reports all the failures together", async () => {
+    const { ports, calls } = fakePorts({ fail: ["wipeEvidence", "enqueueLibraryEmbed"] });
+    const error = await resetInstance(db, ports, CLI).then(
+      () => null,
+      (err: unknown) => err,
+    );
+    expect(error).toBeInstanceOf(DemoPortsError);
+    expect((error as DemoPortsError).failures.map((f) => f.step)).toEqual([
+      "wipeEvidence",
+      "enqueueLibraryEmbed",
+    ]);
+    expect((error as DemoPortsError).message).toMatch(/^The reset was done, but 2 follow-up/);
+    expect(calls).toEqual(["drainQueues", "wipeEvidence", "wipeSessions", "enqueueLibraryEmbed"]);
+    expect(await db.auditEvent.count({ where: { action: "demo.reset" } })).toBe(1);
   });
 });
 

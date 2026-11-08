@@ -1,6 +1,6 @@
 import { loadLibrary, syncControlLibrary } from "@isms/control-library";
 import { type Prisma, type PrismaClient, truncateAll } from "@isms/database";
-import type { DemoActor, DemoPorts } from "./ports.js";
+import { type DemoActor, type DemoPorts, DemoPortsError, tryEach } from "./ports.js";
 
 /**
  * The key of the transaction-scoped advisory lock that a reset and a load take first, so the
@@ -52,6 +52,8 @@ export async function resetRows(
  * everything but `_prisma_migrations` with RESTART IDENTITY (so the risk reference sequence
  * starts at 1), re-sync the control library, and record `demo.reset`. After the commit: drain
  * the queues first (#7), delete evidence files and sessions, and enqueue the library embedding.
+ * A failed step does not stop the others: once all were tried, a DemoPortsError lists every
+ * failure.
  *
  * Queued jobs that name deleted records are drained rather than left to fail; a job already
  * running finds no record and completes as a no-op (apps/worker/test/missing-risk.int.test.ts).
@@ -62,8 +64,11 @@ export async function resetInstance(
   actor: DemoActor,
 ): Promise<void> {
   await ownerDb.$transaction((tx) => resetRows(tx, actor), DEMO_TRANSACTION_OPTIONS);
-  await ports.drainQueues();
-  await ports.wipeEvidence();
-  await ports.wipeSessions();
-  await ports.enqueueLibraryEmbed();
+  const failures = await tryEach([
+    ["drainQueues", () => ports.drainQueues()],
+    ["wipeEvidence", () => ports.wipeEvidence()],
+    ["wipeSessions", () => ports.wipeSessions()],
+    ["enqueueLibraryEmbed", () => ports.enqueueLibraryEmbed()],
+  ]);
+  if (failures.length > 0) throw new DemoPortsError("The reset was done", failures);
 }
