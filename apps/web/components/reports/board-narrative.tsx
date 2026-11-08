@@ -153,9 +153,7 @@ export function BoardNarrative({
             date: formatDate(approved.approvedAt, timeZone),
           })}
         </p>
-        {approved.aiAssisted ? (
-          <p className="text-[13px] text-fg-muted">{t("aiAssisted")}</p>
-        ) : null}
+        {approved.aiAssisted ? <AiBadge state="draft" label={t("aiAssisted")} /> : null}
       </div>
     );
   }
