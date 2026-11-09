@@ -1,6 +1,13 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { AUTHORIZE_URL, NO_EMAIL_USERNAME, OWNER_EMAIL, REPORTER_EMAIL, WEB_URL } from "./env";
+import {
+  AUTHORIZE_URL,
+  KEYCLOAK_URL,
+  NO_EMAIL_USERNAME,
+  OWNER_EMAIL,
+  REPORTER_EMAIL,
+  WEB_URL,
+} from "./env";
 import {
   countAuthorizeNavigations,
   deleteAllSessions,
@@ -17,6 +24,48 @@ function expectNoAppContent(html: string): void {
   expect(html).not.toContain('aria-label="Primary"');
   expect(html).not.toContain('id="main"');
   expect(html).not.toContain("@example.test");
+}
+
+async function requirePasswordUpdate(username: string): Promise<() => Promise<void>> {
+  const adminUsername = process.env.KEYCLOAK_ADMIN_USER;
+  const adminPassword = process.env.KEYCLOAK_ADMIN_PASSWORD;
+  if (!adminUsername || !adminPassword) throw new Error("Keycloak admin credentials are not set");
+  const tokenResponse = await fetch(`${KEYCLOAK_URL}/realms/master/protocol/openid-connect/token`, {
+    method: "POST",
+    body: new URLSearchParams({
+      grant_type: "password",
+      client_id: "admin-cli",
+      username: adminUsername,
+      password: adminPassword,
+    }),
+  });
+  if (!tokenResponse.ok) {
+    throw new Error(`Keycloak admin login failed: ${String(tokenResponse.status)}`);
+  }
+  const token = ((await tokenResponse.json()) as { access_token: string }).access_token;
+  const request = async (path: string, init?: RequestInit) => {
+    const response = await fetch(`${KEYCLOAK_URL}/admin/realms/isms${path}`, {
+      ...init,
+      headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error(`Keycloak ${init?.method ?? "GET"} ${path}: ${String(response.status)}`);
+    }
+    return response;
+  };
+  const users = (await (
+    await request(`/users?username=${encodeURIComponent(username)}&exact=true`)
+  ).json()) as { id: string; requiredActions?: string[] }[];
+  const user = users[0];
+  if (!user) throw new Error(`Keycloak user ${username} was not found`);
+  const previous = user.requiredActions ?? [];
+  const update = (requiredActions: string[]) =>
+    request(`/users/${user.id}`, {
+      method: "PUT",
+      body: JSON.stringify({ requiredActions }),
+    }).then(() => undefined);
+  await update(["UPDATE_PASSWORD"]);
+  return () => update(previous);
 }
 
 // Runs in Chromium and WebKit, each with a fresh browser context (no stored session).
@@ -44,6 +93,21 @@ test("invalid credentials stay on the themed sign-in screen with an error", asyn
   await expect(page.locator("#kc-form-login")).toBeVisible();
   await expect(page.getByText("Invalid username or password.")).toBeVisible();
   await expect(page.locator('link[href*="/login/complaient/css/complaient.css"]')).toHaveCount(1);
+});
+
+test("a required password update keeps the ComplAIent theme", async ({ page }) => {
+  const restore = await requirePasswordUpdate(OWNER_EMAIL);
+  try {
+    await page.goto("/");
+    await submitKeycloakForm(page, OWNER_EMAIL);
+
+    await expect(page.getByRole("heading", { name: "Update password" })).toBeVisible();
+    await expect(page.locator("#kc-passwd-update-form")).toBeVisible();
+    await expect(page.locator('link[href*="/login/complaient/css/complaient.css"]')).toHaveCount(1);
+    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  } finally {
+    await restore();
+  }
 });
 
 test("unauthenticated visit redirects to Keycloak once, then back to requested page", async ({

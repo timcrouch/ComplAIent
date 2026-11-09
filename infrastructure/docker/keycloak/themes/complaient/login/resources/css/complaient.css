@@ -105,6 +105,10 @@ textarea {
   filter: drop-shadow(0 4px 8px color-mix(in oklab, var(--complaient-accent) 30%, transparent));
 }
 
+#kc-header-wrapper span {
+  color: var(--complaient-accent) !important;
+}
+
 .pf-v5-c-login__main {
   overflow: hidden;
   border: 1px solid var(--complaient-border);
