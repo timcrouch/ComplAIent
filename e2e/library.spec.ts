@@ -49,11 +49,15 @@ test("a slow control-detail navigation acknowledges the selected card", async ({
     .getByRole("link")
     .first();
 
-  await control.evaluate((link) => (link as HTMLElement).click());
+  await control.evaluate((link) => {
+    (link as HTMLElement).click();
+  });
   await expect(control).toHaveAttribute("aria-busy", "true", { timeout: 100 });
   await expect(control.locator("[data-link-pending-indicator]")).toBeVisible();
   const requestsAfterFirstClick = detailRequests;
-  await control.evaluate((link) => (link as HTMLElement).click());
+  await control.evaluate((link) => {
+    (link as HTMLElement).click();
+  });
   await page.waitForTimeout(150);
   expect(detailRequests).toBe(requestsAfterFirstClick);
 

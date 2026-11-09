@@ -140,10 +140,14 @@ test.describe("shell", () => {
       .getByRole("navigation", { name: "Primary" })
       .getByRole("link", { name: "Report a concern" });
 
-    await report.evaluate((link) => (link as HTMLElement).click());
+    await report.evaluate((link) => {
+      (link as HTMLElement).click();
+    });
     await expect(report).toHaveAttribute("aria-busy", "true", { timeout: 100 });
     const requestsAfterFirstClick = reportRequests;
-    await report.evaluate((link) => (link as HTMLElement).click());
+    await report.evaluate((link) => {
+      (link as HTMLElement).click();
+    });
     await page.waitForTimeout(150);
     expect(reportRequests).toBe(requestsAfterFirstClick);
 

@@ -121,11 +121,15 @@ test("a slow risk-detail navigation acknowledges the selected row", async ({ bro
   await waitForShell(carl.page);
   const risk = carl.page.getByRole("link", { name: title, exact: true });
 
-  await risk.evaluate((link) => (link as HTMLElement).click());
+  await risk.evaluate((link) => {
+    (link as HTMLElement).click();
+  });
   await expect(risk).toHaveAttribute("aria-busy", "true", { timeout: 100 });
   await expect(risk.locator("[data-link-pending-indicator]")).toBeVisible();
   const requestsAfterFirstClick = detailRequests;
-  await risk.evaluate((link) => (link as HTMLElement).click());
+  await risk.evaluate((link) => {
+    (link as HTMLElement).click();
+  });
   await carl.page.waitForTimeout(150);
   expect(detailRequests).toBe(requestsAfterFirstClick);
 
