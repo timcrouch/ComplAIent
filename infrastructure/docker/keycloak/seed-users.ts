@@ -125,9 +125,10 @@ async function brandRealm(token: string): Promise<void> {
     body: JSON.stringify({
       displayName: "ComplAIent ISMS",
       displayNameHtml: '<strong>Compl<span style="color:#a99dff">AI</span>ent</strong> ISMS',
+      loginTheme: "complaient",
     }),
   });
-  console.log("  sign-in page shows ComplAIent ISMS");
+  console.log("  sign-in page uses the ComplAIent theme");
 }
 
 const token = await adminToken();

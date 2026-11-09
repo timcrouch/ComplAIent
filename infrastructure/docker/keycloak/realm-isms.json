@@ -2,6 +2,7 @@
   "realm": "isms",
   "displayName": "ComplAIent ISMS",
   "displayNameHtml": "<strong>Compl<span style=\"color:#a99dff\">AI</span>ent</strong> ISMS",
+  "loginTheme": "complaient",
   "enabled": true,
   "sslRequired": "external",
   "registrationAllowed": false,

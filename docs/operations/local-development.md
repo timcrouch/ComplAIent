@@ -40,6 +40,28 @@ application identifies a person by the OIDC issuer and subject, not by email; an
 container recreation therefore preserves the dev users' identities and their role assignments.
 `pnpm infra:reset` deliberately deletes both volumes and starts both sides fresh together.
 
+### Sign-in theme
+
+Local Keycloak uses the `complaient` login theme in
+`infrastructure/docker/keycloak/themes/complaient`. It inherits Keycloak 26's `keycloak.v2`
+templates and supplies only ComplAIent CSS and artwork. Keeping the upstream templates means
+password, MFA, passkey, recovery, required-action, external-provider and logout screens continue
+to follow Keycloak's supported flow. ComplAIent still uses authorization code + PKCE; the web app
+never receives a password, OTP, passkey response or recovery secret.
+
+The theme directory is mounted read-only by Compose. Run `pnpm infra:up` after adding the mount or
+changing realm configuration; ordinary CSS and artwork edits are visible after a browser refresh
+in `start-dev`. The idempotent seed step selects the theme even when the persistent Keycloak volume
+already contains the realm. Test both light and dark OS preferences at
+<http://localhost:3000/auth/login>.
+
+For a self-hosted Keycloak deployment, copy the same `complaient` directory to
+`/opt/keycloak/themes/complaient` in the Keycloak image and select `complaient` as the realm's
+Login theme. An installation that uses an external identity provider must apply equivalent
+branding in that provider; ComplAIent cannot style pages served by another origin. On every
+Keycloak upgrade, run the login browser tests and manually check the supported authentication
+states because the inherited upstream markup and class names can change.
+
 If a host port is already in use (for example another Postgres on 5432), override `POSTGRES_PORT`, `MINIO_PORT`, `MINIO_CONSOLE_PORT` or `KEYCLOAK_PORT` in `.env` and update `DATABASE_URL` / `OIDC_ISSUER_URL` to match. The check and seed scripts read those values. If port 4000 is taken, set `API_PORT` and `API_BASE_URL` together (for example `4010` and `http://localhost:4010`), in `.env` or on the command line: `API_PORT=4010 API_BASE_URL=http://localhost:4010 pnpm dev`.
 
 The database role passwords in `.env` are applied by `infrastructure/docker/postgres/init.sql` on the **first** start of the Postgres volume only. Changing them later has no effect on the existing roles; run `pnpm infra:reset` (deletes all local data) to apply new values.

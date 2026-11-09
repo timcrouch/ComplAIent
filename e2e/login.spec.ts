@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { AUTHORIZE_URL, NO_EMAIL_USERNAME, OWNER_EMAIL, REPORTER_EMAIL, WEB_URL } from "./env";
 import {
@@ -19,6 +20,31 @@ function expectNoAppContent(html: string): void {
 }
 
 // Runs in Chromium and WebKit, each with a fresh browser context (no stored session).
+
+test("Keycloak uses the accessible ComplAIent theme in light and dark", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#kc-header-wrapper")).toContainText("ComplAIent");
+  await expect(page.locator('link[href*="/login/complaient/css/complaient.css"]')).toHaveCount(1);
+  await expect(page.locator("#kc-form-login")).toBeVisible();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+
+  await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.reload();
+  await expect(page.locator("html")).toHaveClass(/pf-v5-theme-dark/);
+  await expect(page.locator("#kc-form-login")).toBeVisible();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+test("invalid credentials stay on the themed sign-in screen with an error", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Username or email").fill(REPORTER_EMAIL);
+  await page.getByLabel("Password", { exact: true }).fill("definitely-not-the-password");
+  await page.getByRole("button", { name: "Sign In" }).click();
+
+  await expect(page.locator("#kc-form-login")).toBeVisible();
+  await expect(page.getByText("Invalid username or password.")).toBeVisible();
+  await expect(page.locator('link[href*="/login/complaient/css/complaient.css"]')).toHaveCount(1);
+});
 
 test("unauthenticated visit redirects to Keycloak once, then back to requested page", async ({
   page,

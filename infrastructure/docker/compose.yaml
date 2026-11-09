@@ -65,6 +65,7 @@ services:
       # and history from the newly seeded identities even though their emails are unchanged.
       - keycloak-data:/opt/keycloak/data
       - ./keycloak/realm-isms.json:/opt/keycloak/data/import/realm-isms.json:ro
+      - ./keycloak/themes/complaient:/opt/keycloak/themes/complaient:ro
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.164.0

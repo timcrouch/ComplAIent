@@ -1,0 +1,241 @@
+:root {
+  color-scheme: light;
+  --complaient-bg: #f3f5fb;
+  --complaient-bg-to: #f4f1fa;
+  --complaient-surface: rgba(255, 255, 255, 0.82);
+  --complaient-border: rgba(255, 255, 255, 0.92);
+  --complaient-control-border: #8088a3;
+  --complaient-text: #141a2e;
+  --complaient-muted: #5b6380;
+  --complaient-accent: #4f3fd9;
+  --complaient-accent-text: #ffffff;
+  --complaient-accent-soft: #e6e3ff;
+  --complaient-danger: #b42318;
+  --complaient-danger-soft: #fde5e3;
+  --complaient-focus: #4f3fd9;
+  --complaient-shadow: 0 2px 6px rgba(20, 26, 46, 0.06), 0 18px 44px rgba(20, 26, 46, 0.14);
+}
+
+.pf-v5-theme-dark {
+  color-scheme: dark;
+  --complaient-bg: #0b0e17;
+  --complaient-bg-to: #110e1f;
+  --complaient-surface: rgba(30, 35, 56, 0.82);
+  --complaient-border: rgba(255, 255, 255, 0.08);
+  --complaient-control-border: #6b7493;
+  --complaient-text: #e9ecf5;
+  --complaient-muted: #aeb6cc;
+  --complaient-accent: #8e80ff;
+  --complaient-accent-text: #0e0b26;
+  --complaient-accent-soft: #231e4d;
+  --complaient-danger: #ffaaa6;
+  --complaient-danger-soft: #3a1618;
+  --complaient-focus: #a79cff;
+  --complaient-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 24px 56px rgba(0, 0, 0, 0.5);
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family:
+    "Plus Jakarta Sans",
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+
+.login-pf body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(
+      60rem 40rem at 85% -10%,
+      color-mix(in oklab, var(--complaient-accent) 9%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50rem 36rem at -10% 110%,
+      color-mix(in oklab, #4f3fd9 6%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(160deg, var(--complaient-bg), var(--complaient-bg) 60%, var(--complaient-bg-to));
+  background-attachment: fixed;
+  color: var(--complaient-text);
+}
+
+.pf-v5-c-login {
+  min-height: 100dvh;
+  align-items: center;
+}
+
+.pf-v5-c-login__container {
+  width: min(100% - 2rem, 31rem);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "header" "main";
+  padding-block: 2rem;
+}
+
+.pf-v5-c-login__header {
+  margin-block-end: 1.25rem;
+}
+
+#kc-header-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--complaient-text) !important;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: start;
+  text-transform: none;
+}
+
+#kc-header-wrapper::before {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  background: url("../img/brand-mark.svg") center / contain no-repeat;
+  content: "";
+  filter: drop-shadow(0 4px 8px color-mix(in oklab, var(--complaient-accent) 30%, transparent));
+}
+
+.pf-v5-c-login__main {
+  overflow: hidden;
+  border: 1px solid var(--complaient-border);
+  border-radius: 1rem;
+  background: var(--complaient-surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    var(--complaient-shadow);
+  color: var(--complaient-text);
+  backdrop-filter: blur(20px);
+}
+
+.pf-v5-c-login__main-header {
+  border-top: 0;
+  padding: 2rem 2rem 1rem;
+}
+
+.pf-v5-c-login__main-body {
+  padding: 1rem 2rem 2rem;
+}
+
+.pf-v5-c-login__main-footer-band {
+  border-color: var(--complaient-border);
+  background: transparent;
+  color: var(--complaient-muted);
+}
+
+.pf-v5-c-title,
+.pf-v5-c-form__label,
+.pf-v5-c-check__label,
+.pf-v5-c-helper-text,
+.pf-v5-c-login__main-footer-band,
+.pf-v5-c-login__main-footer-band-item {
+  color: var(--complaient-text);
+}
+
+.pf-v5-c-title {
+  font-size: clamp(1.5rem, 4vw, 1.875rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.pf-v5-c-form__label-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.pf-v5-c-form-control {
+  --pf-v5-c-form-control--BackgroundColor: color-mix(
+    in oklab,
+    var(--complaient-surface) 86%,
+    var(--complaient-bg)
+  );
+  --pf-v5-c-form-control--Color: var(--complaient-text);
+  --pf-v5-c-form-control--before--BorderColor: var(--complaient-control-border);
+  border-radius: 0.5rem;
+}
+
+.pf-v5-c-form-control:focus-within,
+.pf-v5-c-form-control:focus,
+.pf-v5-c-button:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--complaient-focus) 38%, transparent);
+  outline-offset: 2px;
+}
+
+.pf-v5-c-button.pf-m-primary {
+  --pf-v5-c-button--m-primary--BackgroundColor: var(--complaient-accent);
+  --pf-v5-c-button--m-primary--Color: var(--complaient-accent-text);
+  --pf-v5-c-button--m-primary--hover--BackgroundColor: color-mix(
+    in oklab,
+    var(--complaient-accent) 88%,
+    white
+  );
+  min-height: 2.75rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+}
+
+.pf-v5-c-button.pf-m-secondary,
+.pf-v5-c-button.pf-m-tertiary,
+.pf-v5-c-button.pf-m-control {
+  --pf-v5-c-button--Color: var(--complaient-text);
+  border-radius: 0.5rem;
+}
+
+a,
+.pf-v5-c-button.pf-m-link {
+  color: var(--complaient-accent);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.pf-v5-c-alert.pf-m-danger {
+  --pf-v5-c-alert--BackgroundColor: var(--complaient-danger-soft);
+  --pf-v5-c-alert--m-inline--before--BackgroundColor: var(--complaient-danger);
+  color: var(--complaient-danger);
+  border-radius: 0.5rem;
+}
+
+.kc-login-divider::before,
+.kc-login-divider::after,
+hr {
+  border-color: var(--complaient-border);
+}
+
+@media (max-width: 480px) {
+  .pf-v5-c-login__container {
+    width: min(100% - 1rem, 31rem);
+    padding-block: 1rem;
+  }
+
+  .pf-v5-c-login__main-header {
+    padding: 1.5rem 1.25rem 0.75rem;
+  }
+
+  .pf-v5-c-login__main-body {
+    padding: 0.75rem 1.25rem 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -37,6 +37,7 @@ The container images run as the non-root uid 10001. Their code is owned by root,
 
 1. The browser requests an app route without a session cookie. The `proxy.ts` presence check redirects it to `/auth/login?returnTo=…`, where `returnTo` passes `safeReturnTo` and only same-origin paths are accepted.
 2. `/auth/login` creates `state`, `nonce` and a PKCE S256 verifier. It stores them encrypted under `oidc:<state>` for 10 minutes, sets a short-lived `isms_login` cookie carrying `state`, and redirects (303) to the IdP.
+   The bundled Keycloak uses a ComplAIent login theme that inherits Keycloak's supported templates. The theme changes CSS and artwork only: credentials, MFA, passkeys, recovery and required actions remain entirely on the IdP origin, and Direct Access Grants stay disabled.
 3. The user authenticates at the IdP. The application never sees a password.
 4. `/auth/callback` reads `oidc:<state>` with `GETDEL`, so each state works once, and checks it against the `isms_login` cookie to prevent login CSRF. It exchanges the code with the client secret and validates the ID token and nonce. It then creates a session: a random 32-byte id in the cookie, and `{ accessToken, refreshToken, idToken, expiry, sub }` encrypted in Redis under `sess:<HMAC(id)>`.
 5. Any callback failure redirects once to `/auth/login?error=signin`, which never redirects on its own. Only fixed reason codes are logged.
