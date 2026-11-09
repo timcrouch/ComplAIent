@@ -60,6 +60,10 @@ services:
     ports:
       - "127.0.0.1:${KEYCLOAK_PORT:-8080}:8080"
     volumes:
+      # Keep dev-user subjects stable when Compose recreates the container. The application
+      # keys users by OIDC issuer + subject, so losing Keycloak's database disconnects roles
+      # and history from the newly seeded identities even though their emails are unchanged.
+      - keycloak-data:/opt/keycloak/data
       - ./keycloak/realm-isms.json:/opt/keycloak/data/import/realm-isms.json:ro
 
   otel-collector:
@@ -96,6 +100,7 @@ services:
 
 volumes:
   postgres-data:
+  keycloak-data:
   minio-data:
   prometheus-data:
   grafana-data:
