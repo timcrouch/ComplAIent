@@ -21,6 +21,7 @@
       "empty": "No risks to show here.",
       "loadMore": "Load more",
       "loading": "Loading…",
+      "opening": "Opening {risk}",
       "loaded": "{count, plural, one {# more risk} other {# more risks}} loaded.",
       "loadFailed": "We couldn't load more risks. Please try again.",
       "owner": "Owner: {name}",

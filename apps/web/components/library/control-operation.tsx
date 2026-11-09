@@ -2,9 +2,9 @@
 
 import type { ControlOperationDto } from "@isms/contracts";
 import { DetailItem, DetailList, StatusBadge, cn } from "@isms/ui";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { formatDate } from "../../lib/dates";
+import { PendingLink } from "../navigation/pending-link";
 import { glass } from "../setup/styles";
 import { focusRingClass } from "../shell/styles";
 import { RecordTestForm } from "./record-test-form";
@@ -53,15 +53,18 @@ export function ControlOperation({ operation, timeZone }: Props) {
             <ul className="flex flex-col gap-1.5">
               {operation.risks.map((risk) => (
                 <li key={risk.id} className="text-sm">
-                  <Link
+                  <PendingLink
                     href={`/risks/${risk.id}`}
+                    pendingLabel={t("openingRisk", {
+                      risk: `${risk.reference} ${risk.title}`,
+                    })}
                     className={cn(
-                      "rounded-xs font-semibold text-accent underline-offset-4 hover:underline",
+                      "inline-flex items-center gap-1.5 rounded-xs font-semibold text-accent underline-offset-4 hover:underline",
                       focusRingClass,
                     )}
                   >
                     {risk.reference} {risk.title}
-                  </Link>
+                  </PendingLink>
                 </li>
               ))}
             </ul>

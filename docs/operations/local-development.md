@@ -35,6 +35,11 @@ The API's readiness check (`GET /api/v1/ready`) includes the evidence object sto
 | `pnpm infra:down`  | Stop the stack and keep the data                                          |
 | `pnpm infra:reset` | Stop, delete all volumes, start fresh (recreates databases, realm, users) |
 
+Postgres and Keycloak both use named volumes. Keeping the Keycloak volume matters because the
+application identifies a person by the OIDC issuer and subject, not by email; an ordinary
+container recreation therefore preserves the dev users' identities and their role assignments.
+`pnpm infra:reset` deliberately deletes both volumes and starts both sides fresh together.
+
 If a host port is already in use (for example another Postgres on 5432), override `POSTGRES_PORT`, `MINIO_PORT`, `MINIO_CONSOLE_PORT` or `KEYCLOAK_PORT` in `.env` and update `DATABASE_URL` / `OIDC_ISSUER_URL` to match. The check and seed scripts read those values. If port 4000 is taken, set `API_PORT` and `API_BASE_URL` together (for example `4010` and `http://localhost:4010`), in `.env` or on the command line: `API_PORT=4010 API_BASE_URL=http://localhost:4010 pnpm dev`.
 
 The database role passwords in `.env` are applied by `infrastructure/docker/postgres/init.sql` on the **first** start of the Postgres volume only. Changing them later has no effect on the existing roles; run `pnpm infra:reset` (deletes all local data) to apply new values.

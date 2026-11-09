@@ -104,6 +104,37 @@ async function expectNoAxeViolations(page: Page): Promise<void> {
   expect(results.violations).toEqual([]);
 }
 
+test("a slow risk-detail navigation acknowledges the selected row", async ({ browser }) => {
+  const carl = await signIn(browser, CISO_EMAIL);
+  let detailRequests = 0;
+  await carl.page.route(`**/risks/${riskId}*`, async (route) => {
+    const url = new URL(route.request().url());
+    if (!url.searchParams.has("_rsc")) return route.continue();
+    detailRequests += 1;
+    await new Promise((resolve) => setTimeout(resolve, 1_500));
+    await route.continue();
+  });
+
+  await carl.page.goto("/risks");
+  await waitForShell(carl.page);
+  const risk = carl.page.getByRole("link", { name: title, exact: true });
+
+  await risk.evaluate((link) => {
+    (link as HTMLElement).click();
+  });
+  await expect(risk).toHaveAttribute("aria-busy", "true", { timeout: 100 });
+  await expect(risk.locator("[data-link-pending-indicator]")).toBeVisible();
+  const requestsAfterFirstClick = detailRequests;
+  await risk.evaluate((link) => {
+    (link as HTMLElement).click();
+  });
+  await carl.page.waitForTimeout(150);
+  expect(detailRequests).toBe(requestsAfterFirstClick);
+
+  await expect(carl.page).toHaveURL(`${WEB_URL}/risks/${riskId}`);
+  await carl.context.close();
+});
+
 test("the risk shows its current and expected scores and where it is on the way to approval", async ({
   browser,
 }) => {

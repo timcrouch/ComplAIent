@@ -10,6 +10,18 @@
     ".": {
       "isms-dist": "./dist/index.js",
       "default": "./src/index.ts"
+    },
+    "./logger": {
+      "isms-dist": "./dist/logger.js",
+      "default": "./src/logger.ts"
+    },
+    "./otel": {
+      "isms-dist": "./dist/otel.js",
+      "default": "./src/otel.ts"
+    },
+    "./trace": {
+      "isms-dist": "./dist/trace.js",
+      "default": "./src/trace.ts"
     }
   },
   "scripts": {

@@ -3,11 +3,11 @@
 import type { RiskListFilter, RiskListResponse, RiskSummaryDto } from "@isms/contracts";
 import { Button, cn } from "@isms/ui";
 import { MapPinIcon, UserRoundIcon } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { listRisks, type RiskListCell } from "../../lib/actions/risks";
 import { formatDate } from "../../lib/dates";
+import { PendingLink } from "../navigation/pending-link";
 import { glass } from "../setup/styles";
 import { focusRingClass } from "../shell/styles";
 import { ProblemText } from "./notices";
@@ -24,16 +24,18 @@ function RiskRow({ risk, timeZone }: { risk: RiskSummaryDto; timeZone: string })
         </span>
         <RiskStateBadge state={risk.state} />
       </div>
-      <Link
+      <PendingLink
         href={`/risks/${risk.id}`}
         data-risk-link={risk.id}
+        pendingLabel={t("opening", { risk: risk.title })}
+        pendingClassName="text-accent underline"
         className={cn(
-          "w-fit rounded-sm text-[16px] font-semibold break-words text-fg underline-offset-4 hover:text-accent hover:underline",
+          "inline-flex w-fit items-center gap-2 rounded-sm text-[16px] font-semibold break-words text-fg underline-offset-4 hover:text-accent hover:underline",
           focusRingClass,
         )}
       >
         {risk.title}
-      </Link>
+      </PendingLink>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] text-fg-muted">
         <ScoreBadges score={risk.score} aboveAppetite={risk.aboveAppetite} />
         <span className="inline-flex items-center gap-1.5">

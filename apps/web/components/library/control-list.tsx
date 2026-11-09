@@ -5,6 +5,7 @@ import { cn, StatusBadge } from "@isms/ui";
 import { ArrowRightIcon, SearchXIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { PendingLink } from "../navigation/pending-link";
 import { focusRingClass } from "../shell/styles";
 import { glass } from "../setup/styles";
 import { TestResultBadge } from "./test-result";
@@ -111,15 +112,20 @@ export function ControlList({ items, frameworks, total }: ControlListProps) {
               </div>
               <h2 className="text-[15px] leading-snug font-semibold text-fg">
                 {/* The whole card is the link (stretched); the accessible name is code + title. */}
-                <Link
+                <PendingLink
                   href={`/library/${control.code}`}
+                  pendingLabel={t("opening", {
+                    control: `${control.code} ${control.title}`,
+                  })}
+                  pendingClassName="text-accent"
+                  indicatorClassName="absolute top-4 right-4 z-10 text-accent"
                   className="flex flex-col gap-1.5 outline-none after:absolute after:inset-0 after:rounded-lg"
                 >
                   <span className="w-fit rounded-sm bg-accent-soft px-1.5 py-0.5 font-mono text-xs font-semibold tracking-wide text-accent">
                     {control.code}
                   </span>{" "}
                   <span>{control.title}</span>
-                </Link>
+                </PendingLink>
               </h2>
               {control.frameworks.length > 0 ? (
                 <ul className="flex flex-wrap gap-1.5">

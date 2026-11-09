@@ -1,5 +1,6 @@
 import { DownloadIcon, ExternalLinkIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { PendingLink } from "../navigation/pending-link";
 import { glass } from "../setup/styles";
 import { downloadLinkClass } from "./styles";
 
@@ -41,11 +42,15 @@ export function ReportsHub() {
               </div>
               <div className="mt-auto flex flex-wrap gap-2">
                 {card.open ? (
-                  <a href={card.open} className={downloadLinkClass}>
+                  <PendingLink
+                    href={card.open}
+                    pendingLabel={t("actions.opening", { report: title })}
+                    className={downloadLinkClass}
+                  >
                     <ExternalLinkIcon aria-hidden className="size-4" />
                     {t("actions.open")}
                     <span className="sr-only"> {title}</span>
-                  </a>
+                  </PendingLink>
                 ) : null}
                 {card.files.map((ext) => (
                   <a

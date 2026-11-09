@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { completeTask } from "../../lib/actions/risks";
 import { formatDate } from "../../lib/dates";
+import { PendingLink } from "../navigation/pending-link";
 import { NoteDialog } from "../risks/note-dialog";
 import { planCall } from "../risks/plan-call";
 import { useTaskTitle } from "./task-title";
@@ -66,12 +67,13 @@ function TaskItem({ task, showRiskDetails, onUpload, onComplete }: TaskItemProps
         </span>
         {showRiskDetails || task.kind === "periodic_review" ? (
           task.riskId ? (
-            <Link
+            <PendingLink
               href={`/risks/${task.riskId}`}
-              className="text-[13px] font-semibold text-accent tabular-nums underline underline-offset-2"
+              pendingLabel={t("openingRisk", { reference })}
+              className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-accent tabular-nums underline underline-offset-2"
             >
               {reference}
-            </Link>
+            </PendingLink>
           ) : (
             <span className="text-[13px] font-semibold text-fg-muted tabular-nums">
               {reference}
