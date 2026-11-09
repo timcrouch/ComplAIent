@@ -95,6 +95,7 @@
     "control": "For control {code} · {title}",
     "controlTitle": "For control: {title}",
     "risk": "Risk {reference}",
+    "openingRisk": "Opening {reference}",
     "reviewTitle": "Review {reference}: {title}",
     "completedByApproval": "Completed when the risk was approved",
     "doneNote": "Note: {note}",

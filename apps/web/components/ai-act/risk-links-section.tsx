@@ -3,11 +3,11 @@
 import { conflictReasons, type AiSystemDetailDto } from "@isms/contracts";
 import { Button, cn, Field, Input } from "@isms/ui";
 import { LinkIcon, UnlinkIcon } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState } from "react";
 import { linkAiSystemRisk, unlinkAiSystemRisk } from "../../lib/actions/ai-act";
 import { formatDate } from "../../lib/dates";
+import { PendingLink } from "../navigation/pending-link";
 import { ProblemText } from "../risks/notices";
 import { RiskStateBadge } from "../risks/risk-badges";
 import { settle, signInAgain, type Failure } from "../risks/risk-call";
@@ -96,15 +96,16 @@ export function RiskLinksSection({ system, canLink, options, timeZone, onChanged
                   <span className="text-[13px] font-semibold text-fg-muted tabular-nums">
                     {risk.reference}
                   </span>
-                  <Link
+                  <PendingLink
                     href={`/risks/${risk.id}`}
+                    pendingLabel={t("opening", { risk: risk.title })}
                     className={cn(
-                      "rounded-sm font-semibold break-words text-accent underline-offset-4 hover:underline",
+                      "inline-flex items-center gap-1.5 rounded-sm font-semibold break-words text-accent underline-offset-4 hover:underline",
                       focusRingClass,
                     )}
                   >
                     {risk.title}
-                  </Link>
+                  </PendingLink>
                   <RiskStateBadge state={risk.state} />
                 </div>
                 <p className="text-[13px] text-fg-muted">

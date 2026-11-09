@@ -1,6 +1,6 @@
 import "server-only";
 import { loadConfig, telemetryConfig } from "@isms/config";
-import { createLogger } from "@isms/telemetry";
+import { createLogger } from "@isms/telemetry/logger";
 import { requestId } from "./request-id";
 
 type Logger = ReturnType<typeof createLogger>;

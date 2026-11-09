@@ -6,6 +6,7 @@ import { buttonVariants, cn } from "@isms/ui";
 import { ArrowRightIcon, InfoIcon, PlusIcon, ScaleIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { PendingLink } from "../navigation/pending-link";
 import { focusRingClass } from "../shell/styles";
 import { glass } from "../setup/styles";
 import { ClassBadge } from "./badges";
@@ -156,8 +157,9 @@ function Register({ systems }: { systems: readonly AiSystemSummaryDto[] }) {
           {systems.map((s) => (
             <tr key={s.id} className="border-t border-surface-border align-middle">
               <th scope="row" className="px-4 py-3 font-semibold">
-                <Link
+                <PendingLink
                   href={`/ai-act/systems/${s.id}`}
+                  pendingLabel={t("overview.opening", { system: s.name })}
                   className={cn(
                     "inline-flex items-center gap-1 rounded-sm text-accent underline-offset-4 hover:underline",
                     focusRingClass,
@@ -165,7 +167,7 @@ function Register({ systems }: { systems: readonly AiSystemSummaryDto[] }) {
                 >
                   {s.name}
                   <ArrowRightIcon aria-hidden className="size-3.5" />
-                </Link>
+                </PendingLink>
               </th>
               <td className="px-4 py-3 text-fg">{t(`roles.${s.role}`)}</td>
               <td className="px-4 py-3 text-fg">{t(`statuses.${s.status}`)}</td>

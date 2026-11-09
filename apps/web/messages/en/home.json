@@ -35,6 +35,7 @@
     "statements": {
       "title": "What needs you",
       "none": "Nothing needs you right now.",
+      "opening": "Opening {item}",
       "approvalsWaiting": "{count, plural, one {# decision needs your approval} other {# decisions need your approval}}",
       "toReview": "{count, plural, one {# risk is waiting for your review} other {# risks are waiting for your review}}",
       "aboveAppetite": "{count, plural, one {# risk is above your appetite} other {# risks are above your appetite}}",

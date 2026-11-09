@@ -1,13 +1,63 @@
 "use client";
 
 import { cn } from "@isms/ui";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { PendingLink } from "../navigation/pending-link";
 import { BrandMark, BrandWordmark } from "./brand";
 import { isCurrent, type NavItem } from "./nav-items";
 import { focusRingClass } from "./styles";
+
+type PrimaryNavLinkProps = {
+  item: NavItem;
+  current: boolean;
+  label: string;
+  pendingLabel: string;
+};
+
+function PrimaryNavLink({ item, current, label, pendingLabel }: PrimaryNavLinkProps) {
+  const { href, icon: Icon } = item;
+
+  return (
+    <PendingLink
+      href={href}
+      aria-current={current ? "page" : undefined}
+      preventNavigation={current}
+      pendingLabel={pendingLabel}
+      showIndicator={false}
+      pendingClassName="bg-accent-soft text-accent lg:bg-accent-soft lg:hover:bg-accent-soft"
+      className={cn(
+        "flex min-w-16 flex-col items-center gap-1 rounded-md px-3 py-1.5 text-[11px] font-semibold text-fg-muted",
+        "lg:h-10 lg:flex-row lg:gap-3 lg:px-3 lg:py-0 lg:text-sm",
+        "transition-colors duration-(--motion-fast) ease-standard hover:text-fg",
+        "lg:hover:bg-[color-mix(in_oklab,transparent,var(--isms-text)_6%)]",
+        current && "text-accent lg:bg-accent-soft lg:text-accent lg:hover:bg-accent-soft",
+        focusRingClass,
+      )}
+    >
+      {(pending) => (
+        <>
+          <span className="relative size-5 shrink-0 lg:size-[18px]">
+            <Icon
+              aria-hidden
+              className={cn("size-5 lg:size-[18px]", pending && "opacity-25")}
+              strokeWidth={2}
+            />
+            {pending ? (
+              <span
+                aria-hidden
+                data-nav-pending-indicator=""
+                className="absolute inset-[3px] animate-spin rounded-full border-2 border-accent border-t-transparent motion-reduce:animate-none"
+              />
+            ) : null}
+          </span>
+          <span>{label}</span>
+        </>
+      )}
+    </PendingLink>
+  );
+}
 
 /**
  * Persistent primary navigation: a glass sidebar on large screens, a bottom bar on small
@@ -34,25 +84,17 @@ export function PrimaryNav({ items, account }: { items: readonly NavItem[]; acco
       </div>
       <ul className="contents lg:flex lg:flex-col lg:gap-1">
         {items.map((item) => {
-          const { href, key, icon: Icon } = item;
+          const { key } = item;
           const current = isCurrent(item, pathname);
+          const label = t(`nav.${key}`);
           return (
             <li key={key} className="contents lg:block">
-              <Link
-                href={href}
-                aria-current={current ? "page" : undefined}
-                className={cn(
-                  "flex min-w-16 flex-col items-center gap-1 rounded-md px-3 py-1.5 text-[11px] font-semibold text-fg-muted",
-                  "lg:h-10 lg:flex-row lg:gap-3 lg:px-3 lg:py-0 lg:text-sm",
-                  "transition-colors duration-(--motion-fast) ease-standard hover:text-fg",
-                  "lg:hover:bg-[color-mix(in_oklab,transparent,var(--isms-text)_6%)]",
-                  current && "text-accent lg:bg-accent-soft lg:text-accent lg:hover:bg-accent-soft",
-                  focusRingClass,
-                )}
-              >
-                <Icon aria-hidden className="size-5 lg:size-[18px]" strokeWidth={2} />
-                <span>{t(`nav.${key}`)}</span>
-              </Link>
+              <PrimaryNavLink
+                item={item}
+                current={current}
+                label={label}
+                pendingLabel={t("nav.loading", { destination: label })}
+              />
             </li>
           );
         })}

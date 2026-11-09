@@ -15,7 +15,8 @@
     "risks": "Risks",
     "tasks": "Tasks",
     "reports": "Reports",
-    "aiAct": "EU AI Act"
+    "aiAct": "EU AI Act",
+    "loading": "Loading {destination}"
   },
   "reportButton": {
     "label": "Report a concern",

@@ -12,8 +12,8 @@ import {
   StampIcon,
   type LucideIcon,
 } from "lucide-react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { PendingLink } from "../navigation/pending-link";
 import { focusRingClass } from "../shell/styles";
 import { glass, sectionTitle } from "./styles";
 
@@ -55,8 +55,10 @@ export function Statements({ statements }: { statements: readonly WorkspaceState
             const Icon = ICON[key];
             return (
               <li key={key}>
-                <Link
+                <PendingLink
                   href={href}
+                  pendingLabel={t("opening", { item: t(key, { count }) })}
+                  pendingClassName="border-accent text-accent"
                   className={cn(
                     glass,
                     focusRingClass,
@@ -78,7 +80,7 @@ export function Statements({ statements }: { statements: readonly WorkspaceState
                     aria-hidden
                     className="size-4 shrink-0 text-fg-muted transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none"
                   />
-                </Link>
+                </PendingLink>
               </li>
             );
           })}

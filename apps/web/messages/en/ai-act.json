@@ -43,6 +43,7 @@
       "frameworkHintLink": "Go to Setup → Frameworks",
       "frameworkHintAsk": "The EU AI Act isn't one of your frameworks yet. Ask an administrator to add it in Setup → Frameworks, so its requirements show in your Statement of Applicability.",
       "tableCaption": "The AI system register",
+      "opening": "Opening {system}",
       "columns": {
         "name": "Name",
         "role": "Your role",
@@ -176,6 +177,7 @@
       "intro": "Risks in your register that this system causes or affects.",
       "none": "No risks are linked yet.",
       "linkedBy": "Linked by {name} on {date}",
+      "opening": "Opening {risk}",
       "unlink": "Unlink",
       "pickerTitle": "Link a risk",
       "pickerLabel": "Find a risk",

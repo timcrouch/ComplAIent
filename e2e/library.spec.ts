@@ -31,6 +31,35 @@ async function settle(page: Page): Promise<void> {
   );
 }
 
+test("a slow control-detail navigation acknowledges the selected card", async ({ page }) => {
+  let detailRequests = 0;
+  await page.route("**/library/*", async (route) => {
+    const url = new URL(route.request().url());
+    if (!url.searchParams.has("_rsc")) return route.continue();
+    detailRequests += 1;
+    await new Promise((resolve) => setTimeout(resolve, 1_500));
+    await route.continue();
+  });
+
+  await page.goto("/library");
+  await waitForShell(page);
+  const control = page
+    .getByRole("main")
+    .getByRole("heading", { level: 2 })
+    .getByRole("link")
+    .first();
+
+  await control.evaluate((link) => (link as HTMLElement).click());
+  await expect(control).toHaveAttribute("aria-busy", "true", { timeout: 100 });
+  await expect(control.locator("[data-link-pending-indicator]")).toBeVisible();
+  const requestsAfterFirstClick = detailRequests;
+  await control.evaluate((link) => (link as HTMLElement).click());
+  await page.waitForTimeout(150);
+  expect(detailRequests).toBe(requestsAfterFirstClick);
+
+  await expect(page).toHaveURL(/\/library\/[A-Z]{3}-\d{2}$/);
+});
+
 test("a CISO finds a control by reference and marks a mapping reviewed", async ({ page }) => {
   await page.goto("/");
   await waitForShell(page);

@@ -120,6 +120,38 @@ test.describe("home", () => {
 });
 
 test.describe("shell", () => {
+  test("a slow primary navigation acknowledges the click and ignores a duplicate", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ storageState: ADMIN_STATE });
+    const page = await context.newPage();
+    let reportRequests = 0;
+    await page.route("**/report?*", async (route) => {
+      const url = new URL(route.request().url());
+      if (!url.searchParams.has("_rsc")) return route.continue();
+      reportRequests += 1;
+      await new Promise((resolve) => setTimeout(resolve, 1_500));
+      await route.continue();
+    });
+
+    await page.goto("/");
+    await waitForShell(page);
+    const report = page
+      .getByRole("navigation", { name: "Primary" })
+      .getByRole("link", { name: "Report a concern" });
+
+    await report.evaluate((link) => (link as HTMLElement).click());
+    await expect(report).toHaveAttribute("aria-busy", "true", { timeout: 100 });
+    const requestsAfterFirstClick = reportRequests;
+    await report.evaluate((link) => (link as HTMLElement).click());
+    await page.waitForTimeout(150);
+    expect(reportRequests).toBe(requestsAfterFirstClick);
+
+    await expect(page).toHaveURL(`${WEB_URL}/report`);
+    await expect(report).not.toHaveAttribute("aria-busy", "true");
+    await context.close();
+  });
+
   test("Ctrl+K opens palette and 'Switch theme' toggles data-theme", async ({ page }) => {
     await setTheme(page, "light");
     await page.goto("/");

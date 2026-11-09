@@ -28,6 +28,7 @@
     },
     "actions": {
       "open": "Open",
+      "opening": "Opening {report}",
       "excel": "Excel",
       "pdf": "PDF"
     },
