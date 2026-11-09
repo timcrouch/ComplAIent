@@ -10,7 +10,6 @@ type PendingLinkProps = Omit<ComponentProps<typeof Link>, "children" | "onNaviga
   pendingLabel: string;
   pendingClassName?: string;
   indicatorClassName?: string;
-  preventNavigation?: boolean;
   showIndicator?: boolean;
 };
 
@@ -24,7 +23,6 @@ export function PendingLink({
   pendingLabel,
   pendingClassName,
   indicatorClassName,
-  preventNavigation = false,
   showIndicator = true,
   ...props
 }: PendingLinkProps) {
@@ -38,7 +36,7 @@ export function PendingLink({
   }, [pathname]);
 
   const navigate = (event: { preventDefault: () => void }) => {
-    if (preventNavigation || requested.current) {
+    if (requested.current) {
       event.preventDefault();
       return;
     }

@@ -23,7 +23,6 @@ function PrimaryNavLink({ item, current, label, pendingLabel }: PrimaryNavLinkPr
     <PendingLink
       href={href}
       aria-current={current ? "page" : undefined}
-      preventNavigation={current}
       pendingLabel={pendingLabel}
       showIndicator={false}
       pendingClassName="bg-accent-soft text-accent lg:bg-accent-soft lg:hover:bg-accent-soft"
