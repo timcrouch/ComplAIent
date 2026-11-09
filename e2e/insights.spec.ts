@@ -23,8 +23,6 @@ const noExpectedTitle = `No expected score ${String(Date.now()).slice(-6)}`;
 test.beforeAll(async () => {
   test.setTimeout(180_000);
   await grantRoleViaApi(APPROVER_EMAIL, "risk_approver");
-  await grantRoleViaApi(REPORTER_EMAIL, "contributor");
-  await grantRoleViaApi(OWNER_EMAIL, "risk_owner");
   const [rita, carl] = [await apiToken(REPORTER_EMAIL), await apiToken(CISO_EMAIL)];
   const library = (await api(carl, "GET", "/api/v1/library/controls")).data as {
     items: { code: string }[];
