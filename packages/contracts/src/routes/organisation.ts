@@ -84,6 +84,8 @@ export const OrganisationResponse = z
     defaultRiskScale: RiskScaleDto,
     /** Months between periodic reviews of an approved or closed risk (1 to 36, default 12). */
     reviewIntervalMonths: z.number().int(),
+    /** Concern reporting continues normally when rewards are disabled. */
+    concernRewards: z.object({ enabled: z.boolean() }),
     setup: z.object({
       completedAt: z.iso.datetime().nullable(),
       /** Steps still to do, in setup order. */
@@ -94,6 +96,22 @@ export const OrganisationResponse = z
   })
   .openapi("OrganisationResponse");
 export type OrganisationResponse = z.infer<typeof OrganisationResponse>;
+
+export const ConcernRewardsSettingsInput = z
+  .object({ enabled: z.boolean() })
+  .strict()
+  .openapi("ConcernRewardsSettingsInput");
+export type ConcernRewardsSettingsInput = z.infer<typeof ConcernRewardsSettingsInput>;
+
+export const ConcernRewardsSettingsDto = z
+  .object({ enabled: z.boolean() })
+  .openapi("ConcernRewardsSettingsDto");
+export type ConcernRewardsSettingsDto = z.infer<typeof ConcernRewardsSettingsDto>;
+
+export const ResumeConcernRewardsResponse = z
+  .object({ queued: z.number().int().nonnegative() })
+  .openapi("ResumeConcernRewardsResponse");
+export type ResumeConcernRewardsResponse = z.infer<typeof ResumeConcernRewardsResponse>;
 
 export const ProfileInput = z
   .object({
@@ -269,6 +287,24 @@ export const organisationRoutes = {
     permission: "organisation.manage",
     request: { body: ReviewIntervalInput },
     responses: { 200: OrganisationResponse, 409: ErrorResponse },
+  }),
+  setConcernRewards: defineRoute({
+    method: "put",
+    path: "/api/v1/organisation/concern-rewards",
+    summary: "Turn concern rewards and recognition on or off without changing concern reporting",
+    permission: "organisation.manage",
+    recentAuth: true,
+    request: { body: ConcernRewardsSettingsInput },
+    responses: { 200: ConcernRewardsSettingsDto, 409: ErrorResponse },
+  }),
+  resumeConcernRewards: defineRoute({
+    method: "post",
+    path: "/api/v1/organisation/concern-rewards/resume",
+    summary:
+      "Explicitly resume suspended and pending reward evaluations without backfilling reports",
+    permission: "organisation.manage",
+    recentAuth: true,
+    responses: { 200: ResumeConcernRewardsResponse, 409: ErrorResponse },
   }),
   setModule: defineRoute({
     method: "put",

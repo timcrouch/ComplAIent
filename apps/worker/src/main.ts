@@ -26,6 +26,7 @@ import { embedLibrary } from "./jobs/embed-library.js";
 import { reviewDue } from "./jobs/review-due.js";
 import { heartbeat } from "./jobs/heartbeat.js";
 import { suggestControls } from "./jobs/suggest-controls.js";
+import { evaluateConcern } from "./jobs/evaluate-concern.js";
 import { registerJobCountGauge } from "./metrics.js";
 
 const FORCE_EXIT_MS = 30_000;
@@ -104,6 +105,11 @@ async function main(): Promise<void> {
       registerProcessor(
         "risk.suggest_controls",
         (payload, attempt) => suggestControls({ db, gateway, embedder, logger }, payload, attempt),
+        { connection, logger },
+      ),
+      registerProcessor(
+        "concern.evaluate",
+        (payload) => evaluateConcern({ db, gateway, logger }, payload),
         { connection, logger },
       ),
       registerProcessor(

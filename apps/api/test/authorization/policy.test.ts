@@ -32,6 +32,10 @@ const contribOrg: RoleAssignmentDto = {
   scope: { type: "organisation", id: null },
 };
 const cisoSiteA: RoleAssignmentDto = { role: "ciso", scope: { type: "site", id: "A" } };
+const cisoOrg: RoleAssignmentDto = {
+  role: "ciso",
+  scope: { type: "organisation", id: null },
+};
 const auditorDeptX: RoleAssignmentDto = {
   role: "auditor",
   scope: { type: "department", id: "X" },
@@ -75,6 +79,7 @@ describe("ROLE_PERMISSIONS", () => {
         "soa.manage",
         "aiact.read",
         "aiact.manage",
+        "concerns.judge",
       ],
       auditor: [
         "me.read",
@@ -392,5 +397,18 @@ describe("AI Act permissions (#16 §2)", () => {
       "viewer",
     ]);
     expect(holders("aiact.manage")).toEqual(["ciso", "risk_owner"]);
+  });
+});
+
+describe("concern reward authority (#31)", () => {
+  it("belongs only to an organisation-scoped CISO, never to an administrator by role alone", () => {
+    expect(DEFAULT_SCOPED_PERMISSIONS).not.toContain("concerns.judge");
+    const holders = Object.entries(ROLE_PERMISSIONS)
+      .filter(([, permissions]) => permissions.includes("concerns.judge"))
+      .map(([role]) => role);
+    expect(holders).toEqual(["ciso"]);
+    expect(defaults.permissionsFor(actor([adminOrg]))).not.toContain("concerns.judge");
+    expect(defaults.permissionsFor(actor([cisoOrg]))).toContain("concerns.judge");
+    expect(defaults.permissionsFor(actor([cisoSiteA]))).not.toContain("concerns.judge");
   });
 });

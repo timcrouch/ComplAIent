@@ -1,0 +1,70 @@
+{
+  "rewards": {
+    "pageTitle": "Security contribution · {app}",
+    "eyebrow": "Your security impact",
+    "title": "Security contribution",
+    "intro": "Private recognition for helping protect the organisation. Only you and authorized security reviewers can see these results.",
+    "disabled": "Rewards and recognition are currently off. Your ability to report concerns is unchanged.",
+    "points": "{points} points",
+    "provisional": "{points} provisional",
+    "rank": "Current rank",
+    "nextRank": "{points} points to {rank}",
+    "topRank": "Highest rank reached",
+    "badges": "Achievement badges",
+    "noBadges": "Your first achievement badge will appear here after a qualifying concern is evaluated.",
+    "earnedTimes": "Earned {count, plural, one {# time} other {# times}}",
+    "recent": "Recent evaluations",
+    "noRecent": "No reward evaluations yet.",
+    "status": {
+      "pending": "Evaluation pending",
+      "provisional": "Provisional AI evaluation",
+      "final": "Final CISO evaluation",
+      "overridden": "Replaced by a newer evaluation",
+      "suspended": "Evaluation paused"
+    },
+    "legitimacy": {
+      "confirmed": "Confirmed concern",
+      "plausible": "Plausible concern",
+      "confirmed_duplicate": "Useful corroboration",
+      "not_confirmed": "Not confirmed",
+      "out_of_scope": "Outside security scope",
+      "abusive": "Reporting misuse"
+    },
+    "severity": {
+      "informational": "Informational",
+      "minor": "Minor potential impact",
+      "moderate": "Moderate potential impact",
+      "major": "Major potential impact",
+      "critical": "Critical potential impact"
+    },
+    "breakdown": "{legitimacy} legitimacy + {severity} severity + {position} early-reporting",
+    "position": "Report position {position}",
+    "reviewNotice": "The CISO may review this provisional result.",
+    "highImpact": "High-impact report recognized",
+    "newBadge": "Achievement earned",
+    "refresh": "Refresh results"
+  },
+  "judgments": {
+    "pageTitle": "Concern judgments · {app}",
+    "eyebrow": "CISO review",
+    "title": "Concern judgment queue",
+    "intro": "Finalize pending reports and review AI evaluations that require human attention. This does not approve or close the underlying risk.",
+    "empty": "No concern evaluations currently need judgment.",
+    "pending": "Waiting for human evaluation",
+    "ai": "AI recommendation",
+    "confidence": "Confidence {percent}%",
+    "failure": "AI evaluation unavailable: {reason}",
+    "rationale": "Evaluator rationale",
+    "uncertainty": "Uncertainty",
+    "legitimacy": "Legitimacy",
+    "severity": "Potential severity",
+    "duplicate": "Duplicate risk ID (only for useful corroboration)",
+    "feedback": "Private feedback to the reporter",
+    "reason": "CISO rationale",
+    "save": "Save final judgment",
+    "saving": "Saving…",
+    "saved": "Judgment saved.",
+    "failed": "The judgment could not be saved. Check the fields and try again.",
+    "openRisk": "Open risk {reference}"
+  }
+}

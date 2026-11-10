@@ -24,7 +24,11 @@ vi.mock("../lib/actions/theme", () => ({
   saveTheme: (...args: unknown[]) => saveTheme(...args) as unknown,
 }));
 
-const user = { displayName: "Rita Reporter", email: "reporter@example.test" };
+const user = {
+  displayName: "Rita Reporter",
+  email: "reporter@example.test",
+  concernRank: null,
+};
 
 function shell(messages?: unknown, permissions: Permission[] = ["me.read"]) {
   return withMessages(
@@ -63,6 +67,25 @@ describe("AppShell", () => {
     expect(within(nav).getAllByRole("link")).toHaveLength(1);
     expect(screen.getByRole("button", { name: /^Search/ })).toBeTruthy();
     expect(screen.getByRole("main").textContent).toContain("page");
+  });
+
+  it("replaces the initials with the current rank crest after a useful concern is validated", () => {
+    withMessages(
+      <AppShell
+        user={{ ...user, concernRank: "defender" }}
+        viewMode="guided"
+        theme="light"
+        permissions={["me.read"]}
+      >
+        <p>page</p>
+      </AppShell>,
+    );
+    const avatar = document.querySelector('[data-concern-rank="defender"]');
+    expect(avatar?.textContent).toBe("");
+    expect(decodeURIComponent(avatar?.querySelector("img")?.getAttribute("src") ?? "")).toContain(
+      "/images/concern-rewards/ranks/defender.png",
+    );
+    expect(avatar?.getAttribute("title")).toBe("Defender rank");
   });
 
   it("shows Organisation in navigation only to people who can manage it", () => {

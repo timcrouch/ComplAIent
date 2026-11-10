@@ -35,6 +35,40 @@ describe("reporting: scoped reporters and AI-assisted reports", () => {
     ]);
   });
 
+  it("queues evaluation only when the organisation has opted into concern rewards", async () => {
+    const ordinary = await h.post("/api/v1/risks", reportBody(), "rita");
+    expect(ordinary.status).toBe(201);
+    expect(await db.concernEvaluation.count()).toBe(0);
+
+    await db.organisation.create({
+      data: {
+        name: "Northwind",
+        description: "",
+        concernRewardsEnabled: true,
+      },
+    });
+    const rewarded = await h.post(
+      "/api/v1/risks",
+      reportBody({ title: "Suspicious sign-in prompt" }),
+      "rita",
+    );
+    expect(rewarded.status, JSON.stringify(rewarded.body)).toBe(201);
+    const evaluation = await db.concernEvaluation.findFirstOrThrow({
+      where: { riskId: (rewarded.body as RiskDetailDto).id },
+    });
+    expect(evaluation).toMatchObject({
+      reporterId: h.userIds.rita,
+      status: "pending",
+      source: null,
+      totalPoints: 0,
+    });
+    expect(
+      await db.auditEvent.count({
+        where: { action: "concern.evaluation_queued", objectId: evaluation.id },
+      }),
+    ).toBe(1);
+  });
+
   it("an AI-assisted report submits and links the reporter's open conversation", async () => {
     const open = await conversation("rita");
     const reports = h.service(RiskReportService);

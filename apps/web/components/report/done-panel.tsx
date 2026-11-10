@@ -42,6 +42,10 @@ export function DonePanel({ reference, onAnother }: { reference: string; onAnoth
           {t("concernsLink")}
           <ArrowRightIcon aria-hidden />
         </Link>
+        <Link href="/security-contribution" className={buttonVariants({ variant: "secondary" })}>
+          {t("rewardsLink")}
+          <ArrowRightIcon aria-hidden />
+        </Link>
         <Button type="button" variant="secondary" onClick={onAnother}>
           {t("another")}
         </Button>

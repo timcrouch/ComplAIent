@@ -92,3 +92,25 @@ export type {
   ProhibitedPractice,
   TransparencyDuty,
 } from "./ai-act/index.js";
+export {
+  CONCERN_BADGES,
+  CONCERN_LEGITIMACY_POINTS,
+  CONCERN_POSITION_POINTS,
+  CONCERN_RANKS,
+  CONCERN_SEVERITY_POINTS,
+  concernBadgeOccurrences,
+  concernRank,
+  earnedConcernBadges,
+  scoreConcern,
+} from "./concern-rewards.js";
+export type {
+  ConcernBadgeFacts,
+  ConcernBadgeKey,
+  ConcernBadgeEvaluation,
+  ConcernBadgeOccurrence,
+  ConcernLegitimacy,
+  ConcernRank,
+  ConcernScore,
+  ConcernScoreInput,
+  ConcernSeverity,
+} from "./concern-rewards.js";

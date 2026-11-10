@@ -1,18 +1,20 @@
 // Organisation profile, sites, departments, frameworks in scope, risk scales and assets.
 
 model Organisation {
-  id                   String    @id @default(uuid(7)) @db.Uuid
+  id                    String    @id @default(uuid(7)) @db.Uuid
   /// Always true; the unique index plus a check constraint allow exactly one row.
-  singleton            Boolean   @unique @default(true)
-  name                 String
-  description          String    @default("")
-  approximateHeadcount Int?
-  setupCompletedAt     DateTime? @db.Timestamptz(3)
-  setupCompletedById   String?   @db.Uuid
+  singleton             Boolean   @unique @default(true)
+  name                  String
+  description           String    @default("")
+  approximateHeadcount  Int?
+  setupCompletedAt      DateTime? @db.Timestamptz(3)
+  setupCompletedById    String?   @db.Uuid
   /// Months between periodic risk reviews; 1-36 (check constraint in the migration, Plan 6).
-  reviewIntervalMonths Int       @default(12)
-  createdAt            DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime  @updatedAt @db.Timestamptz(3)
+  reviewIntervalMonths  Int       @default(12)
+  /// Organisation-wide opt-in for concern rewards (#31). Off preserves ordinary reporting only.
+  concernRewardsEnabled Boolean   @default(false)
+  createdAt             DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt             DateTime  @updatedAt @db.Timestamptz(3)
 
   setupCompletedBy User? @relation("SetupCompletedBy", fields: [setupCompletedById], references: [id], onDelete: Restrict)
 }

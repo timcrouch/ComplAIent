@@ -1,5 +1,56 @@
 {
   "settings": {
+    "concernReporting": {
+      "pageTitle": "Concern reporting · Settings · {app}",
+      "eyebrow": "Settings",
+      "title": "Concern reporting",
+      "intro": "Encourage people to report legitimate security concerns with transparent points, ranks and achievement badges.",
+      "sectionTitle": "Rewards and recognition",
+      "sectionDescription": "This opt-in is independent of the AI assistant. When AI is available it can assess reports immediately; otherwise the CISO reviews them.",
+      "switchLabel": "Rewards and recognition",
+      "switchHint": "Award points, ranks and badges for legitimate concern reports.",
+      "enabledExplanation": "New concern reports enter the rewards workflow. Existing suspended evaluations stay suspended until an administrator explicitly resumes them.",
+      "disabledExplanation": "Concern reporting continues normally. No new evaluations, points, badges or reward notices are created.",
+      "savedOn": "Rewards and recognition are on.",
+      "savedOff": "Rewards and recognition are off.",
+      "resume": "Resume pending evaluations",
+      "resuming": "Resuming…",
+      "resumed": "{count, plural, one {# evaluation queued} other {# evaluations queued}}.",
+      "catalog": {
+        "title": "Recognition people can earn",
+        "description": "Points build a person’s rank over time, while achievement badges recognize specific kinds of helpful reporting. Results remain private to the reporter and authorized security reviewers.",
+        "ranksTitle": "Ranks",
+        "pointsRequired": "{points, number} points",
+        "badgesTitle": "Achievement badges",
+        "repeatable": "Repeatable achievement",
+        "badges": {
+          "first_signal": {
+            "title": "First Signal",
+            "description": "First reporter of a confirmed concern."
+          },
+          "sharp_eye": {
+            "title": "Sharp Eye",
+            "description": "Reported five confirmed or plausible concerns."
+          },
+          "early_warning": {
+            "title": "Early Warning",
+            "description": "First to report three separately confirmed concerns."
+          },
+          "high_impact": {
+            "title": "High Impact",
+            "description": "Reported a confirmed major or critical concern."
+          },
+          "consistent_guardian": {
+            "title": "Consistent Guardian",
+            "description": "Reported useful concerns in three different calendar months."
+          },
+          "corroborator": {
+            "title": "Corroborator",
+            "description": "Added useful corroboration to an existing concern."
+          }
+        }
+      }
+    },
     "ai": {
       "pageTitle": "AI assistant · Settings · {app}",
       "eyebrow": "Settings",

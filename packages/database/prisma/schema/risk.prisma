@@ -63,21 +63,22 @@ model Risk {
   createdAt                DateTime                @default(now()) @db.Timestamptz(3)
   updatedAt                DateTime                @updatedAt @db.Timestamptz(3)
 
-  riskScale    RiskScale?           @relation(fields: [riskScaleId], references: [id], onDelete: Restrict)
-  owner        User?                @relation("RiskOwner", fields: [ownerId], references: [id], onDelete: Restrict)
-  reporter     User                 @relation("RiskReporter", fields: [reporterId], references: [id], onDelete: Restrict)
-  reviewer     User?                @relation("RiskReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
-  closedBy     User?                @relation("RiskClosedBy", fields: [closedById], references: [id], onDelete: Restrict)
-  site         Site?                @relation(fields: [siteId], references: [id], onDelete: Restrict)
-  department   Department?          @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-  versions     RiskVersion[]
-  assets       RiskAsset[]
-  controls     RiskControl[]
-  evidence     Evidence[]
-  tasks        Task[]
-  approvals    Approval[]
-  conversation ConcernConversation?
-  aiSystems    AiSystemRisk[]
+  riskScale          RiskScale?           @relation(fields: [riskScaleId], references: [id], onDelete: Restrict)
+  owner              User?                @relation("RiskOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  reporter           User                 @relation("RiskReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  reviewer           User?                @relation("RiskReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+  closedBy           User?                @relation("RiskClosedBy", fields: [closedById], references: [id], onDelete: Restrict)
+  site               Site?                @relation(fields: [siteId], references: [id], onDelete: Restrict)
+  department         Department?          @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+  versions           RiskVersion[]
+  assets             RiskAsset[]
+  controls           RiskControl[]
+  evidence           Evidence[]
+  tasks              Task[]
+  approvals          Approval[]
+  conversation       ConcernConversation?
+  concernEvaluations ConcernEvaluation[]
+  aiSystems          AiSystemRisk[]
 
   @@index([state])
   @@index([reporterId])

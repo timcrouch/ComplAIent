@@ -38,6 +38,7 @@ describe("aiReadiness", () => {
   it("maps purposes to model keys", () => {
     expect(MODEL_KEY_BY_PURPOSE).toEqual({
       concern_turn: "conversation",
+      concern_evaluation: "conversation",
       control_suggestion: "controls",
       framework_suggestion: "frameworks",
       connection_test: "conversation",

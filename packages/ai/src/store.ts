@@ -3,6 +3,7 @@ import type { ChatMessage } from "./provider.js";
 /** Mirrors the Prisma enums; kept as plain unions so callers need no database import. */
 export type AiPurpose =
   | "concern_turn"
+  | "concern_evaluation"
   | "control_suggestion"
   | "framework_suggestion"
   | "connection_test"

@@ -11,6 +11,8 @@ export const JobContracts = {
     requestedById: z.uuid(),
     version: z.number().int(),
   }),
+  /** Evaluates and rewards a submitted concern when the feature and AI are available. */
+  "concern.evaluate": z.object({ evaluationId: z.uuid() }),
   /**
    * Daily: creates "Review this risk" tasks for risks whose review is due. A job scheduler has a
    * fixed payload, so `runOn` (the date it was scheduled) is informational; the handler uses

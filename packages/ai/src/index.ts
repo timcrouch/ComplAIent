@@ -93,6 +93,13 @@ export {
 } from "./purposes/concern-turn.js";
 export { MOCK_ESTIMATE_REASONING } from "./mock/concern-turn.js";
 export {
+  AI_CONCERN_LEGITIMACY,
+  AI_CONCERN_SEVERITY,
+  ConcernEvaluationOutput,
+  buildConcernEvaluationPrompt,
+  type ConcernEvaluationText,
+} from "./purposes/concern-evaluation.js";
+export {
   buildFrameworkSuggestionPrompt,
   FrameworkSuggestionOutput,
   selectFrameworkSuggestions,

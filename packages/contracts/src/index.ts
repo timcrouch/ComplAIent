@@ -41,6 +41,8 @@ export {
 } from "./routes/library.js";
 export {
   CompleteSetupResponse,
+  ConcernRewardsSettingsDto,
+  ConcernRewardsSettingsInput,
   DepartmentDto,
   DepartmentInput,
   FrameworksInput,
@@ -53,6 +55,7 @@ export {
   RiskLevelDto,
   RiskScaleDto,
   RiskScaleInput,
+  ResumeConcernRewardsResponse,
   ReviewIntervalInput,
   SetModuleInput,
   SetupStepSchema,
@@ -143,6 +146,19 @@ export {
   aiSettingsRoutes,
 } from "./routes/ai-settings.js";
 export type { AiReadinessReason, AiTestFailureReason } from "./routes/ai-settings.js";
+export {
+  ConcernBadgeKeySchema,
+  ConcernEvaluationDto,
+  ConcernEvaluationQueueDto,
+  ConcernEvaluationStatusSchema,
+  ConcernLegitimacySchema,
+  ConcernPointsDto,
+  ConcernRankKeySchema,
+  ConcernSeveritySchema,
+  JudgeConcernInput,
+  SecurityContributionDto,
+  concernRewardRoutes,
+} from "./routes/concern-rewards.js";
 export {
   ConcernAiStatusDto,
   ConcernDraftDto,

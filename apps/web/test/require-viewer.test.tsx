@@ -31,6 +31,7 @@ const me = {
   viewMode: "guided" as const,
   theme: "system" as const,
   modules: [],
+  concernRank: null,
 };
 
 beforeEach(() => {

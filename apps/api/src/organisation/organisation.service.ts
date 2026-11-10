@@ -1,18 +1,23 @@
 import { Inject, Injectable } from "@nestjs/common";
 import {
   type CompleteSetupResponse,
+  type ConcernRewardsSettingsDto,
+  type ConcernRewardsSettingsInput,
   type OrganisationProfileDto,
   type OrganisationResponse,
   type ProfileInput,
   type ReviewIntervalInput,
+  type ResumeConcernRewardsResponse,
   type SetupStep,
   conflictDetail,
 } from "@isms/contracts";
 import type { Prisma } from "@isms/database";
+import type { JobsClient } from "@isms/jobs";
 import { type Clock, DEFAULT_REVIEW_INTERVAL_MONTHS, DomainError } from "@isms/domain";
 import { type AuditContext, AuditService } from "../audit/index.js";
 import { CLOCK } from "../identity/index.js";
 import { PRISMA, type PrismaService, enabledModules } from "../platform/index.js";
+import { JOBS } from "../platform/index.js";
 import { defaultRiskScaleDto } from "./default-risk-scale.js";
 import { OrganisationFrameworksService } from "./organisation-frameworks.service.js";
 import { OrganisationUnitsService } from "./organisation-units.service.js";
@@ -26,6 +31,7 @@ const PROFILE_SELECT = {
   approximateHeadcount: true,
   setupCompletedAt: true,
   reviewIntervalMonths: true,
+  concernRewardsEnabled: true,
 } as const satisfies Prisma.OrganisationSelect;
 
 type StoredOrganisation = Prisma.OrganisationGetPayload<{ select: typeof PROFILE_SELECT }>;
@@ -68,6 +74,7 @@ export class OrganisationService {
     private readonly frameworks: OrganisationFrameworksService,
     private readonly riskScale: RiskScaleService,
     private readonly audit: AuditService,
+    @Inject(JOBS) private readonly jobs: JobsClient,
   ) {}
 
   /** Read in one transaction, so the parts agree with each other. */
@@ -83,6 +90,7 @@ export class OrganisationService {
           defaultRiskScale: defaultRiskScaleDto(),
           reviewIntervalMonths:
             organisation?.reviewIntervalMonths ?? DEFAULT_REVIEW_INTERVAL_MONTHS,
+          concernRewards: { enabled: organisation?.concernRewardsEnabled ?? false },
           setup: {
             completedAt: organisation?.setupCompletedAt?.toISOString() ?? null,
             missing: await missingSteps(tx),
@@ -158,6 +166,91 @@ export class OrganisationService {
       );
     });
     return this.get();
+  }
+
+  /** Enables or disables rewards independently from AI and leaves ordinary reporting unchanged. */
+  async setConcernRewards(
+    input: ConcernRewardsSettingsInput,
+    ctx: AuditContext,
+  ): Promise<ConcernRewardsSettingsDto> {
+    return withSetupLock(this.prisma, async (tx) => {
+      const existing = await findOrganisation(tx);
+      if (!existing) {
+        throw new DomainError("CONFLICT", "The organisation profile is not saved yet", [
+          conflictDetail("setupIncomplete", "profile"),
+        ]);
+      }
+      if (existing.concernRewardsEnabled === input.enabled) return input;
+      let suspended = 0;
+      if (!input.enabled) {
+        suspended = (
+          await tx.concernEvaluation.updateMany({
+            where: { status: { in: ["pending", "provisional"] } },
+            data: { status: "suspended" },
+          })
+        ).count;
+      }
+      const saved = await tx.organisation.update({
+        where: { singleton: true },
+        data: { concernRewardsEnabled: input.enabled },
+        select: { id: true, concernRewardsEnabled: true },
+      });
+      await this.audit.record(
+        {
+          action: "organisation.concern_rewards_changed",
+          objectType: "Organisation",
+          objectId: saved.id,
+          before: { enabled: existing.concernRewardsEnabled },
+          after: { enabled: saved.concernRewardsEnabled, suspendedEvaluations: suspended },
+        },
+        ctx,
+        tx,
+      );
+      return { enabled: saved.concernRewardsEnabled };
+    });
+  }
+
+  async resumeConcernRewards(ctx: AuditContext): Promise<ResumeConcernRewardsResponse> {
+    const ids = await withSetupLock(this.prisma, async (tx) => {
+      const organisation = await findOrganisation(tx);
+      if (!organisation?.concernRewardsEnabled) {
+        throw new DomainError("CONFLICT", "Concern rewards are not enabled");
+      }
+      await tx.concernEvaluation.updateMany({
+        where: { status: "suspended", supersededBy: null },
+        data: { status: "pending", failureReason: null },
+      });
+      const pending = await tx.concernEvaluation.findMany({
+        where: { status: "pending", supersededBy: null },
+        select: { id: true },
+      });
+      await this.audit.record(
+        {
+          action: "organisation.concern_rewards_resumed",
+          objectType: "Organisation",
+          objectId: organisation.id,
+          after: { evaluations: pending.length },
+        },
+        ctx,
+        tx,
+      );
+      return pending.map(({ id }) => id);
+    });
+    let queued = 0;
+    for (const evaluationId of ids) {
+      try {
+        await this.jobs.removeFinished("concern.evaluate", evaluationId);
+        await this.jobs.enqueue(
+          "concern.evaluate",
+          { evaluationId },
+          { idempotencyKey: evaluationId },
+        );
+        queued += 1;
+      } catch {
+        // It remains pending in the CISO queue and a later explicit resume can retry it.
+      }
+    }
+    return { queued };
   }
 
   /**

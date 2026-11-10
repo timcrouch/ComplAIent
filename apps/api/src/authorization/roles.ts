@@ -35,6 +35,7 @@ export const ROLE_PERMISSIONS: Readonly<Record<Role, readonly Permission[]>> = O
     "soa.manage",
     "aiact.read",
     "aiact.manage",
+    "concerns.judge",
   ],
   auditor: [
     "me.read",

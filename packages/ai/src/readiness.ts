@@ -21,6 +21,7 @@ export type ConnectionTestReadiness = { ready: true; model: string | null } | No
 /** Which configured model each purpose uses (P3-R10 / PF3). */
 export const MODEL_KEY_BY_PURPOSE: Readonly<Record<AiPurpose, AiModelKey>> = {
   concern_turn: "conversation",
+  concern_evaluation: "conversation",
   control_suggestion: "controls",
   framework_suggestion: "frameworks",
   connection_test: "conversation",

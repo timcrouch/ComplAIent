@@ -3,6 +3,7 @@ import { Builder, emptyRows, idMaker, lengthOf } from "./builder.js";
 import { SAMPLE_ORGANISATION, SAMPLE_SEED } from "./company.js";
 import { type RiskBook, applyRiskEvent, openReviewTasks } from "./risk-events.js";
 import { writeIdentities, writePeople, writeSetup } from "./setup.js";
+import { writeConcernRewards } from "./concern-rewards.js";
 import { SETUP_DAYS_AGO } from "./year.js";
 import { DAY, MINUTE, dateOnly, isoDay, startOfDay } from "./time.js";
 import type { RowsContext, SampleEvent, SamplePlan, SampleRows } from "./types.js";
@@ -171,6 +172,7 @@ export function rowsFor(plan: SamplePlan, ctx: RowsContext): SampleRows {
   });
   runReviewDue(b, book, ctx.now.getTime());
   rows.risks.push(...[...book.values()].map((r) => r.row));
+  writeConcernRewards(b, rows.risks);
   const aiAct = new Builder(rows, idMaker(SAMPLE_SEED + AI_ACT_SEED_OFFSET), ctx.library, users);
   writeAiAct(aiAct, startOfDay(ctx.now.getTime()));
   return rows;

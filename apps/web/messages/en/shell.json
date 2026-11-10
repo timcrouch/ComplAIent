@@ -16,6 +16,8 @@
     "tasks": "Tasks",
     "reports": "Reports",
     "aiAct": "EU AI Act",
+    "contribution": "Security contribution",
+    "judgmentQueue": "Concern judgments",
     "loading": "Loading {destination}"
   },
   "reportButton": {
@@ -56,7 +58,15 @@
   "account": {
     "trigger": "Account menu",
     "title": "Account",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "rankAvatar": "{rank} rank",
+    "ranks": {
+      "recruit": "Recruit",
+      "defender": "Defender",
+      "protector": "Protector",
+      "guardian": "Guardian",
+      "security_vanguard": "Security Vanguard"
+    }
   },
   "theme": {
     "legend": "Theme",

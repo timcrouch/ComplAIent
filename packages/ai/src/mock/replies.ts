@@ -1,6 +1,7 @@
 import type { CompletionRequest } from "../provider.js";
 import { aiActClassificationReply, aiActGuidanceReply } from "./ai-act.js";
 import { concernTurnReply } from "./concern-turn.js";
+import { concernEvaluationReply } from "./concern-evaluation.js";
 import { connectionTestReply } from "./connection-test.js";
 import { controlSuggestionReply } from "./control-suggestion.js";
 import { controlTestStepsReply } from "./control-test-steps.js";
@@ -16,6 +17,7 @@ export const MOCK_REPLIES: Readonly<Record<string, (request: CompletionRequest) 
   ai_act_classification: aiActClassificationReply,
   ai_act_obligation_guidance: aiActGuidanceReply,
   concern_turn: concernTurnReply,
+  concern_evaluation: concernEvaluationReply,
   connection_test: connectionTestReply,
   control_suggestion: controlSuggestionReply,
   control_test_steps: controlTestStepsReply,

@@ -9,6 +9,7 @@ import { resolveAssets } from "./assets.js";
 import { RiskQueryService } from "./risk-query.service.js";
 import { writeVersion } from "./risk-versions.js";
 import { assertUnitsExist } from "./units.js";
+import { ConcernRewardsService } from "./concern-rewards.service.js";
 
 /** How an AI-assisted report differs from a form report (Task 8). */
 export type ReportOptions = {
@@ -26,6 +27,7 @@ export class RiskReportService {
     @Inject(PRISMA) private readonly prisma: PrismaService,
     private readonly audit: AuditService,
     private readonly query: RiskQueryService,
+    private readonly rewards: ConcernRewardsService,
   ) {}
 
   async report(
@@ -34,7 +36,7 @@ export class RiskReportService {
     ctx: AuditContext,
     opts?: ReportOptions,
   ): Promise<RiskDetailDto> {
-    const id = await this.prisma.$transaction(async (tx) => {
+    const created = await this.prisma.$transaction(async (tx) => {
       await assertUnitsExist(tx, input, "");
       const estimate = opts?.aiEstimate ?? null;
       const risk = await tx.risk.create({
@@ -62,6 +64,7 @@ export class RiskReportService {
           data: assetIds.map((assetId) => ({ riskId: risk.id, assetId })),
         });
       if (opts) await this.linkConversation(tx, actor, opts.conversationId, risk.id);
+      const evaluationId = await this.rewards.begin(tx, risk, ctx);
       await writeVersion(tx, risk, [], actor.userId);
       // No free text in the audit history: the reporter's words stay on the risk itself.
       await this.audit.record(
@@ -78,9 +81,10 @@ export class RiskReportService {
         ctx,
         tx,
       );
-      return risk.id;
+      return { riskId: risk.id, evaluationId };
     });
-    return this.query.detail(actor, id);
+    if (created.evaluationId) await this.rewards.enqueue(created.evaluationId);
+    return this.query.detail(actor, created.riskId);
   }
 
   /** Marks the reporter's open conversation submitted, in the same transaction. */

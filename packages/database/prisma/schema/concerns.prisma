@@ -44,3 +44,144 @@ model ConcernMessage {
 
   @@unique([conversationId, seq])
 }
+
+enum ConcernEvaluationStatus {
+  pending
+  provisional
+  final
+  overridden
+  suspended
+}
+
+enum ConcernEvaluationSource {
+  ai
+  ciso
+}
+
+enum ConcernLegitimacy {
+  confirmed
+  plausible
+  confirmed_duplicate
+  not_confirmed
+  out_of_scope
+  abusive
+}
+
+enum ConcernSeverity {
+  informational
+  minor
+  moderate
+  major
+  critical
+}
+
+enum ConcernRewardEntryKind {
+  award
+  adjustment
+}
+
+enum ConcernBadgeKey {
+  first_signal
+  sharp_eye
+  early_warning
+  high_impact
+  consistent_guardian
+  corroborator
+}
+
+enum ConcernBadgeEventKind {
+  awarded
+  revoked
+}
+
+/// Concerns enter this workflow only when rewards were enabled at submission time.
+model ConcernEvaluation {
+  id                String                   @id @default(uuid(7)) @db.Uuid
+  riskId            String                   @db.Uuid
+  version           Int                      @default(1)
+  reporterId        String                   @db.Uuid
+  status            ConcernEvaluationStatus  @default(pending)
+  source            ConcernEvaluationSource?
+  legitimacy        ConcernLegitimacy?
+  severity          ConcernSeverity?
+  duplicateGroupId  String?                  @db.Uuid
+  duplicatePosition Int?
+  legitimacyPoints  Int                      @default(0)
+  severityPoints    Int                      @default(0)
+  positionPoints    Int                      @default(0)
+  totalPoints       Int                      @default(0)
+  /// Reporter-facing explanation. Private evaluator reasoning belongs in the audit trail.
+  feedback          String?
+  confidence        Float?
+  rationale         String?
+  uncertainty       String?
+  failureReason     String?
+  aiInteractionId   String?                  @db.Uuid
+  policyVersion     Int                      @default(1)
+  requiresReview    Boolean                  @default(true)
+  supersedesId      String?                  @unique @db.Uuid
+  evaluatedById     String?                  @db.Uuid
+  evaluatedAt       DateTime?                @db.Timestamptz(3)
+  createdAt         DateTime                 @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime                 @updatedAt @db.Timestamptz(3)
+
+  risk           Risk                   @relation(fields: [riskId], references: [id], onDelete: Restrict)
+  reporter       User                   @relation("ConcernEvaluationReporter", fields: [reporterId], references: [id], onDelete: Restrict)
+  evaluatedBy    User?                  @relation("ConcernEvaluationJudge", fields: [evaluatedById], references: [id], onDelete: Restrict)
+  duplicateGroup ConcernDuplicateGroup? @relation(fields: [duplicateGroupId], references: [id], onDelete: Restrict)
+  ledgerEntries  ConcernRewardEntry[]
+  badgeEvents    ConcernBadgeEvent[]
+  supersedes     ConcernEvaluation?     @relation("ConcernEvaluationHistory", fields: [supersedesId], references: [id], onDelete: Restrict)
+  supersededBy   ConcernEvaluation?     @relation("ConcernEvaluationHistory")
+
+  @@unique([riskId, version])
+  @@index([status, createdAt])
+  @@index([reporterId, createdAt])
+}
+
+/// Reports judged to describe the same underlying concern share a group and receive positions.
+model ConcernDuplicateGroup {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  evaluations ConcernEvaluation[]
+}
+
+/// Append-only points history. Overrides add a compensating entry; previous awards never change.
+model ConcernRewardEntry {
+  id               String                 @id @default(uuid(7)) @db.Uuid
+  evaluationId     String                 @db.Uuid
+  userId           String                 @db.Uuid
+  kind             ConcernRewardEntryKind
+  points           Int
+  policyVersion    Int                    @default(1)
+  legitimacyPoints Int                    @default(0)
+  severityPoints   Int                    @default(0)
+  positionPoints   Int                    @default(0)
+  note             String                 @default("")
+  createdById      String?                @db.Uuid
+  createdAt        DateTime               @default(now()) @db.Timestamptz(3)
+
+  evaluation ConcernEvaluation @relation(fields: [evaluationId], references: [id], onDelete: Restrict)
+  user       User              @relation("ConcernRewardRecipient", fields: [userId], references: [id], onDelete: Restrict)
+  createdBy  User?             @relation("ConcernRewardCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([userId, createdAt])
+  @@index([evaluationId, createdAt])
+}
+
+/// Append-only badge history; current badges are the latest event for each user/key.
+model ConcernBadgeEvent {
+  id           String                @id @default(uuid(7)) @db.Uuid
+  userId       String                @db.Uuid
+  badgeKey     ConcernBadgeKey
+  kind         ConcernBadgeEventKind
+  evaluationId String                @db.Uuid
+  reason       String                @default("")
+  createdAt    DateTime              @default(now()) @db.Timestamptz(3)
+
+  user       User              @relation("ConcernBadgeRecipient", fields: [userId], references: [id], onDelete: Restrict)
+  evaluation ConcernEvaluation @relation(fields: [evaluationId], references: [id], onDelete: Restrict)
+
+  @@index([userId, badgeKey, createdAt])
+}

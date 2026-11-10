@@ -24,6 +24,7 @@ model AiSettings {
 
 enum AiPurpose {
   concern_turn
+  concern_evaluation
   control_suggestion
   framework_suggestion
   connection_test
