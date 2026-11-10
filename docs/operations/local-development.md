@@ -51,8 +51,12 @@ never receives a password, OTP, passkey response or recovery secret.
 
 The theme directory is mounted read-only by Compose. Run `pnpm infra:up` after adding the mount or
 changing realm configuration; ordinary CSS and artwork edits are visible after a browser refresh
-in `start-dev`. The idempotent seed step selects the theme even when the persistent Keycloak volume
-already contains the realm. Test both light and dark OS preferences at
+in `start-dev`. Infrastructure readiness verifies the login page is actually serving the
+ComplAIent stylesheet, because OIDC can remain healthy while a stale Docker Desktop bind mount is
+empty. If it reports that the theme is not served, recreate only the Keycloak container with the
+command printed by the check; the named data volume and registered authenticators are preserved.
+The idempotent seed step selects the theme even when the persistent Keycloak volume already
+contains the realm. Test both light and dark OS preferences at
 <http://localhost:3000/auth/login>.
 
 For a self-hosted Keycloak deployment, copy the same `complaient` directory to
