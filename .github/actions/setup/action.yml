@@ -13,7 +13,10 @@ runs:
         cache: pnpm
     - name: Environment from .env.example (dev placeholders only)
       shell: bash
-      run: cp .env.example .env
+      run: |
+        cp .env.example .env
+        # Normal e2e identities must remain deterministic; the MFA spec enrolls an isolated user.
+        sed -i.bak 's/^KEYCLOAK_MFA_REQUIRED=.*/KEYCLOAK_MFA_REQUIRED=false/' .env
     - name: Install
       shell: bash
       run: pnpm install --frozen-lockfile
