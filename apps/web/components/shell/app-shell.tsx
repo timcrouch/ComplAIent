@@ -17,6 +17,7 @@ import { focusRingClass } from "./styles";
 import { saveTheme } from "../../lib/actions/theme";
 import { applyTheme, oppositeTheme } from "./theme-toggle";
 import { SIGN_OUT_FORM_ID, UserMenu, type ShellUser } from "./user-menu";
+import { CONCERN_RANK_CHANGED, isConcernRank } from "../rewards/concern-rank-event";
 
 type AppShellProps = {
   user: ShellUser;
@@ -85,10 +86,27 @@ export function AppShell({
   const t = useTranslations();
   const navItems = useMemo(() => navItemsFor(permissions, modules), [permissions, modules]);
   const [theme, setTheme] = useState<Theme>(initialTheme);
+  const [shellUser, setShellUser] = useState(user);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const hydrated = useHydrated();
   const canReport = permissions.includes("risks.report");
   useReportShortcut(canReport);
+
+  useEffect(() => {
+    setShellUser(user);
+  }, [user]);
+  useEffect(() => {
+    const updateRank = (event: Event) => {
+      const detail = (event as CustomEvent<unknown>).detail;
+      if (typeof detail !== "object" || detail === null || !("rank" in detail)) return;
+      const rank = detail.rank;
+      if (isConcernRank(rank)) setShellUser((current) => ({ ...current, concernRank: rank }));
+    };
+    window.addEventListener(CONCERN_RANK_CHANGED, updateRank);
+    return () => {
+      window.removeEventListener(CONCERN_RANK_CHANGED, updateRank);
+    };
+  }, []);
 
   const changeTheme = useCallback((next: Theme) => {
     applyTheme(next);
@@ -116,7 +134,12 @@ export function AppShell({
       <PrimaryNav
         items={navItems}
         account={
-          <UserMenu user={user} viewMode={viewMode} theme={theme} onThemeChange={changeTheme} />
+          <UserMenu
+            user={shellUser}
+            viewMode={viewMode}
+            theme={theme}
+            onThemeChange={changeTheme}
+          />
         }
       />
 

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ConversationDto } from "@isms/contracts";
+import type { ConversationDto, MeResponse } from "@isms/contracts";
 import { ArrowRightIcon, SparklesIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -33,7 +33,7 @@ import { SummaryCard } from "./summary-card";
 type Mode =
   | { kind: "chat" }
   | { kind: "form"; initial: ReportValues; fallback: boolean }
-  | { kind: "done"; reference: string };
+  | { kind: "done"; riskId: string; reference: string };
 
 type ReportFlowProps = {
   /** The AI can run a turn now (`aiStatus`). */
@@ -41,6 +41,8 @@ type ReportFlowProps = {
   /** `?mode=form`: the reporter chose the form. */
   startInForm: boolean;
   sites: readonly SiteOption[];
+  rewardsEnabled?: boolean;
+  initialRank?: MeResponse["concernRank"];
 };
 
 const reporterTexts = (c: ConversationDto | null): string[] =>
@@ -53,7 +55,13 @@ const linkClass = `self-start inline-flex min-h-6 items-center gap-1.5 rounded-s
  * a step form when AI is unavailable, chosen, or fails mid-conversation (prefilled with the
  * reporter's own words, and still reported through the kept conversation).
  */
-export function ReportFlow({ aiAvailable, startInForm, sites }: ReportFlowProps) {
+export function ReportFlow({
+  aiAvailable,
+  startInForm,
+  sites,
+  rewardsEnabled = false,
+  initialRank = null,
+}: ReportFlowProps) {
   const t = useTranslations("report");
   const initialMode = (): Mode =>
     aiAvailable && !startInForm
@@ -72,7 +80,7 @@ export function ReportFlow({ aiAvailable, startInForm, sites }: ReportFlowProps)
   const [restarted, setRestarted] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
   const sender = useReportSubmit(conversation?.id ?? keptId, (risk) => {
-    setMode({ kind: "done", reference: risk.reference });
+    setMode({ kind: "done", riskId: risk.id, reference: risk.reference });
   });
 
   /**
@@ -139,7 +147,16 @@ export function ReportFlow({ aiAvailable, startInForm, sites }: ReportFlowProps)
   }
 
   if (mode.kind === "done") {
-    return <DonePanel reference={mode.reference} onAnother={reset} />;
+    return (
+      <DonePanel
+        riskId={mode.riskId}
+        reference={mode.reference}
+        rewardsEnabled={rewardsEnabled}
+        aiAvailable={aiAvailable}
+        initialRank={initialRank}
+        onAnother={reset}
+      />
+    );
   }
 
   if (mode.kind === "form") {

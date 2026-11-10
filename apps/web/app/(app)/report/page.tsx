@@ -70,6 +70,8 @@ export default async function ReportPage({ searchParams }: ReportPageProps) {
           aiAvailable={status.ok && status.data.available}
           startInForm={startInForm}
           sites={sites}
+          rewardsEnabled={organisation.data.concernRewards.enabled}
+          initialRank={viewer.me.concernRank}
         />
       </Entrance>
     </div>

@@ -1,13 +1,16 @@
 "use server";
 
 import {
+  concernRewardRoutes,
   ConcernReplyInput,
   concernRoutes,
   ReportRiskInput,
   riskRoutes,
   StartConcernInput,
   type ConversationDto,
+  type ConcernEvaluationDto,
   type RiskDetailDto,
+  type SecurityContributionDto,
 } from "@isms/contracts";
 import { z } from "zod";
 import { invalid, revalidated } from "../action-results";
@@ -16,6 +19,12 @@ import { callApi, type CallResult } from "../server-api";
 const RETURN_TO = { returnTo: "/report" };
 const CONCERNS = "/concerns";
 const ConversationId = z.uuid();
+const RiskId = z.uuid();
+
+export type ConcernRewardCheck = {
+  evaluation: ConcernEvaluationDto;
+  contribution: SecurityContributionDto;
+};
 
 /** A conversation id that is not a UUID names nothing the reporter owns. */
 const notFound: CallResult<never> = {
@@ -75,4 +84,19 @@ export async function reportRisk(input: ReportRiskInput): Promise<CallResult<Ris
   const parsed = ReportRiskInput.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
   return revalidated(await callApi(riskRoutes.report, { body: parsed.data }, RETURN_TO), CONCERNS);
+}
+
+/**
+ * Reads the submitted concern's evaluation and the reporter's resulting contribution together.
+ * The API remains authoritative for ownership: another reporter's risk is indistinguishable from
+ * a missing one. This is intentionally read-only and is polled briefly after submission.
+ */
+export async function getConcernReward(riskId: string): Promise<CallResult<ConcernRewardCheck>> {
+  const id = RiskId.safeParse(riskId);
+  if (!id.success) return notFound;
+  const evaluation = await callApi(concernRewardRoutes.get, { params: { id: id.data } }, RETURN_TO);
+  if (!evaluation.ok) return evaluation;
+  const contribution = await callApi(concernRewardRoutes.contribution, {}, RETURN_TO);
+  if (!contribution.ok) return contribution;
+  return { ok: true, data: { evaluation: evaluation.data, contribution: contribution.data } };
 }
