@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { createHmac } from "node:crypto";
 import {
   AUTHORIZE_URL,
   KEYCLOAK_URL,
@@ -7,6 +8,7 @@ import {
   OWNER_EMAIL,
   REPORTER_EMAIL,
   WEB_URL,
+  devUserPassword,
 } from "./env";
 import {
   countAuthorizeNavigations,
@@ -26,7 +28,31 @@ function expectNoAppContent(html: string): void {
   expect(html).not.toContain("@example.test");
 }
 
-async function requirePasswordUpdate(username: string): Promise<() => Promise<void>> {
+function decodeBase32(value: string): Buffer {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  let bits = "";
+  for (const character of value.replaceAll(/\s|=/g, "").toUpperCase()) {
+    const index = alphabet.indexOf(character);
+    if (index < 0) throw new Error("Keycloak returned an invalid TOTP secret");
+    bits += index.toString(2).padStart(5, "0");
+  }
+  const bytes: number[] = [];
+  for (let offset = 0; offset + 8 <= bits.length; offset += 8) {
+    bytes.push(Number.parseInt(bits.slice(offset, offset + 8), 2));
+  }
+  return Buffer.from(bytes);
+}
+
+function totp(secret: string, now = Date.now()): string {
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(Math.floor(now / 30_000)));
+  const digest = createHmac("sha1", decodeBase32(secret)).update(counter).digest();
+  const offset = (digest.at(-1) ?? 0) & 0x0f;
+  const binary = (digest.readUInt32BE(offset) & 0x7fffffff) % 1_000_000;
+  return String(binary).padStart(6, "0");
+}
+
+async function keycloakAdminRequest(path: string, init?: RequestInit): Promise<Response> {
   const adminUsername = process.env.KEYCLOAK_ADMIN_USER;
   const adminPassword = process.env.KEYCLOAK_ADMIN_PASSWORD;
   if (!adminUsername || !adminPassword) throw new Error("Keycloak admin credentials are not set");
@@ -43,29 +69,54 @@ async function requirePasswordUpdate(username: string): Promise<() => Promise<vo
     throw new Error(`Keycloak admin login failed: ${String(tokenResponse.status)}`);
   }
   const token = ((await tokenResponse.json()) as { access_token: string }).access_token;
-  const request = async (path: string, init?: RequestInit) => {
-    const response = await fetch(`${KEYCLOAK_URL}/admin/realms/isms${path}`, {
-      ...init,
-      headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
-    });
-    if (!response.ok) {
-      throw new Error(`Keycloak ${init?.method ?? "GET"} ${path}: ${String(response.status)}`);
-    }
-    return response;
-  };
+  const response = await fetch(`${KEYCLOAK_URL}/admin/realms/isms${path}`, {
+    ...init,
+    headers: {
+      authorization: `Bearer ${token}`,
+      "content-type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Keycloak ${init?.method ?? "GET"} ${path}: ${String(response.status)}`);
+  }
+  return response;
+}
+
+async function requirePasswordUpdate(username: string): Promise<() => Promise<void>> {
   const users = (await (
-    await request(`/users?username=${encodeURIComponent(username)}&exact=true`)
+    await keycloakAdminRequest(`/users?username=${encodeURIComponent(username)}&exact=true`)
   ).json()) as { id: string; requiredActions?: string[] }[];
   const user = users[0];
   if (!user) throw new Error(`Keycloak user ${username} was not found`);
   const previous = user.requiredActions ?? [];
   const update = (requiredActions: string[]) =>
-    request(`/users/${user.id}`, {
+    keycloakAdminRequest(`/users/${user.id}`, {
       method: "PUT",
       body: JSON.stringify({ requiredActions }),
     }).then(() => undefined);
   await update(["UPDATE_PASSWORD"]);
   return () => update(previous);
+}
+
+async function createMfaUser(username: string): Promise<() => Promise<void>> {
+  const created = await keycloakAdminRequest("/users", {
+    method: "POST",
+    body: JSON.stringify({
+      username,
+      email: username,
+      emailVerified: true,
+      enabled: true,
+      firstName: "Mina",
+      lastName: "Mfa",
+      requiredActions: ["CONFIGURE_TOTP"],
+      credentials: [{ type: "password", value: devUserPassword(), temporary: false }],
+    }),
+  });
+  const id = created.headers.get("location")?.split("/").pop();
+  if (!id) throw new Error("Keycloak did not return the disposable MFA user's id");
+  return async () => {
+    await keycloakAdminRequest(`/users/${id}`, { method: "DELETE" });
+  };
 }
 
 // Runs in Chromium and WebKit, each with a fresh browser context (no stored session).
@@ -82,6 +133,142 @@ test("Keycloak uses the accessible ComplAIent theme in light and dark", async ({
   await expect(page.locator("html")).toHaveClass(/pf-v5-theme-dark/);
   await expect(page.locator("#kc-form-login")).toBeVisible();
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+test("TOTP enrollment, OTP challenge and one-time recovery login stay on the IdP", async ({
+  browser,
+  browserName,
+}) => {
+  test.setTimeout(90_000);
+  const username = `mfa-${browserName}@example.test`;
+  const removeUser = await createMfaUser(username);
+  let recoveryCode: string;
+  let secret: string;
+
+  try {
+    const enrollmentContext = await browser.newContext({
+      colorScheme: "dark",
+      viewport: { width: 1280, height: 800 },
+    });
+    const enrollment = await enrollmentContext.newPage();
+    await enrollment.goto("/");
+    await submitKeycloakForm(enrollment, username);
+
+    await expect(enrollment.locator("#kc-totp-settings-form")).toBeVisible();
+    await expect(enrollment.locator("html")).toHaveClass(/pf-v5-theme-dark/);
+    await expect(
+      enrollment.locator('link[href*="/login/complaient/css/complaient.css"]'),
+    ).toHaveCount(1);
+    expect((await new AxeBuilder({ page: enrollment }).analyze()).violations).toEqual([]);
+
+    const desktopLayout = await enrollment.evaluate(() => ({
+      cardWidth: document.querySelector(".pf-v5-c-login__main")?.getBoundingClientRect().width ?? 0,
+      submitBottom:
+        document.querySelector("#saveTOTPBtn")?.getBoundingClientRect().bottom ?? Infinity,
+      viewportHeight: window.innerHeight,
+    }));
+    expect(desktopLayout.cardWidth).toBeGreaterThanOrEqual(900);
+    expect(desktopLayout.submitBottom).toBeLessThanOrEqual(desktopLayout.viewportHeight);
+
+    const authenticatorAppTops = await enrollment
+      .locator("#kc-totp-supported-apps > li")
+      .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().top));
+    expect(
+      Math.max(...authenticatorAppTops) - Math.min(...authenticatorAppTops),
+    ).toBeLessThanOrEqual(1);
+
+    await enrollment.setViewportSize({ width: 390, height: 844 });
+    const mobileLayout = await enrollment.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth,
+      qrWidth:
+        document.querySelector("#kc-totp-secret-qr-code")?.getBoundingClientRect().width ?? 0,
+    }));
+    expect(mobileLayout.scrollWidth).toBeLessThanOrEqual(mobileLayout.viewportWidth);
+    expect(mobileLayout.qrWidth).toBeGreaterThanOrEqual(180);
+    expect((await new AxeBuilder({ page: enrollment }).analyze()).violations).toEqual([]);
+    await enrollment.setViewportSize({ width: 1280, height: 800 });
+
+    await enrollment.locator("#mode-manual").click();
+    secret = (await enrollment.locator("#kc-totp-secret-key").innerText()).trim();
+    const validCode = totp(secret);
+    const invalidCode = `${validCode.slice(0, -1)}${validCode.endsWith("0") ? "1" : "0"}`;
+    await enrollment.locator("#totp").fill(invalidCode);
+    await enrollment.locator("#userLabel").fill("Playwright authenticator");
+    await enrollment.locator("#saveTOTPBtn").click();
+    await expect(enrollment.locator("#input-error-otp-code")).toBeVisible();
+
+    await enrollment.locator("#totp").fill(totp(secret));
+    await enrollment.locator("#saveTOTPBtn").click();
+    await expect(enrollment.locator("#kc-recovery-codes-settings-form")).toBeVisible();
+    recoveryCode = (
+      await enrollment.locator("#kc-recovery-codes-list li").first().innerText()
+    ).trim();
+    expect(recoveryCode).not.toBe("");
+    await enrollment.locator("#kcRecoveryCodesConfirmationCheck").check();
+    await enrollment.locator("#saveRecoveryAuthnCodesBtn").click();
+    await expect(enrollment).toHaveURL(`${WEB_URL}/`);
+    await enrollmentContext.close();
+
+    // Keycloak rejects replaying the TOTP used for enrollment within the same 30-second step.
+    await new Promise((resolve) => setTimeout(resolve, 30_500 - (Date.now() % 30_000)));
+
+    const otpContext = await browser.newContext({
+      colorScheme: "light",
+      viewport: { width: 1280, height: 800 },
+    });
+    const otpPage = await otpContext.newPage();
+    await otpPage.goto("/");
+    await submitKeycloakForm(otpPage, username);
+    await expect(otpPage.locator("#kc-otp-login-form")).toBeVisible();
+    await expect(otpPage.locator('link[href*="/login/complaient/css/complaient.css"]')).toHaveCount(
+      1,
+    );
+    await expect(otpPage.getByRole("heading", { name: "Verify it’s you" })).toBeVisible();
+    expect((await new AxeBuilder({ page: otpPage }).analyze()).violations).toEqual([]);
+    expect(
+      await otpPage
+        .locator("#otp")
+        .evaluate((input) => Number.parseFloat(getComputedStyle(input).fontSize)),
+    ).toBeGreaterThanOrEqual(20);
+    await otpPage.locator("#otp").fill(totp(secret));
+    await otpPage.locator("#kc-login").click();
+    await expect(otpPage).toHaveURL(`${WEB_URL}/`);
+    await otpContext.close();
+
+    const recoveryContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const recoveryPage = await recoveryContext.newPage();
+    await recoveryPage.goto("/");
+    await submitKeycloakForm(recoveryPage, username);
+    await recoveryPage.getByRole("link", { name: /Try Another Way/i }).click();
+    await expect(recoveryPage.locator("body")).toHaveAttribute(
+      "data-page-id",
+      "login-select-authenticator",
+    );
+    await expect(
+      recoveryPage.getByRole("heading", { name: "Choose a verification method" }),
+    ).toBeVisible();
+    const methodCards = recoveryPage.locator(".select-auth-box-parent");
+    await expect(methodCards).toHaveCount(2);
+    const methodCardStyle = await methodCards.first().evaluate((card) => {
+      const style = getComputedStyle(card);
+      return {
+        backgroundColor: style.backgroundColor,
+        borderRadius: Number.parseFloat(style.borderRadius),
+      };
+    });
+    expect(methodCardStyle.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+    expect(methodCardStyle.borderRadius).toBeGreaterThanOrEqual(12);
+    expect((await new AxeBuilder({ page: recoveryPage }).analyze()).violations).toEqual([]);
+    await recoveryPage.getByRole("button", { name: /Recovery code/i }).click();
+    await expect(recoveryPage.locator("#kc-recovery-code-login-form")).toBeVisible();
+    await recoveryPage.locator("#recoveryCodeInput").fill(recoveryCode);
+    await recoveryPage.locator("#kc-login").click();
+    await expect(recoveryPage).toHaveURL(`${WEB_URL}/`);
+    await recoveryContext.close();
+  } finally {
+    await removeUser();
+  }
 });
 
 test("invalid credentials stay on the themed sign-in screen with an error", async ({ page }) => {
@@ -221,7 +408,12 @@ test("'Sign out' in the command palette submits the logout form", async ({ page 
 
 test("a forged session cookie never renders the app", async ({ page, context }) => {
   await context.addCookies([
-    { name: "isms_session", value: "A".repeat(43), url: WEB_URL, httpOnly: true },
+    {
+      name: "isms_session",
+      value: "A".repeat(43),
+      url: WEB_URL,
+      httpOnly: true,
+    },
   ]);
   const authorize = countAuthorizeNavigations(page);
   const response = await page.request.get("/", { maxRedirects: 0 });

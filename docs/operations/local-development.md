@@ -62,6 +62,36 @@ branding in that provider; ComplAIent cannot style pages served by another origi
 Keycloak upgrade, run the login browser tests and manually check the supported authentication
 states because the inherited upstream markup and class names can change.
 
+### Local multi-factor authentication
+
+`KEYCLOAK_MFA_REQUIRED=true` makes authenticator-app TOTP mandatory for every local Keycloak
+account. `pnpm infra:up` reconciles this policy on both a new realm and the existing persistent
+realm; resetting the Keycloak volume is not required. Authentication remains on Keycloak's origin
+and the application continues to use authorization code + PKCE.
+
+On the first password sign-in, scan the QR code with an authenticator app, enter the current
+six-digit code, give the device a recognisable name and continue. Keycloak then displays one-time
+recovery codes. Save them in a password manager or another protected offline location, confirm
+that they have been saved and continue to ComplAIent. Do not put the QR code, TOTP secret or
+recovery codes in source control, tickets, chat, logs or application data. Later password sign-ins
+require the current authenticator code. A recovery code can be selected with **Try another way**;
+each code works once.
+
+For a planned device replacement, keep the old authenticator until the new device has been
+enrolled and tested. In Phase 1, an administrator performs re-enrollment in the Keycloak admin
+console: **Users → account → Credentials**, remove the old `otp` credential and its recovery-code
+credential, then have the user sign in and enroll again. For a lost device, the user should sign in
+with one unused recovery code and request the same reset. If neither an authenticator nor a
+recovery code is available, an administrator must verify the user's identity out of band before
+resetting those credentials. The reset changes authentication credentials only; application roles
+remain in ComplAIent. Retain Keycloak admin events in production so the reset is auditable
+(expanded operational monitoring is Phase 3 of issue #30).
+
+Automated CI sets `KEYCLOAK_MFA_REQUIRED=false` for the shared seeded identities; isolated MFA
+browser coverage assigns enrollment to a disposable test identity. This keeps the full suite
+deterministic without committing factor secrets or adding a password-only browser flow. Local
+development defaults to `true`. After changing the value, run `pnpm infra:up` to reconcile it.
+
 If a host port is already in use (for example another Postgres on 5432), override `POSTGRES_PORT`, `MINIO_PORT`, `MINIO_CONSOLE_PORT` or `KEYCLOAK_PORT` in `.env` and update `DATABASE_URL` / `OIDC_ISSUER_URL` to match. The check and seed scripts read those values. If port 4000 is taken, set `API_PORT` and `API_BASE_URL` together (for example `4010` and `http://localhost:4010`), in `.env` or on the command line: `API_PORT=4010 API_BASE_URL=http://localhost:4010 pnpm dev`.
 
 The database role passwords in `.env` are applied by `infrastructure/docker/postgres/init.sql` on the **first** start of the Postgres volume only. Changing them later has no effect on the existing roles; run `pnpm infra:reset` (deletes all local data) to apply new values.

@@ -25,7 +25,7 @@
   --complaient-control-border: #6b7493;
   --complaient-text: #e9ecf5;
   --complaient-muted: #aeb6cc;
-  --complaient-accent: #8e80ff;
+  --complaient-accent: #c3bdff;
   --complaient-accent-text: #0e0b26;
   --complaient-accent-soft: #231e4d;
   --complaient-danger: #ffaaa6;
@@ -212,6 +212,312 @@ a,
   border-radius: 0.5rem;
 }
 
+/* TOTP enrollment has substantially more content than a password form. On a desktop it uses
+   the available width for two clear tasks: scan/read the setup steps, then confirm the code. */
+body[data-page-id="login-login-config-totp"] .pf-v5-c-login {
+  align-items: flex-start;
+}
+
+body[data-page-id="login-login-config-totp"] .pf-v5-c-login__container {
+  width: min(calc(100% - 3rem), 68rem);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
+  align-self: start;
+  padding: 1.5rem 0;
+}
+
+body[data-page-id="login-login-config-totp"] .pf-v5-c-login__header {
+  margin-block-end: 0.75rem;
+}
+
+body[data-page-id="login-login-config-totp"] .pf-v5-c-login__main-header {
+  padding: 1.5rem 2rem 0.625rem;
+}
+
+body[data-page-id="login-login-config-totp"] .pf-v5-c-login__main-body {
+  display: grid;
+  grid-template-areas:
+    "alert alert"
+    "steps confirm";
+  grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
+  gap: 1.25rem 2rem;
+  padding: 1rem 2rem 2rem;
+}
+
+body[data-page-id="login-login-config-totp"] .pf-v5-c-alert {
+  grid-area: alert;
+  margin: 0 !important;
+  border-radius: 0.75rem;
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-settings {
+  grid-area: steps;
+  margin: 0;
+  padding-inline-start: 1.5rem;
+  line-height: 1.55;
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-settings > li {
+  padding-inline-start: 0.375rem;
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-supported-apps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 1.25rem;
+  margin-block-start: 0.5rem;
+  padding-inline-start: 1.25rem;
+  color: var(--complaient-muted);
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-supported-apps > li {
+  margin: 0;
+  padding: 0;
+}
+
+body[data-page-id="login-login-config-totp"] .kc-qr-code {
+  width: fit-content;
+  margin-inline: auto;
+  padding: 0.875rem;
+  border: 1px solid color-mix(in oklab, var(--complaient-control-border) 35%, transparent);
+  border-radius: 0.875rem;
+  background: #ffffff;
+  box-shadow: 0 0.5rem 1.5rem rgba(20, 26, 46, 0.1);
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-secret-qr-code {
+  width: 13.25rem;
+  height: 13.25rem;
+}
+
+body[data-page-id="login-login-config-totp"] #mode-manual,
+body[data-page-id="login-login-config-totp"] #mode-barcode {
+  margin-block-start: 0.625rem;
+  /* These links sit inside the QR panel, which is always white in both colour schemes. */
+  color: #5145cd;
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-settings-form {
+  grid-area: confirm;
+  align-self: start;
+  gap: 0.875rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in oklab, var(--complaient-control-border) 38%, transparent);
+  border-radius: 0.875rem;
+  background: color-mix(in oklab, var(--complaient-accent-soft) 48%, var(--complaient-surface));
+  box-shadow: 0 0.75rem 2rem rgba(20, 26, 46, 0.08);
+}
+
+.complaient-setup-intro h2 {
+  margin: 0;
+  color: var(--complaient-text);
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.complaient-setup-intro p,
+#complaient-otp-intro {
+  margin: 0.375rem 0 0;
+  color: var(--complaient-muted);
+  line-height: 1.5;
+}
+
+body[data-page-id="login-login-config-totp"] #kc-totp-settings-form input:not([type="hidden"]),
+body[data-page-id="login-login-otp"] #otp {
+  min-height: 3.25rem;
+  font-size: 1rem;
+}
+
+body[data-page-id="login-login-config-totp"] #saveTOTPBtn {
+  min-height: 3rem;
+}
+
+/* The ordinary OTP challenge is deliberately focused and calm, rather than another generic
+   sign-in card. Authentication behavior remains entirely in Keycloak's inherited template. */
+body[data-page-id="login-login-otp"] .pf-v5-c-login__container {
+  width: min(calc(100% - 2rem), 30rem);
+  grid-template-columns: minmax(0, 1fr);
+  padding-inline: 0;
+}
+
+body[data-page-id="login-login-otp"] .pf-v5-c-login__main-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 2rem 0.75rem;
+  text-align: center;
+}
+
+body[data-page-id="login-login-otp"] .pf-v5-c-login__main-header::before {
+  display: block;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0 auto 1rem;
+  border: 1px solid color-mix(in oklab, var(--complaient-accent) 24%, transparent);
+  border-radius: 1rem;
+  background: var(--complaient-accent-soft) url("../img/brand-mark.svg") center / 1.75rem no-repeat;
+  content: "";
+}
+
+body[data-page-id="login-login-otp"] .pf-v5-c-login__main-body {
+  padding: 1rem 2rem 2rem;
+}
+
+body[data-page-id="login-login-otp"] #kc-otp-login-form {
+  gap: 1.25rem;
+}
+
+body[data-page-id="login-login-otp"] #otp {
+  min-height: 4rem;
+  padding-inline: 1rem;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+body[data-page-id="login-login-otp"] #kc-login {
+  min-height: 3rem;
+}
+
+/* Keycloak renders alternate authentication methods as an unadorned data list. Present the
+   same inherited forms as clear, keyboard-focusable security choices. */
+body[data-page-id="login-select-authenticator"] .pf-v5-c-login__container {
+  width: min(calc(100% - 2rem), 30rem);
+  grid-template-columns: minmax(0, 1fr);
+  padding-inline: 0;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-login__main-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 2rem 0.75rem;
+  text-align: center;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-login__main-header::before {
+  display: block;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0 auto 1rem;
+  border: 1px solid color-mix(in oklab, var(--complaient-accent) 24%, transparent);
+  border-radius: 1rem;
+  background: var(--complaient-accent-soft) url("../img/brand-mark.svg") center / 1.75rem no-repeat;
+  content: "";
+}
+
+#complaient-method-intro {
+  max-width: 22rem;
+  margin: 0.5rem 0 0;
+  color: var(--complaient-muted);
+  line-height: 1.5;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-login__main-body {
+  padding: 1rem 2rem 2rem;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-login__main-body > .pf-v5-c-form {
+  margin-block-end: 1.25rem !important;
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-container {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-container > li {
+  border: 0;
+  background: transparent;
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-box-parent {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 7.5rem;
+  padding: 1rem;
+  border: 1px solid var(--complaient-border);
+  border-radius: 0.875rem;
+  background: color-mix(in oklab, var(--complaient-surface) 88%, var(--complaient-accent-soft));
+  box-shadow: 0 0.375rem 1.25rem rgba(20, 26, 46, 0.06);
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-box-parent:hover {
+  border-color: color-mix(in oklab, var(--complaient-accent) 48%, var(--complaient-border));
+  box-shadow: 0 0.75rem 1.75rem rgba(20, 26, 46, 0.1);
+  transform: translateY(-1px);
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-box-parent:focus-visible {
+  border-color: var(--complaient-accent);
+  outline: 3px solid color-mix(in oklab, var(--complaient-focus) 38%, transparent);
+  outline-offset: 2px;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-data-list__item-content {
+  display: grid;
+  grid-template-areas:
+    "icon title"
+    "icon description";
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.25rem 0.875rem;
+  align-items: center;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-data-list__cell {
+  padding: 0 !important;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-data-list__cell.pf-m-icon {
+  display: grid !important;
+  grid-area: icon;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid color-mix(in oklab, var(--complaient-accent) 20%, transparent);
+  border-radius: 0.875rem;
+  background: var(--complaient-accent-soft);
+  color: var(--complaient-accent);
+  font-size: 1.25rem;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-data-list__cell:nth-child(2) {
+  grid-area: title;
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-box-headline {
+  margin: 0;
+  color: var(--complaient-text);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+body[data-page-id="login-select-authenticator"] .select-auth-box-desc {
+  grid-area: description;
+  color: var(--complaient-muted) !important;
+  line-height: 1.4;
+}
+
+body[data-page-id="login-select-authenticator"] .pf-v5-c-data-list__item-action {
+  padding-inline-start: 0.75rem;
+  color: var(--complaient-accent);
+}
+
 .kc-login-divider::before,
 .kc-login-divider::after,
 hr {
@@ -231,6 +537,53 @@ hr {
   .pf-v5-c-login__main-body {
     padding: 0.75rem 1.25rem 1.5rem;
   }
+
+  body[data-page-id="login-select-authenticator"] .pf-v5-c-login__main-header {
+    padding: 1.5rem 1.25rem 0.625rem;
+  }
+
+  body[data-page-id="login-select-authenticator"] .pf-v5-c-login__main-body {
+    padding: 0.75rem 1.25rem 1.5rem;
+  }
+
+  body[data-page-id="login-select-authenticator"] .select-auth-box-parent {
+    min-height: 7rem;
+    padding: 0.875rem;
+  }
+}
+
+@media (max-width: 760px) {
+  body[data-page-id="login-login-config-totp"] .pf-v5-c-login__container {
+    width: min(calc(100% - 1rem), 31rem);
+    padding-block: 1rem;
+  }
+
+  body[data-page-id="login-login-config-totp"] .pf-v5-c-login__main-header {
+    padding: 1.5rem 1.25rem 0.625rem;
+  }
+
+  body[data-page-id="login-login-config-totp"] .pf-v5-c-login__main-body {
+    display: block;
+    padding: 0.75rem 1.25rem 1.5rem;
+  }
+
+  body[data-page-id="login-login-config-totp"] .pf-v5-c-alert {
+    margin-block-end: 1.25rem !important;
+  }
+
+  body[data-page-id="login-login-config-totp"] #kc-totp-settings-form {
+    margin-block-start: 1.5rem;
+    padding: 1.25rem;
+  }
+
+  body[data-page-id="login-login-config-totp"] .kc-qr-code {
+    max-width: 100%;
+  }
+
+  body[data-page-id="login-login-config-totp"] #kc-totp-secret-qr-code {
+    width: min(13.25rem, 100%);
+    height: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -241,5 +594,9 @@ hr {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  body[data-page-id="login-select-authenticator"] .select-auth-box-parent:hover {
+    transform: none;
   }
 }
