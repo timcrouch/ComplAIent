@@ -65,6 +65,10 @@ describe("Summary card", () => {
       expect(within(card).getByLabelText(label)).toBeTruthy();
     }
     expect(within(card).getByText(t.summary.assetsLabel)).toBeTruthy();
+    const assetName = within(card).getByText(t.summary.assetName.replace("{number}", "1"));
+    const assetType = within(card).getByText(t.summary.assetType.replace("{number}", "1"));
+    expect(assetName.classList.contains("sr-only")).toBe(false);
+    expect(assetType.classList.contains("sr-only")).toBe(false);
     expect(within(card).getByText(t.summary.toConfirmLabel)).toBeTruthy();
     expect(within(card).getByText("AI's rough estimate")).toBeTruthy();
     expect(within(card).getByLabelText<HTMLSelectElement>(t.summary.siteLabel).value).toBe(RIGA.id);
