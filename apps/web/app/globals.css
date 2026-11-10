@@ -36,6 +36,78 @@ body {
   color: var(--isms-text);
 }
 
+@keyframes signal-beacon {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes signal-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0.25);
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+
+@keyframes signal-shield {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes rank-halo {
+  0% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+  35% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes rank-crest {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) translateY(12px);
+    filter: saturate(0.4);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.06) translateY(0);
+    filter: saturate(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: saturate(1);
+  }
+}
+
 /*
  * Reduced motion: no entrance or page transitions. Motion runs them with duration 0; this
  * also pins the server-rendered first frame (Motion's initial styles) to the final state.

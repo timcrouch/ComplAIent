@@ -93,10 +93,25 @@
     "done": {
       "title": "Thank you. Your concern is reported.",
       "body": "Safety review has started. If rewards are enabled, your evaluation and recognition will appear under Security contribution.",
+      "rewardBody": "Signal secured. Thank you for being security aware and reporting what you know. Safety review has started; no judgment has been made yet.",
       "referenceLabel": "Reference",
       "concernsLink": "See your concerns",
       "rewardsLink": "View security contribution",
       "another": "Report another concern"
+    },
+    "promotion": {
+      "eyebrow": "New security rank",
+      "title": "You've advanced to {rank}",
+      "body": "Your reporting is a positive influence on the organisation's security posture. Thank you for helping everyone stay safer.",
+      "continue": "Continue",
+      "close": "Close rank celebration",
+      "ranks": {
+        "recruit": "Recruit",
+        "defender": "Defender",
+        "protector": "Protector",
+        "guardian": "Guardian",
+        "security_vanguard": "Security Vanguard"
+      }
     },
     "errors": {
       "titleRequired": "Give it a short title.",

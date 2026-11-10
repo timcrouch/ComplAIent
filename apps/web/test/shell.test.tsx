@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import type { Permission } from "@isms/contracts";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppShell } from "../components/shell/app-shell";
+import { CONCERN_RANK_CHANGED } from "../components/rewards/concern-rank-event";
 import { navItemsFor } from "../components/shell/nav-items";
 import en from "../messages/index";
 import { MARK, marked, withMessages } from "./intl";
@@ -86,6 +87,21 @@ describe("AppShell", () => {
       "/images/concern-rewards/ranks/defender.png",
     );
     expect(avatar?.getAttribute("title")).toBe("Defender rank");
+  });
+
+  it("updates the account avatar immediately when a new rank is announced", () => {
+    shell();
+    expect(document.querySelector("[data-concern-rank]")).toBeNull();
+    act(() => {
+      window.dispatchEvent(
+        new CustomEvent(CONCERN_RANK_CHANGED, { detail: { rank: "protector" } }),
+      );
+    });
+    const avatar = document.querySelector('[data-concern-rank="protector"]');
+    expect(avatar).toBeTruthy();
+    expect(decodeURIComponent(avatar?.querySelector("img")?.getAttribute("src") ?? "")).toContain(
+      "/images/concern-rewards/ranks/protector.png",
+    );
   });
 
   it("shows Organisation in navigation only to people who can manage it", () => {
