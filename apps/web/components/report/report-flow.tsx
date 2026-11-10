@@ -1,7 +1,7 @@
 "use client";
 
 import type { ConversationDto, MeResponse } from "@isms/contracts";
-import { ArrowRightIcon, SparklesIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +9,7 @@ import { getConcern, replyToConcern, startConcern } from "../../lib/actions/repo
 import { focusRingClass } from "../shell/styles";
 import { ChatComposer } from "./chat-composer";
 import { ChatThread, type ThreadMessage } from "./chat-thread";
+import { BeaconBotAvatar } from "./beacon-bot-avatar";
 import { DonePanel } from "./done-panel";
 import {
   aiFailed,
@@ -202,7 +203,7 @@ export function ReportFlow({
         data-testid="ai-notice"
         className="flex items-start gap-2.5 rounded-md bg-accent-soft/60 px-3.5 py-3 text-sm leading-relaxed text-fg"
       >
-        <SparklesIcon aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
+        <BeaconBotAvatar className="size-8" />
         <span>{t("chat.aiNotice")}</span>
       </p>
       <ChatThread

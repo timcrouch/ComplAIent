@@ -1,9 +1,10 @@
 "use client";
 
 import { AiBadge, cn } from "@isms/ui";
-import { CircleHelpIcon, SparklesIcon } from "lucide-react";
+import { CircleHelpIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { focusRingClass } from "../shell/styles";
+import { BeaconBotAvatar } from "./beacon-bot-avatar";
 
 export type ThreadMessage = {
   key: string;
@@ -62,6 +63,7 @@ export function ChatThread({ messages, answers, typing, announcement, onAnswer }
       <p role="status" className={typing ? "flex items-center gap-2.5" : "sr-only"}>
         {typing ? (
           <>
+            <BeaconBotAvatar className="size-8" />
             <span
               aria-hidden
               className="flex gap-1 rounded-full bg-surface px-3 py-2.5 shadow-glass"
@@ -119,12 +121,7 @@ function AssistantBubble({ text, testId, ai }: { text: string; testId: string; a
   const t = useTranslations("report.chat");
   return (
     <div data-message className="flex items-start gap-3">
-      <span
-        aria-hidden
-        className="mt-1 inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"
-      >
-        <SparklesIcon className="size-4" />
-      </span>
+      <BeaconBotAvatar className="mt-0.5 size-9" />
       <p
         data-testid={testId}
         className={cn(bubble, "border border-surface-border bg-surface text-fg shadow-glass")}

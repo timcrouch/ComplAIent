@@ -39,7 +39,12 @@ test("reports a concern through the conversation and sees it under your concerns
   await expect(page).toHaveTitle("Report a concern · ComplAIent ISMS");
   const log = page.getByRole("log");
   await expect(log).toHaveAttribute("aria-live", "polite");
-  await expect(log.getByText("What are you worried might happen?", { exact: true })).toBeVisible();
+  await expect(
+    log.getByText(
+      "Hi, I'm BeaconBot. I'll help turn what you noticed into a clear report. What are you worried might happen?",
+      { exact: true },
+    ),
+  ).toBeVisible();
 
   const composer = page.getByLabel("Your answer");
   await composer.fill("People leave laptops in unlocked cars in the car park");
@@ -63,6 +68,17 @@ test("reports a concern through the conversation and sees it under your concerns
   await expect(log.getByTestId("assistant-question")).toHaveCount(3);
   await expect(card.getByText("AI's rough estimate")).toBeVisible();
   await expect(card.getByLabel("Site")).toHaveValue(/.+/);
+  if ((await card.getByRole("textbox", { name: "Affected thing 1" }).count()) === 0) {
+    await card.getByRole("button", { name: "Add something affected" }).click();
+    await card.getByRole("textbox", { name: "Affected thing 1" }).fill("Laptop");
+  }
+  const assetTop = await card
+    .getByRole("textbox", { name: "Affected thing 1" })
+    .evaluate((control) => control.getBoundingClientRect().top);
+  const kindTop = await card
+    .getByRole("combobox", { name: "Kind of thing 1" })
+    .evaluate((control) => control.getBoundingClientRect().top);
+  expect(Math.abs(assetTop - kindTop)).toBeLessThanOrEqual(1);
   // "Not sure" put the question on the list of things to confirm.
   await expect(card.getByRole("textbox", { name: "Thing to confirm 1", exact: true })).toHaveValue(
     "What could be affected?",

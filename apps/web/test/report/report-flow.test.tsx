@@ -58,15 +58,20 @@ describe("ReportFlow conversation", () => {
   it("opens with the first prompt in a polite log", () => {
     flow();
     expect(log().getAttribute("aria-live")).toBe("polite");
-    expect(within(log()).getByText("What are you worried might happen?")).toBeTruthy();
+    expect(within(log()).getByText(t.chat.firstPrompt)).toBeTruthy();
   });
 
   it("says plainly that the reporter is talking to an AI and that a person reviews everything", () => {
     flow();
     const notice = screen.getByTestId("ai-notice");
     expect(notice.textContent).toBe(en.report.chat.aiNotice);
-    expect(en.report.chat.aiNotice).toMatch(/AI assistant, not a person/);
-    expect(en.report.chat.aiNotice).toMatch(/A person reviews everything/);
+    expect(en.report.chat.aiNotice).toMatch(/AI bot.*not a person/);
+    expect(en.report.chat.aiNotice).toMatch(/a person reviews everything/);
+    const avatar = screen.getByTestId("assistant-prompt").parentElement?.querySelector("img");
+    expect(decodeURIComponent(avatar?.getAttribute("src") ?? "")).toContain(
+      "/images/reporting/beacon-bot.png",
+    );
+    expect(avatar?.getAttribute("alt")).toBe("");
   });
 
   it("shows an announced typing indicator while the turn runs", async () => {

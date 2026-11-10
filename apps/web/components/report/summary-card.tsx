@@ -116,6 +116,7 @@ export function SummaryCard({ draft, sites, sender }: SummaryCardProps) {
                 <ItemInput
                   id={nameId}
                   label={t("assetName", { number })}
+                  hideLabel={false}
                   error={error}
                   value={asset.name}
                   onChange={(name) => {
@@ -210,12 +211,15 @@ export function SummaryCard({ draft, sites, sender }: SummaryCardProps) {
 function ItemInput({
   id,
   label,
+  hideLabel = true,
   error,
   value,
   onChange,
 }: {
   id: string;
   label: string;
+  /** Repeated list labels may be visually hidden; paired asset columns show both labels. */
+  hideLabel?: boolean;
   error: ReportErrorKey | undefined;
   value: string;
   onChange: (value: string) => void;
@@ -225,7 +229,7 @@ function ItemInput({
   return (
     <Field
       id={id}
-      label={<span className="sr-only">{label}</span>}
+      label={hideLabel ? <span className="sr-only">{label}</span> : label}
       error={message}
       className="min-w-0 flex-1"
     >

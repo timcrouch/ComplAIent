@@ -75,11 +75,35 @@ async function checkHttp(url: string): Promise<void> {
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
 }
 
+/** OIDC can be healthy while a stale Docker Desktop bind mount leaves the login theme empty. */
+async function checkKeycloak(): Promise<void> {
+  const issuer = required("OIDC_ISSUER_URL");
+  await checkHttp(`${issuer}/.well-known/openid-configuration`);
+
+  const authorize = new URL(`${issuer}/protocol/openid-connect/auth`);
+  authorize.search = new URLSearchParams({
+    client_id: "isms-web",
+    redirect_uri: new URL("/auth/callback", required("WEB_BASE_URL")).toString(),
+    response_type: "code",
+    scope: "openid",
+    code_challenge: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    code_challenge_method: "S256",
+  }).toString();
+  const response = await fetch(authorize, { signal: AbortSignal.timeout(5_000) });
+  if (!response.ok) throw new Error(`login HTTP ${response.status}`);
+  const html = await response.text();
+  if (!html.includes("/login/complaient/css/complaient.css")) {
+    throw new Error(
+      "ComplAIent login theme is not served; run `docker compose --env-file .env -f infrastructure/docker/compose.yaml up -d --force-recreate keycloak`",
+    );
+  }
+}
+
 const checks: Record<string, () => Promise<void>> = {
   postgres: checkPostgres,
   redis: checkRedis,
   minio: checkMinio,
-  keycloak: () => checkHttp(`${required("OIDC_ISSUER_URL")}/.well-known/openid-configuration`),
+  keycloak: checkKeycloak,
   prometheus: () => checkHttp("http://localhost:9090/-/ready"),
 };
 
