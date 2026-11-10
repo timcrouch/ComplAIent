@@ -14,7 +14,9 @@ describe("report.json", () => {
   });
 
   it("starts the conversation with the exact first prompt", () => {
-    expect(en.report.chat.firstPrompt).toBe("What are you worried might happen?");
+    expect(en.report.chat.firstPrompt).toBe(
+      "Hi, I'm BeaconBot. I'll help turn what you noticed into a clear report. What are you worried might happen?",
+    );
   });
 
   it("names every concern status in plain words", () => {
@@ -29,7 +31,14 @@ describe("report.json", () => {
 
   it("explains a failed turn in one plain message", () => {
     expect(en.report.form.fallback).toBe(
-      "The assistant couldn't continue. Your answers are kept — finish with the form below.",
+      "BeaconBot couldn't continue. Your answers are kept — finish with the form below.",
     );
+  });
+
+  it("keeps the bot persona explicit and does not give it decision authority", () => {
+    expect(en.report.chat.aiBadge).toContain("Bot");
+    expect(en.report.chat.aiNotice).toMatch(/AI bot.*not a person/);
+    expect(en.report.chat.aiNotice).toContain("does not judge");
+    expect(en.report.chat.aiNotice).toContain("a person reviews everything");
   });
 });

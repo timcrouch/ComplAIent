@@ -166,7 +166,7 @@ describe("ReportFlow thread", () => {
     await say(FIRST);
     const question = await screen.findByTestId("assistant-question");
     const bubble = question.closest("[data-message]");
-    expect(bubble?.querySelector("[data-slot=ai-badge]")?.textContent).toBe("AI assistant");
+    expect(bubble?.querySelector("[data-slot=ai-badge]")?.textContent).toBe("BeaconBot · AI bot");
     expect(answers().querySelector("[data-slot=ai-badge]")?.textContent).toBe("Suggested by AI");
   });
 });

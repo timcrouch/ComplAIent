@@ -226,12 +226,12 @@
       "pageTitle": "Conversation · {app}",
       "back": "Back to {reference}",
       "title": "How {reference} was reported",
-      "intro": "The conversation the reporter had with the assistant. It is read-only.",
+      "intro": "The conversation the reporter had with BeaconBot. It is read-only.",
       "logLabel": "Conversation",
       "reporter": "Reporter",
-      "assistant": "AI assistant",
+      "assistant": "BeaconBot · AI bot",
       "notSure": "Not sure",
-      "summary": "The assistant summarised the answers.",
+      "summary": "BeaconBot summarised the answers.",
       "empty": "No messages."
     }
   }
