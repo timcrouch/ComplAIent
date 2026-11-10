@@ -174,6 +174,20 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
             "items": {
               "$ref": "#/components/schemas/ModuleKey"
             }
+          },
+          "concernRank": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "recruit",
+              "defender",
+              "protector",
+              "guardian",
+              "security_vanguard",
+              null
+            ]
           }
         },
         "required": [
@@ -184,7 +198,8 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "permissions",
           "viewMode",
           "theme",
-          "modules"
+          "modules",
+          "concernRank"
         ]
       },
       "RoleAssignmentDto": {
@@ -257,7 +272,8 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "reports.narrative",
           "soa.manage",
           "aiact.read",
-          "aiact.manage"
+          "aiact.manage",
+          "concerns.judge"
         ]
       },
       "ViewMode": {
@@ -1122,6 +1138,17 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "reviewIntervalMonths": {
             "type": "integer"
           },
+          "concernRewards": {
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "enabled"
+            ]
+          },
           "setup": {
             "type": "object",
             "properties": {
@@ -1159,6 +1186,7 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "riskScale",
           "defaultRiskScale",
           "reviewIntervalMonths",
+          "concernRewards",
           "setup",
           "modules"
         ]
@@ -1539,6 +1567,41 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "months"
         ],
         "additionalProperties": false
+      },
+      "ConcernRewardsSettingsDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ]
+      },
+      "ConcernRewardsSettingsInput": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "additionalProperties": false
+      },
+      "ResumeConcernRewardsResponse": {
+        "type": "object",
+        "properties": {
+          "queued": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "queued"
+        ]
       },
       "ModulesResponse": {
         "type": "object",
@@ -3854,6 +3917,345 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           "status",
           "messages"
         ]
+      },
+      "SecurityContributionDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "points": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "provisional": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "total",
+              "provisional"
+            ]
+          },
+          "rank": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "enum": [
+                  "recruit",
+                  "defender",
+                  "protector",
+                  "guardian",
+                  "security_vanguard"
+                ]
+              },
+              "label": {
+                "type": "string"
+              },
+              "minimumPoints": {
+                "type": "integer"
+              },
+              "next": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "enum": [
+                      "recruit",
+                      "defender",
+                      "protector",
+                      "guardian",
+                      "security_vanguard"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "minimumPoints": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "key",
+                  "label",
+                  "minimumPoints"
+                ]
+              }
+            },
+            "required": [
+              "key",
+              "label",
+              "minimumPoints",
+              "next"
+            ]
+          },
+          "badges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "enum": [
+                    "first_signal",
+                    "sharp_eye",
+                    "early_warning",
+                    "high_impact",
+                    "consistent_guardian",
+                    "corroborator"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "image": {
+                  "type": "string"
+                },
+                "repeatable": {
+                  "type": "boolean"
+                },
+                "count": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "firstAwardedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "lastAwardedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "key",
+                "title",
+                "description",
+                "image",
+                "repeatable",
+                "count",
+                "firstAwardedAt",
+                "lastAwardedAt"
+              ]
+            }
+          },
+          "recent": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConcernEvaluationDto"
+            }
+          }
+        },
+        "required": [
+          "enabled",
+          "points",
+          "rank",
+          "badges",
+          "recent"
+        ]
+      },
+      "ConcernEvaluationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "riskId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "riskReference": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "provisional",
+              "final",
+              "overridden",
+              "suspended"
+            ]
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "ai",
+              "ciso",
+              null
+            ]
+          },
+          "legitimacy": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "confirmed",
+              "plausible",
+              "confirmed_duplicate",
+              "not_confirmed",
+              "out_of_scope",
+              "abusive",
+              null
+            ]
+          },
+          "severity": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "informational",
+              "minor",
+              "moderate",
+              "major",
+              "critical",
+              null
+            ]
+          },
+          "confidence": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 1
+          },
+          "duplicatePosition": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "exclusiveMinimum": 0
+          },
+          "points": {
+            "type": "object",
+            "properties": {
+              "legitimacy": {
+                "type": "integer"
+              },
+              "severity": {
+                "type": "integer"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "total": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "legitimacy",
+              "severity",
+              "position",
+              "total"
+            ]
+          },
+          "feedback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "requiresReview": {
+            "type": "boolean"
+          },
+          "evaluatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "riskId",
+          "riskReference",
+          "status",
+          "source",
+          "legitimacy",
+          "severity",
+          "confidence",
+          "duplicatePosition",
+          "points",
+          "feedback",
+          "requiresReview",
+          "evaluatedAt",
+          "createdAt"
+        ]
+      },
+      "JudgeConcernInput": {
+        "type": "object",
+        "properties": {
+          "legitimacy": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "plausible",
+              "confirmed_duplicate",
+              "not_confirmed",
+              "out_of_scope",
+              "abusive"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "informational",
+              "minor",
+              "moderate",
+              "major",
+              "critical"
+            ]
+          },
+          "duplicateRiskId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uuid"
+          },
+          "feedback": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "^[^\\\\x00-\\\\x08\\\\x0b\\\\x0c\\\\x0e-\\\\x1f\\\\x7f-\\\\x9f\\\\u00ad\\\\u061c\\\\u180e\\\\u200b\\\\u200e\\\\u200f\\\\u202a-\\\\u202e\\\\u2060-\\\\u206f\\\\ufeff]*$"
+          }
+        },
+        "required": [
+          "legitimacy",
+          "severity",
+          "duplicateRiskId",
+          "feedback",
+          "rationale"
+        ],
+        "additionalProperties": false
       },
       "EvidenceMimeType": {
         "type": "string",
@@ -8072,6 +8474,203 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
         }
       }
     },
+    "/api/v1/organisation/concern-rewards": {
+      "put": {
+        "summary": "Turn concern rewards and recognition on or off without changing concern reporting",
+        "x-permission": "organisation.manage",
+        "x-recent-auth": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConcernRewardsSettingsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConcernRewardsSettingsDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden, or RECENT_AUTH_REQUIRED when a recent re-authentication is needed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/organisation/concern-rewards/resume": {
+      "post": {
+        "summary": "Explicitly resume suspended and pending reward evaluations without backfilling reports",
+        "x-permission": "organisation.manage",
+        "x-recent-auth": true,
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResumeConcernRewardsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden, or RECENT_AUTH_REQUIRED when a recent re-authentication is needed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONFLICT: details[].path is a ConflictReason, or \`<reason>.<item>\`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/organisation/modules/{key}": {
       "put": {
         "summary": "Turn an optional module on or off; off hides it (its routes answer 404) and keeps its data",
@@ -11840,6 +12439,419 @@ exports[`buildOpenApiDocument > matches the contract snapshot 1`] = `
           },
           "404": {
             "description": "Response 404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me/security-contribution": {
+      "get": {
+        "summary": "The signed-in reporter's private points, rank, badges and recent evaluations",
+        "x-permission": "me.read",
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecurityContributionDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/concern-evaluations/queue": {
+      "get": {
+        "summary": "Pending and escalated concern evaluations for CISO judgment",
+        "x-permission": "concerns.judge",
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "evaluation": {
+                            "$ref": "#/components/schemas/ConcernEvaluationDto"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "reporter": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "displayName": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "displayName"
+                            ]
+                          },
+                          "rationale": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "uncertainty": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "failureReason": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "evaluation",
+                          "title",
+                          "reporter",
+                          "rationale",
+                          "uncertainty",
+                          "failureReason"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/risks/{id}/concern-evaluation": {
+      "get": {
+        "summary": "The reporter's or CISO's current reward evaluation for one concern",
+        "x-permission": "me.read",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConcernEvaluationDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "RATE_LIMITED: too many requests for this caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "AUTH_UNAVAILABLE: the identity provider's signing keys cannot be obtained",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Finalize or override a concern evaluation as the CISO",
+        "x-permission": "concerns.judge",
+        "x-recent-auth": true,
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JudgeConcernInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Response 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConcernEvaluationDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden, or RECENT_AUTH_REQUIRED when a recent re-authentication is needed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "PAYLOAD_TOO_LARGE: the JSON body exceeds 1 MB",
             "content": {
               "application/json": {
                 "schema": {

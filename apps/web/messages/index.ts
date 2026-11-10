@@ -9,6 +9,7 @@ import report from "./en/report.json" with { type: "json" };
 import reports from "./en/reports.json" with { type: "json" };
 import risks from "./en/risks.json" with { type: "json" };
 import settings from "./en/settings.json" with { type: "json" };
+import rewards from "./en/rewards.json" with { type: "json" };
 import setup from "./en/setup.json" with { type: "json" };
 import shell from "./en/shell.json" with { type: "json" };
 
@@ -20,6 +21,7 @@ const messages = {
   ...setup,
   ...library,
   ...settings,
+  ...rewards,
   ...report,
   ...risks,
   ...evidence,

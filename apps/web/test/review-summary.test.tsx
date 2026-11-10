@@ -38,6 +38,7 @@ const done: OrganisationResponse = {
   riskScale: scale,
   defaultRiskScale: { ...scale, version: null },
   reviewIntervalMonths: 12,
+  concernRewards: { enabled: false },
   setup: { completedAt: null, missing: [] },
   modules: [],
 };

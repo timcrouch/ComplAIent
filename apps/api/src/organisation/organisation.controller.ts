@@ -1,6 +1,8 @@
 import { Body, Controller, HttpCode, Param, Req } from "@nestjs/common";
 import {
   type CompleteSetupResponse,
+  type ConcernRewardsSettingsDto,
+  type ConcernRewardsSettingsInput,
   type FrameworksInput,
   type FrameworksResponse,
   type ModuleKey,
@@ -10,6 +12,7 @@ import {
   type ReviewIntervalInput,
   type RiskScaleDto,
   type RiskScaleInput,
+  type ResumeConcernRewardsResponse,
   type SetModuleInput,
   type UnitsInput,
   type UnitsResponse,
@@ -77,6 +80,20 @@ export class OrganisationController {
     @Req() req: Request,
   ): Promise<OrganisationResponse> {
     return this.organisation.setReviewInterval(body, auditContextFrom(req));
+  }
+
+  @ContractRoute(organisationRoutes.setConcernRewards)
+  setConcernRewards(
+    @Body() body: ConcernRewardsSettingsInput,
+    @Req() req: Request,
+  ): Promise<ConcernRewardsSettingsDto> {
+    return this.organisation.setConcernRewards(body, auditContextFrom(req));
+  }
+
+  @ContractRoute(organisationRoutes.resumeConcernRewards)
+  @HttpCode(200)
+  resumeConcernRewards(@Req() req: Request): Promise<ResumeConcernRewardsResponse> {
+    return this.organisation.resumeConcernRewards(auditContextFrom(req));
   }
 
   @ContractRoute(organisationRoutes.setModule)

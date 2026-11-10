@@ -92,9 +92,10 @@
     },
     "done": {
       "title": "Thank you. Your concern is reported.",
-      "body": "Someone will look at it soon. You can follow it under your concerns.",
+      "body": "Safety review has started. If rewards are enabled, your evaluation and recognition will appear under Security contribution.",
       "referenceLabel": "Reference",
       "concernsLink": "See your concerns",
+      "rewardsLink": "View security contribution",
       "another": "Report another concern"
     },
     "errors": {

@@ -10,6 +10,7 @@ import type { RouteDef } from "./route.js";
 import { aiActRoutes } from "./routes/ai-act.js";
 import { aiSettingsRoutes } from "./routes/ai-settings.js";
 import { concernRoutes } from "./routes/concerns.js";
+import { concernRewardRoutes } from "./routes/concern-rewards.js";
 import { controlOperationRoutes } from "./routes/control-operation.js";
 import { demoRoutes } from "./routes/demo.js";
 import { evidenceRoutes } from "./routes/evidence.js";
@@ -48,6 +49,8 @@ export const allRoutes: RouteDef[] = [
   organisationRoutes.suggestFrameworks,
   organisationRoutes.setRiskScale,
   organisationRoutes.setReviewInterval,
+  organisationRoutes.setConcernRewards,
+  organisationRoutes.resumeConcernRewards,
   organisationRoutes.setModule,
   organisationRoutes.completeSetup,
   riskRoutes.report,
@@ -82,6 +85,10 @@ export const allRoutes: RouteDef[] = [
   concernRoutes.submit,
   concernRoutes.abandon,
   concernRoutes.transcript,
+  concernRewardRoutes.contribution,
+  concernRewardRoutes.queue,
+  concernRewardRoutes.get,
+  concernRewardRoutes.judge,
   evidenceRoutes.upload,
   evidenceRoutes.download,
   evidenceRoutes.requestEvidence,

@@ -23,7 +23,7 @@ const REPORTER: Permission[] = ["me.read", "risks.report"];
 function shell(permissions: Permission[] = REPORTER) {
   return withMessages(
     <AppShell
-      user={{ displayName: "Rita Reporter", email: "reporter@example.test" }}
+      user={{ displayName: "Rita Reporter", email: "reporter@example.test", concernRank: null }}
       viewMode="guided"
       theme="light"
       permissions={permissions}
@@ -44,6 +44,7 @@ describe("Report a concern in the shell", () => {
     expect(navItemsFor(REPORTER).map((i) => [i.key, i.href])).toEqual([
       ["home", "/"],
       ["report", "/report"],
+      ["contribution", "/security-contribution"],
       ["tasks", "/tasks"],
     ]);
   });

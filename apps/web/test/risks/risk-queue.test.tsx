@@ -147,6 +147,7 @@ describe("Navigation", () => {
     ).toEqual([
       ["home", "/"],
       ["report", "/report"],
+      ["contribution", "/security-contribution"],
       ["tasks", "/tasks"],
       ["risks", "/risks"],
       ["library", "/library"],

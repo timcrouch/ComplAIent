@@ -15,6 +15,9 @@ import { RiskReportService } from "./risk-report.service.js";
 import { RisksController } from "./risks.controller.js";
 import { TreatmentController } from "./treatment.controller.js";
 import { TreatmentService } from "./treatment.service.js";
+import { ConcernRewardsService } from "./concern-rewards.service.js";
+import { ConcernEvaluationController } from "./concern-evaluation.controller.js";
+import { ConcernEvaluationService } from "./concern-evaluation.service.js";
 
 /** The risk API. Needs the global AuthorizationModule (PolicyService) and PRISMA. */
 @Module({
@@ -25,6 +28,7 @@ import { TreatmentService } from "./treatment.service.js";
     RiskLifecycleController,
     RisksController,
     TreatmentController,
+    ConcernEvaluationController,
   ],
   providers: [
     ControlOperationService,
@@ -36,6 +40,8 @@ import { TreatmentService } from "./treatment.service.js";
     RiskInsightsService,
     RiskLifecycleService,
     TreatmentService,
+    ConcernRewardsService,
+    ConcernEvaluationService,
   ],
   exports: [
     RiskQueryService,

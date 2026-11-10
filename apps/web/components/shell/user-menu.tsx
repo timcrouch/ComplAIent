@@ -4,6 +4,7 @@ import { Popover } from "@base-ui/react/popover";
 import type { MeResponse } from "@isms/contracts";
 import { cn } from "@isms/ui";
 import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import type { Theme } from "../../lib/theme";
@@ -14,7 +15,7 @@ import { ViewModeSwitch } from "./view-mode-switch";
 export const SIGN_OUT_FORM_ID = "sign-out-form";
 
 /** Only what the shell displays; never tokens or anything else from the session. */
-export type ShellUser = Pick<MeResponse, "displayName" | "email">;
+export type ShellUser = Pick<MeResponse, "displayName" | "email" | "concernRank">;
 
 function initials(name: string, email: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean);
@@ -23,17 +24,32 @@ function initials(name: string, email: string): string {
 }
 
 export function Avatar({ user, className }: { user: ShellUser; className?: string }) {
+  const t = useTranslations("account");
+  const rankName = user.concernRank ? t(`ranks.${user.concernRank}`) : null;
   return (
     <span
       aria-hidden
+      data-concern-rank={user.concernRank ?? undefined}
+      title={rankName ? t("rankAvatar", { rank: rankName }) : undefined}
       className={cn(
-        "inline-flex size-9 shrink-0 items-center justify-center rounded-full text-[13px] font-bold tracking-wide text-on-accent",
-        "bg-[linear-gradient(140deg,color-mix(in_oklab,var(--isms-accent)_70%,var(--isms-info-soft)),var(--isms-accent))]",
-        "shadow-[inset_0_1px_0_rgb(255_255_255/0.25)]",
+        "relative inline-flex size-9 shrink-0 items-center justify-center rounded-full text-[13px] font-bold tracking-wide text-on-accent",
+        user.concernRank
+          ? "bg-surface"
+          : "bg-[linear-gradient(140deg,color-mix(in_oklab,var(--isms-accent)_70%,var(--isms-info-soft)),var(--isms-accent))] shadow-[inset_0_1px_0_rgb(255_255_255/0.25)]",
         className,
       )}
     >
-      {initials(user.displayName, user.email)}
+      {user.concernRank ? (
+        <Image
+          src={`/images/concern-rewards/ranks/${user.concernRank.replaceAll("_", "-")}.png`}
+          alt=""
+          fill
+          sizes="40px"
+          className="object-contain drop-shadow-sm"
+        />
+      ) : (
+        initials(user.displayName, user.email)
+      )}
     </span>
   );
 }

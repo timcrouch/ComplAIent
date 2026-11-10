@@ -3,6 +3,7 @@ import "../zod.js";
 import { ModuleKeySchema } from "../modules.js";
 import { PermissionSchema, RoleSchema } from "../permissions.js";
 import { defineRoute } from "../route.js";
+import { ConcernRankKeySchema } from "./concern-rewards.js";
 
 export const RoleAssignmentDto = z
   .object({
@@ -33,6 +34,8 @@ export const MeResponse = z
     theme: ThemeSchema,
     /** The optional modules switched on, in key order (as on `GET /organisation`). */
     modules: z.array(ModuleKeySchema),
+    /** Current recognition rank after at least one useful concern has been validated. */
+    concernRank: ConcernRankKeySchema.nullable(),
   })
   .openapi("MeResponse");
 export type MeResponse = z.infer<typeof MeResponse>;

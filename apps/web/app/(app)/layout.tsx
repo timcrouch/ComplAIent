@@ -18,10 +18,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     return <main className="flex min-h-dvh items-center justify-center p-6">{viewer.screen}</main>;
   }
 
-  const { displayName, email, viewMode, permissions, modules } = viewer.me;
+  const { displayName, email, viewMode, permissions, modules, concernRank } = viewer.me;
   return (
     <AppShell
-      user={{ displayName, email }}
+      user={{ displayName, email, concernRank }}
       viewMode={viewMode}
       permissions={permissions}
       modules={modules}

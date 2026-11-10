@@ -9,6 +9,8 @@ import {
   ScaleIcon,
   SettingsIcon,
   ShieldAlertIcon,
+  TrophyIcon,
+  GavelIcon,
   type LucideIcon,
 } from "lucide-react";
 
@@ -23,6 +25,8 @@ export type NavItem = {
     | "reports"
     | "library"
     | "aiAct"
+    | "contribution"
+    | "judgmentQueue"
     | "organisation"
     | "settings";
   icon: LucideIcon;
@@ -42,8 +46,22 @@ export function navItemsFor(
   const items: NavItem[] = [{ href: "/", key: "home", icon: HouseIcon, section: false }];
   if (permissions.includes("risks.report")) {
     items.push({ href: "/report", key: "report", icon: MessageSquareWarningIcon, section: true });
+    items.push({
+      href: "/security-contribution",
+      key: "contribution",
+      icon: TrophyIcon,
+      section: true,
+    });
     // Evidence requests go to people who can report, the contributors included.
     items.push({ href: "/tasks", key: "tasks", icon: ListTodoIcon, section: true });
+  }
+  if (permissions.includes("concerns.judge")) {
+    items.push({
+      href: "/concern-evaluations",
+      key: "judgmentQueue",
+      icon: GavelIcon,
+      section: true,
+    });
   }
   if (permissions.includes("risks.read")) {
     items.push({ href: "/risks", key: "risks", icon: ShieldAlertIcon, section: true });
@@ -68,6 +86,7 @@ export function navItemsFor(
 }
 
 export function isCurrent(item: NavItem, pathname: string): boolean {
+  if (item.key === "settings") return pathname.startsWith("/settings/");
   return item.section
     ? pathname === item.href || pathname.startsWith(`${item.href}/`)
     : pathname === item.href;

@@ -179,6 +179,7 @@ describe("identity", () => {
         viewMode: "guided",
         theme: "system",
         modules: [],
+        concernRank: null,
       });
       expect(user.idpIssuer).toBe(idp.issuer);
       expect(user.idpSubject).toBe("subject-1");

@@ -142,6 +142,7 @@ export function writeSetup(b: Builder, people: readonly SamplePerson[], start: n
     reviewIntervalMonths,
     setupCompletedAt: null,
     setupCompletedById: null,
+    concernRewardsEnabled: true,
     createdAt: at,
     updatedAt: at,
   };

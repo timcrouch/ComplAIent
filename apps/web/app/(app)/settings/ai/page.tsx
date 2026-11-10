@@ -7,6 +7,7 @@ import { AiSettingsView } from "../../../../components/settings/ai-settings-view
 import type { ModelsUnavailable } from "../../../../components/settings/model-pickers";
 import { Entrance } from "../../../../components/motion/entrance";
 import { StatusScreen } from "../../../../components/status/status-screen";
+import { SettingsNav } from "../../../../components/settings/settings-nav";
 import { requireViewer } from "../../../../lib/current-viewer";
 import { resolveTimeZone, TIME_ZONE_COOKIE } from "../../../../lib/greeting";
 import { failureScreen } from "../../../../lib/page-result";
@@ -60,6 +61,7 @@ export default async function AiSettingsPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-[960px] flex-col gap-6">
+      <SettingsNav current="ai" permissions={viewer.me.permissions} />
       <Entrance className="flex flex-col gap-3">
         <p className="text-[13px] font-semibold text-accent">{t("eyebrow")}</p>
         <h1 className="text-[28px] leading-[1.15] font-bold tracking-[-0.025em] text-fg sm:text-[34px]">

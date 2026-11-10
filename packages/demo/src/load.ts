@@ -59,6 +59,10 @@ async function writeRows(tx: Prisma.TransactionClient, r: SampleRows): Promise<v
   await insert(r.roleAssignments, (data) => tx.roleAssignment.createMany({ data }));
   await insert(r.assets, (data) => tx.asset.createMany({ data }));
   await insert(r.risks, (data) => tx.risk.createMany({ data }));
+  await insert(r.concernDuplicateGroups, (data) => tx.concernDuplicateGroup.createMany({ data }));
+  await insert(r.concernEvaluations, (data) => tx.concernEvaluation.createMany({ data }));
+  await insert(r.concernRewardEntries, (data) => tx.concernRewardEntry.createMany({ data }));
+  await insert(r.concernBadgeEvents, (data) => tx.concernBadgeEvent.createMany({ data }));
   await insert(r.riskVersions, (data) => tx.riskVersion.createMany({ data }));
   await insert(r.riskAssets, (data) => tx.riskAsset.createMany({ data }));
   await insert(r.riskControls, (data) => tx.riskControl.createMany({ data }));

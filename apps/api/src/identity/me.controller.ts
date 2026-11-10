@@ -5,6 +5,7 @@ import {
   type UpdatePreferencesRequest,
   identityRoutes,
 } from "@isms/contracts";
+import { concernRank } from "@isms/domain";
 import { ContractRoute, PRISMA, type PrismaService, enabledModules } from "../platform/index.js";
 import { type Actor, CurrentActor } from "./actor.js";
 import { PERMISSIONS_PROVIDER, type PermissionsProvider } from "./permissions.js";
@@ -20,10 +21,24 @@ export class MeController {
 
   @ContractRoute(identityRoutes.me)
   async me(@CurrentActor() actor: Actor): Promise<MeResponse> {
-    const user = await this.prisma.user.findUniqueOrThrow({
-      where: { id: actor.userId },
-      select: { id: true, email: true, displayName: true, viewMode: true, theme: true },
-    });
+    const [user, modules, rewardTotal, validatedConcerns] = await Promise.all([
+      this.prisma.user.findUniqueOrThrow({
+        where: { id: actor.userId },
+        select: { id: true, email: true, displayName: true, viewMode: true, theme: true },
+      }),
+      enabledModules(this.prisma),
+      this.prisma.concernRewardEntry.aggregate({
+        where: { userId: actor.userId },
+        _sum: { points: true },
+      }),
+      this.prisma.concernEvaluation.count({
+        where: {
+          reporterId: actor.userId,
+          status: { in: ["provisional", "final"] },
+          legitimacy: { in: ["confirmed", "plausible", "confirmed_duplicate"] },
+        },
+      }),
+    ]);
     return {
       ...user,
       viewMode: user.viewMode ?? defaultViewMode(actor.roles.map((r) => r.role)),
@@ -31,7 +46,8 @@ export class MeController {
       roles: actor.roles,
       permissions: this.permissions.permissionsFor(actor),
       // For the navigation (#16 §1); whether the viewer may use a module is in permissions.
-      modules: await enabledModules(this.prisma),
+      modules,
+      concernRank: validatedConcerns > 0 ? concernRank(rewardTotal._sum.points ?? 0).key : null,
     };
   }
 

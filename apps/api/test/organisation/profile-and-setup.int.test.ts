@@ -244,3 +244,78 @@ describe("organisation review interval", () => {
     expect(detailPaths(res)).toEqual(["setupIncomplete.profile"]);
   });
 });
+
+describe("concern rewards setting", () => {
+  const h = organisationHarness();
+  beforeAll(() => h.start());
+  beforeEach(() => h.reset());
+  afterAll(() => h.stop());
+
+  it("is off by default and can be enabled by an administrator with an audit record", async () => {
+    await h.put("/api/v1/organisation/profile", PROFILE);
+    const initial = await h.get("/api/v1/organisation");
+    expect((initial.body as OrganisationResponse).concernRewards).toEqual({ enabled: false });
+
+    const enabled = await h.put("/api/v1/organisation/concern-rewards", { enabled: true });
+    expect(enabled.status).toBe(200);
+    expect(enabled.body).toEqual({ enabled: true });
+    expect((await db.organisation.findFirstOrThrow()).concernRewardsEnabled).toBe(true);
+
+    // Repeating the same setting is idempotent and does not add audit noise.
+    expect((await h.put("/api/v1/organisation/concern-rewards", { enabled: true })).status).toBe(
+      200,
+    );
+    const rows = await audits("organisation.concern_rewards_changed");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      actorUserId: h.userIds.admin,
+      beforeRef: { enabled: false },
+      afterRef: { enabled: true },
+    });
+  });
+
+  it("does not create an organisation implicitly and refuses non-administrators", async () => {
+    const missing = await h.put("/api/v1/organisation/concern-rewards", { enabled: true });
+    expect(missing.status).toBe(409);
+    expect(detailPaths(missing)).toEqual(["setupIncomplete.profile"]);
+
+    await h.put("/api/v1/organisation/profile", PROFILE);
+    const forbidden = await h.put(
+      "/api/v1/organisation/concern-rewards",
+      { enabled: true },
+      "rita",
+    );
+    expect(forbidden.status).toBe(403);
+    expect((await db.organisation.findFirstOrThrow()).concernRewardsEnabled).toBe(false);
+  });
+
+  it("suspends pending work when disabled and does not resume it automatically", async () => {
+    await h.put("/api/v1/organisation/profile", PROFILE);
+    await h.put("/api/v1/organisation/concern-rewards", { enabled: true });
+    const risk = await db.risk.create({
+      data: {
+        title: "Test concern",
+        scenario: "A test concern exists.",
+        threat: "Testing",
+        consequence: "Testing",
+        toConfirm: [],
+        reporterId: h.userIds.rita,
+        aiAssisted: false,
+      },
+    });
+    const evaluation = await db.concernEvaluation.create({
+      data: { riskId: risk.id, reporterId: h.userIds.rita },
+    });
+
+    const disabled = await h.put("/api/v1/organisation/concern-rewards", { enabled: false });
+    expect(disabled.status).toBe(200);
+    expect(
+      (await db.concernEvaluation.findUniqueOrThrow({ where: { id: evaluation.id } })).status,
+    ).toBe("suspended");
+
+    await h.put("/api/v1/organisation/concern-rewards", { enabled: true });
+    expect(
+      (await db.concernEvaluation.findUniqueOrThrow({ where: { id: evaluation.id } })).status,
+    ).toBe("suspended");
+  });
+});

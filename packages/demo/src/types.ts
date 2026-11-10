@@ -161,6 +161,10 @@ export type SampleRows = {
   roleAssignments: Rows<Prisma.RoleAssignmentCreateManyInput>;
   assets: Rows<Prisma.AssetCreateManyInput>;
   risks: RiskRow[];
+  concernDuplicateGroups: Rows<Prisma.ConcernDuplicateGroupCreateManyInput>;
+  concernEvaluations: Rows<Prisma.ConcernEvaluationCreateManyInput>;
+  concernRewardEntries: Rows<Prisma.ConcernRewardEntryCreateManyInput>;
+  concernBadgeEvents: Rows<Prisma.ConcernBadgeEventCreateManyInput>;
   riskVersions: Rows<
     Prisma.RiskVersionCreateManyInput & {
       snapshot: Prisma.InputJsonObject;

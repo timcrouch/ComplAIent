@@ -12,6 +12,7 @@ const me = {
   viewMode: "guided",
   theme: "system",
   modules: [],
+  concernRank: null,
 };
 
 const itemRoute = defineRoute({
